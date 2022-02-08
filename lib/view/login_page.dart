@@ -1,38 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/provider/auth_error_provider.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'dashboard_page.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MainPage(),
-    );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          height: MediaQuery.of(context).size.height / 2,
-          width: MediaQuery.of(context).size.height,
-          margin: EdgeInsets.all(10),
-          child: buildAuthCard(),
-        ),
+      body: Column(
+        children: [
+          Column(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
+                height: 100,
+                width: MediaQuery.of(context).size.height / 3,
+                child: Image.asset('assets/images/logo_garuda.png'),
+              ),
+              Text("Onboarding HR",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
+            ],
+          ),
+          Container(
+              margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
+              alignment: Alignment.center,
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.height,
+              child: ChangeNotifierProvider(
+                create: (context) => AuthError(),
+                child: buildAuthCard(),
+              )),
+        ],
       ),
     );
   }
@@ -62,41 +68,45 @@ class _MainPageState extends State<MainPage> {
                         child: Column(
                           children: [
                             TextField(),
-                            Visibility(
-                              visible: true,
-                              child: Container(
+                            Consumer<AuthError>(
+                              builder: (context, authError, _) => Container(
                                   margin: EdgeInsets.all(5),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning,
-                                        color: Colors.red,
-                                      ),
-                                      Text(
-                                        "Email/Phone number is required",
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                    ],
+                                  child: Visibility(
+                                    visible: authError.error,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.warning,
+                                          color: Colors.red,
+                                        ),
+                                        Text(
+                                          "Email/Phone number is required",
+                                          style: TextStyle(color: Colors.red),
+                                        )
+                                      ],
+                                    ),
                                   )),
                             ),
                             TextField(),
-                            Visibility(
-                              visible: true,
-                              child: Container(
+                            Consumer<AuthError>(
+                              builder: (context, authError, _) => Container(
                                   margin: EdgeInsets.all(5),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning,
-                                        color: Colors.red,
-                                      ),
-                                      Text(
-                                        "Password is required",
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                    ],
+                                  child: Visibility(
+                                    visible: authError.error,
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.warning,
+                                          color: Colors.red,
+                                        ),
+                                        Text(
+                                          "Password number is required",
+                                          style: TextStyle(color: Colors.red),
+                                        )
+                                      ],
+                                    ),
                                   )),
-                            )
+                            ),
                           ],
                         ),
                       )
@@ -107,7 +117,7 @@ class _MainPageState extends State<MainPage> {
 
                 Container(
                     alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
                     child: Text("Forgot Password?")),
               ],
             ),
@@ -116,10 +126,21 @@ class _MainPageState extends State<MainPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: () {}, child: Text("Login")),
               ElevatedButton(
-                onPressed: () {},
-                child: Text("Try error"),
+                  onPressed: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return DashboardPage();
+                    }));
+                  },
+                  child: Text("Login")),
+              Consumer<AuthError>(
+                builder: (context, applicationColor, _) => Switch(
+                  value: applicationColor.isError,
+                  onChanged: (newValue) {
+                    applicationColor.isError = newValue;
+                  },
+                ),
               ),
             ],
           )
