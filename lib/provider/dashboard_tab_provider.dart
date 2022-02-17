@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/utils/constans.dart';
 
-class DashboardTab with ChangeNotifier {
-  int _page = 0;
+class DashboardTabProvider with ChangeNotifier {
+  int _tab = HOME_PAGE;
 
-  int get page => _page;
+  int get tab => _tab;
 
-  set page(int val) {
-    _page = val;
+  set tab(int val) {
+    _tab = val;
     notifyListeners();
   }
 }

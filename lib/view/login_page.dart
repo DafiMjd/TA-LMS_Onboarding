@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/provider/auth_error_provider.dart';
+import 'package:lms_onboarding/provider/login_page_provider.dart';
+import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:provider/provider.dart';
 
 import 'dashboard_page.dart';
@@ -26,7 +27,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Image.asset('assets/images/logo_garuda.png'),
               ),
               Text("Onboarding HR",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: BROWN_GARUDA)),
             ],
           ),
           Container(
@@ -34,10 +38,7 @@ class _LoginPageState extends State<LoginPage> {
               alignment: Alignment.center,
               height: MediaQuery.of(context).size.height / 2,
               width: MediaQuery.of(context).size.height,
-              child: ChangeNotifierProvider(
-                create: (context) => AuthError(),
-                child: buildAuthCard(),
-              )),
+              child: buildAuthCard()),
         ],
       ),
     );
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           children: [
                             TextField(),
-                            Consumer<AuthError>(
+                            Consumer<LoginPageProvider>(
                               builder: (context, authError, _) => Container(
                                   margin: EdgeInsets.all(5),
                                   child: Visibility(
@@ -88,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                                   )),
                             ),
                             TextField(),
-                            Consumer<AuthError>(
+                            Consumer<LoginPageProvider>(
                               builder: (context, authError, _) => Container(
                                   margin: EdgeInsets.all(5),
                                   child: Visibility(
@@ -134,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                     }));
                   },
                   child: Text("Login")),
-              Consumer<AuthError>(
+              Consumer<LoginPageProvider>(
                 builder: (context, applicationColor, _) => Switch(
                   value: applicationColor.isError,
                   onChanged: (newValue) {

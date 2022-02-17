@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AuthError with ChangeNotifier {
+class LoginPageProvider with ChangeNotifier {
   bool _isError = false;
 
   bool get isError => _isError;
