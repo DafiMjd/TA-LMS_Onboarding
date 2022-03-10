@@ -15,7 +15,18 @@ class ActivityPage {
   static Container activityHome(BuildContext context) {
     return Container(
       child: Center(
-        child: Text("Activity"),
+        child: Column(
+          children: [
+            Flexible(
+                flex: 1,
+                child: Container(
+                  color: Colors.grey,
+                  margin: EdgeInsets.fromLTRB(35, 15, 35, 15),
+                )),
+            Flexible(flex: 1, child: Container(color: Colors.blue)),
+            Flexible(flex: 2, child: Container(color: Colors.green)),
+          ],
+        ),
       ),
     );
   }
