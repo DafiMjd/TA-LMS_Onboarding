@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/provider/dashboard_tab_provider.dart';
+import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
-import 'package:lms_onboarding/view/activity/activity_page.dart';
-import 'package:lms_onboarding/view/profile/profile_page.dart';
+import 'package:lms_onboarding/views/activity/activity_page.dart';
+import 'package:lms_onboarding/views/profile/profile_page.dart';
 import 'package:provider/provider.dart';
 
 import 'home/home_page.dart';
@@ -16,10 +16,10 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     DashboardTabProvider dashboardTabProvider =
         context.watch<DashboardTabProvider>();
-    return Page(dashboardTabProvider, context);
+    return page(dashboardTabProvider, context);
   }
 
-  Scaffold Page(
+  Scaffold page(
       DashboardTabProvider dashboardTabProvider, BuildContext context) {
     if (dashboardTabProvider.tab == HOME_PAGE) {
       return Scaffold(

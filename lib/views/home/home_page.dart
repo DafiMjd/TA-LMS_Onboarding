@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
-import 'package:lms_onboarding/view/home/garuda_profile_page.dart';
-import 'package:lms_onboarding/view/home/job_desc_page.dart';
+import 'package:lms_onboarding/views/home/garuda_profile_page.dart';
+import 'package:lms_onboarding/views/home/job_desc_page.dart';
 
 class HomePage {
   static PreferredSize homeAppBar() {

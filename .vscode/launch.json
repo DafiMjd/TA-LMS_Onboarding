@@ -8,7 +8,7 @@
             "name": "lms_onboarding",
             "request": "launch",
             "type": "dart",
-            "program": "lib/view/main.dart"
+            "program": "lib/main.dart"
         },
         {
             "name": "lms_onboarding (profile mode)",
