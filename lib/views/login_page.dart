@@ -16,134 +16,79 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Column(
-            children: [
-              Container(
-                margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-                height: 100,
-                width: MediaQuery.of(context).size.height / 3,
-                child: Image.asset('assets/images/logo_garuda.png'),
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Container(
+          margin: EdgeInsets.only(top: 50),
+          child: Column(children: [
+            Container(
+              alignment: Alignment.topCenter,
+              child: Column(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height / 6,
+                    width: MediaQuery.of(context).size.height / 3,
+                    child: Image.asset('assets/images/logo_garuda.png'),
+                  ),
+                  Text("Onboarding HR",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          color: BROWN_GARUDA)),
+                ],
               ),
-              Text("Onboarding HR",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      color: BROWN_GARUDA)),
-            ],
-          ),
-          Container(
-              margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
-              alignment: Alignment.center,
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.height,
-              child: buildAuthCard()),
-        ],
+            ),
+            Divider(height: 30, color: Colors.transparent),
+            Center(
+              child: Container(
+                margin: EdgeInsets.all(10),
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: MediaQuery.of(context).size.width,
+                child: BuildAuthCard(),
+              ),
+            ),
+          ]),
+        ),
       ),
     );
   }
 
-  Card buildAuthCard() {
+  Card BuildAuthCard() {
     return Card(
       elevation: 5,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            child: Text(
+      child: Container(
+        margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
               "Login to your account",
               style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
             ),
-          ),
-          // email pw
-          Column(
-            children: [
-              // textfield and warning email
-              Container(
-                margin: EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          TextField(),
-                          Consumer<LoginPageProvider>(
-                            builder: (context, authError, _) => Container(
-                                margin: EdgeInsets.all(5),
-                                child: Visibility(
-                                  visible: authError.error,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning,
-                                        color: Colors.red,
-                                      ),
-                                      Text(
-                                        "Email/Phone number is required",
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ),
-                          TextField(),
-                          Consumer<LoginPageProvider>(
-                            builder: (context, authError, _) => Container(
-                                margin: EdgeInsets.all(5),
-                                child: Visibility(
-                                  visible: authError.error,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning,
-                                        color: Colors.red,
-                                      ),
-                                      Text(
-                                        "Password number is required",
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              //------------------------------- email & pw//
-
-              Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                  child: Text("Forgot Password?")),
-            ],
-          ),
-          // email pw
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return DashboardPage();
-                    }));
-                  },
-                  child: Text("Login")),
-              Consumer<LoginPageProvider>(
-                builder: (context, applicationColor, _) => Switch(
-                  value: applicationColor.isError,
-                  onChanged: (newValue) {
-                    applicationColor.isError = newValue;
-                  },
-                ),
-              ),
-            ],
-          )
-        ],
+            TextFormField(
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), labelText: "Email"),
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                  border: OutlineInputBorder(), labelText: "Email"),
+            ),
+            Container(
+                alignment: Alignment.centerLeft,
+                child: InkWell(
+                    onTap: () {},
+                    child: Text("Forgot Password?",
+                        style: TextStyle(fontWeight: FontWeight.w500)))),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return DashboardPage();
+                  }));
+                },
+                child: Text("Login")),
+          ],
+        ),
       ),
     );
   }

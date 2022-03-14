@@ -1,33 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/providers/login_page_provider.dart';
+import 'package:lms_onboarding/utils/custom_colors.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'views/dashboard_page.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MainPage(),
-    );
-  }
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class MainPage extends StatelessWidget {
-  const MainPage({Key? key}) : super(key: key);
-
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          height: MediaQuery.of(context).size.height / 2,
-          width: MediaQuery.of(context).size.height,
-          margin: EdgeInsets.all(10),
-          child: buildAuthCard(),
-        ),
+      body: Column(
+        children: [
+          Column(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
+                height: MediaQuery.of(context).size.height / 6,
+                width: MediaQuery.of(context).size.height / 3,
+                child: Image.asset('assets/images/logo_garuda.png'),
+              ),
+              Text("Onboarding HR",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      color: BROWN_GARUDA)),
+            ],
+          ),
+          Container(
+              margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
+              alignment: Alignment.center,
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.height,
+              child: buildAuthCard()),
+        ],
       ),
     );
   }
@@ -44,77 +56,93 @@ class MainPage extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
             ),
           ),
-          Container(
-            child: Column(
-              children: [
-                // textfield and warning email
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      Column(
+          // email pw
+          Column(
+            children: [
+              // textfield and warning email
+              Container(
+                margin: EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
                         children: [
-                          // TextField(),
-                          Text("Enter your email"),
-                          Container(
-                              margin: EdgeInsets.all(5),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.warning,
-                                    color: Colors.red,
+                          TextField(),
+                          Consumer<LoginPageProvider>(
+                            builder: (context, authError, _) => Container(
+                                margin: EdgeInsets.all(5),
+                                child: Visibility(
+                                  visible: authError.error,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.warning,
+                                        color: Colors.red,
+                                      ),
+                                      Text(
+                                        "Email/Phone number is required",
+                                        style: TextStyle(color: Colors.red),
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                    "Email/Phone number is required",
-                                    style: TextStyle(color: Colors.red),
-                                  )
-                                ],
-                              ))
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                //------------------------------- email//
-
-                // textfield and warning password
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          // TextField
-                          Text("Enter your Password"),
-                          Container(
-                              margin: EdgeInsets.all(5),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.warning,
-                                    color: Colors.red,
+                                )),
+                          ),
+                          TextField(),
+                          Consumer<LoginPageProvider>(
+                            builder: (context, authError, _) => Container(
+                                margin: EdgeInsets.all(5),
+                                child: Visibility(
+                                  visible: authError.error,
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.warning,
+                                        color: Colors.red,
+                                      ),
+                                      Text(
+                                        "Password number is required",
+                                        style: TextStyle(color: Colors.red),
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                    "Password required",
-                                    style: TextStyle(color: Colors.red),
-                                  )
-                                ],
-                              ))
+                                )),
+                          ),
                         ],
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
-                //-------------password//
+              ),
+              //------------------------------- email & pw//
 
-                Container(
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    child: Text("Forgot Password?")),
-              ],
-            ),
+              Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
+                  child: Text("Forgot Password?")),
+            ],
           ),
-          ElevatedButton(onPressed: () {}, child: Text("Login")),
+          // email pw
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return DashboardPage();
+                    }));
+                  },
+                  child: Text("Login")),
+              Consumer<LoginPageProvider>(
+                builder: (context, applicationColor, _) => Switch(
+                  value: applicationColor.isError,
+                  onChanged: (newValue) {
+                    applicationColor.isError = newValue;
+                  },
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

@@ -23,7 +23,7 @@ class DashboardPage extends StatelessWidget {
       DashboardTabProvider dashboardTabProvider, BuildContext context) {
     if (dashboardTabProvider.tab == HOME_PAGE) {
       return Scaffold(
-        appBar: HomePage.homeAppBar(),
+        appBar: HomePage.homeAppBar(context),
         body: HomePage.homeBody(context),
         bottomNavigationBar: BottomNavBar(),
       );

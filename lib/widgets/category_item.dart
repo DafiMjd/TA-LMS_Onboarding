@@ -20,19 +20,16 @@ class CategoryItem extends StatelessWidget {
           left: 18,
           right: 18,
         ),
-        width: 65,
+        width: MediaQuery.of(context).size.height * 0.1,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
               decoration: BoxDecoration(
                   color: categoryColor,
                   borderRadius: BorderRadius.all(Radius.circular(5))),
-              width: 65,
-              height: 62,
-            ),
-            Divider(
-              height: 10,
-              color: Colors.transparent,
+              width: MediaQuery.of(context).size.height * 0.1,
+              height: MediaQuery.of(context).size.height * 0.1,
             ),
             Text(
               categoryName,

@@ -18,6 +18,8 @@ class ActivityPage {
 
   static Center activityHome(BuildContext context) {
     final categoryProv = Provider.of<CategoryProvider>(context);
+    final ScrollController _scrollController = ScrollController();
+
     return Center(
       child: Column(
         children: [
@@ -56,6 +58,7 @@ class ActivityPage {
           Flexible(
             flex: 1,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
                     margin: EdgeInsets.only(left: 10),
@@ -64,7 +67,6 @@ class ActivityPage {
                       "Activity Category",
                       style: TextStyle(fontSize: 17),
                     )),
-                Divider(height: 15, color: Colors.transparent),
                 // Horizontal ListView
                 (categoryProv.category.isEmpty)
                     ? Center(
@@ -76,14 +78,17 @@ class ActivityPage {
                         ),
                       )
                     : Expanded(
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: categoryProv.category.length,
-                            itemBuilder: (context, i) => CategoryItem(
-                                categoryName:
-                                    categoryProv.category[i].categoryName,
-                                categoryColor:
-                                    categoryProv.category[i].categoryColor)),
+                        child: Scrollbar(
+                          controller: _scrollController,
+                          child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: categoryProv.category.length,
+                              itemBuilder: (context, i) => CategoryItem(
+                                  categoryName:
+                                      categoryProv.category[i].categoryName,
+                                  categoryColor:
+                                      categoryProv.category[i].categoryColor)),
+                        ),
                       )
               ],
             ),
