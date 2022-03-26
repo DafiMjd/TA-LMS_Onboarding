@@ -1,15 +1,126 @@
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:lms_onboarding/utils/auth_secure_storage.dart';
+import 'package:lms_onboarding/utils/constans.dart';
+import 'dart:convert';
+
 class LoginPageProvider with ChangeNotifier {
-  bool _isError = false;
+  late bool _isAuth = false;
+  late String _token, _email;
+  late DateTime _expiryDate;
 
-  bool get isError => _isError;
+  Future<void> _getAuthInfo() async {
+    try {
+      _token = await AuthSecureStorage.getToken();
+      _expiryDate = await AuthSecureStorage.getExpiryDate();
+      _email = await AuthSecureStorage.getEmail();
 
-  set isError(bool val) {
-    _isError = val;
+      print("token: " + _token);
+      print("email: " + _email);
 
+      if (_expiryDate.isAfter(DateTime.now()))
+        _setIsAuth(true);
+      else
+        _setIsAuth(false);
+    } catch (e) {
+      _setIsAuth(false);
+      print("error Auth: " + e.toString());
+    }
+  }
+
+  bool getIsAuth() {
+    _getAuthInfo();
+    return _isAuth;
+  }
+
+  void _setIsAuth(bool val) {
+    _isAuth = val;
     notifyListeners();
   }
 
-  bool get error => (_isError) ? false : true;
+  Future<void> _storeAuthInfo(String token, int expiresIn, String email) async {
+    DateTime _expiryDate = DateTime.now().add(Duration(seconds: expiresIn));
+
+    await AuthSecureStorage.setToken(token);
+    await AuthSecureStorage.setExpiryDate(_expiryDate);
+    await AuthSecureStorage.setEmail(email);
+  }
+
+  Future<void> auth(String email, String password) async {
+    String apiURL = "$BASE_URL/api/Auth/login-user";
+
+    try {
+      print("dafi1");
+      var apiResult = await http.post(Uri.parse(apiURL),
+          headers: {
+            "Access-Control-Allow-Origin":
+                "*", // Required for CORS support to work
+            "Access-Control-Allow-Methods": "POST",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Expose-Headers": "Authorization, authenticated",
+            'Content-Type': 'application/json; charset=UTF-8'
+          },
+          body: jsonEncode({"email": email, "password": password}));
+
+      print("dafi2");
+
+      print("dafi2.1: " + apiResult.statusCode.toString());
+      print("dafi2.1: " + apiResult.body);
+
+      Map<String, dynamic> responseData = jsonDecode(apiResult.body);
+
+      if (apiResult.statusCode == 400) {
+        print("error1" + responseData['errorMessage']);
+        throw responseData['errorMessage'];
+      }
+
+      _storeAuthInfo(responseData['token'],
+          int.parse(responseData['expiresIn']), responseData['email']);
+      notifyListeners();
+
+      isLoginButtonDisabled = false;
+    } catch (e) {
+      isLoginButtonDisabled = false;
+      throw e;
+    }
+  }
+
+  // button disable after login
+  bool _isLoginButtonDisabled = false;
+
+  bool get isLoginButtonDisabled => _isLoginButtonDisabled;
+  set isLoginButtonDisabled(bool val) {
+    _isLoginButtonDisabled = val;
+    notifyListeners();
+  }
+  // ==========================
+
+  // form validation
+  bool _isEmailFieldEmpty = false;
+  bool _isPasswordFieldEmpty = false;
+
+  bool get isEmailFieldEmpty => _isEmailFieldEmpty;
+  bool get isPasswordFieldEmpty => _isPasswordFieldEmpty;
+  set isEmailFieldEmpty(bool val) {
+    _isEmailFieldEmpty = val;
+    notifyListeners();
+  }
+
+  set isPasswordFieldEmpty(bool val) {
+    _isPasswordFieldEmpty = val;
+    notifyListeners();
+  }
+  // ==========================
+
+  // password hide
+  bool _isPasswordHidden = true;
+
+  bool get isPasswordHidden => _isPasswordHidden;
+  void changePasswordHidden() {
+    _isPasswordHidden = !_isPasswordHidden;
+    notifyListeners();
+  }
+  // ==========================
+
 }

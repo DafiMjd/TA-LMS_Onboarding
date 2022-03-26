@@ -1,150 +1,202 @@
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/providers/login_page_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
-import 'package:provider/provider.dart';
+import 'package:lms_onboarding/views/home/garuda_profile_page.dart';
+import 'package:lms_onboarding/views/home/job_desc_page.dart';
 
-import 'views/dashboard_page.dart';
-
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
-
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Column(
+class HomePage {
+  static PreferredSize homeAppBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: Size.fromHeight(MediaQuery.of(context).size.height / 5),
+      child: AppBar(
+        elevation: 0,
+        backgroundColor: ORANGE_GARUDA,
+        flexibleSpace: Container(
+          height: MediaQuery.of(context).size.height / 5,
+          margin: EdgeInsets.only(
+            top: 30,
+            bottom: 30,
+            left: 20,
+          ),
+          alignment: Alignment.centerLeft,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-                height: MediaQuery.of(context).size.height / 6,
-                width: MediaQuery.of(context).size.height / 3,
-                child: Image.asset('assets/images/logo_garuda.png'),
+                alignment: Alignment.topLeft,
+                child: Text("Selamat Datang!",
+                    style: TextStyle(
+                        fontSize: 23,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500)),
               ),
-              Text("Onboarding HR",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      color: BROWN_GARUDA)),
+              Container(
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.only(top: 40),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text("Name",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500)),
+                    Text("Job Title",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400)),
+                  ],
+                ),
+              ),
             ],
           ),
-          Container(
-              margin: EdgeInsets.fromLTRB(10, 40, 10, 10),
-              alignment: Alignment.center,
-              height: MediaQuery.of(context).size.height / 2,
-              width: MediaQuery.of(context).size.height,
-              child: buildAuthCard()),
-        ],
+        ),
       ),
     );
   }
 
-  Card buildAuthCard() {
-    return Card(
-      elevation: 5,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            child: Text(
-              "Login to your account",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+  static Stack homeBody(BuildContext context) {
+    return Stack(
+      children: [
+        // background
+        Container(
+          color: ORANGE_GARUDA,
+        ),
+        // white circular background
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
             ),
           ),
-          // email pw
-          Column(
-            children: [
-              // textfield and warning email
-              Container(
-                margin: EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          TextField(),
-                          Consumer<LoginPageProvider>(
-                            builder: (context, authError, _) => Container(
-                                margin: EdgeInsets.all(5),
-                                child: Visibility(
-                                  visible: authError.error,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning,
-                                        color: Colors.red,
-                                      ),
-                                      Text(
-                                        "Email/Phone number is required",
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ),
-                          TextField(),
-                          Consumer<LoginPageProvider>(
-                            builder: (context, authError, _) => Container(
-                                margin: EdgeInsets.all(5),
-                                child: Visibility(
-                                  visible: authError.error,
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning,
-                                        color: Colors.red,
-                                      ),
-                                      Text(
-                                        "Password number is required",
-                                        style: TextStyle(color: Colors.red),
-                                      )
-                                    ],
-                                  ),
-                                )),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              //------------------------------- email & pw//
+        ),
+        //* Content
 
-              Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.fromLTRB(20, 10, 0, 0),
-                  child: Text("Forgot Password?")),
-            ],
-          ),
-          // email pw
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(context,
+        SingleChildScrollView(
+          child: Container(
+            margin: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.all(10),
+                  alignment: Alignment.topLeft,
+                  child: Text("Explore",
+                      style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400)),
+                ),
+
+                // Pengenalan Perusahaan
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return DashboardPage();
+                      return GarudaProfilePage();
                     }));
                   },
-                  child: Text("Login")),
-              Consumer<LoginPageProvider>(
-                builder: (context, applicationColor, _) => Switch(
-                  value: applicationColor.isError,
-                  onChanged: (newValue) {
-                    applicationColor.isError = newValue;
-                  },
+                  child: Container(
+                      margin: EdgeInsets.all(10),
+                      height: MediaQuery.of(context).size.height / 4,
+                      width: MediaQuery.of(context).size.height,
+                      child: Card(
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.stretch, // add this
+                          children: [
+                            Flexible(
+                              flex: 3,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: CARD_BORDER,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                ),
+                                child:
+                                    Image.asset('assets/images/logo_garuda.png',
+                                        // width: 300,
+                                        fit: BoxFit.fill),
+                              ),
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 10),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Pengenalan Perusahaan",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                )),
+                          ],
+                        ),
+                      )),
                 ),
-              ),
-            ],
-          )
-        ],
-      ),
+
+                // Job Desc
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return JobDescPage();
+                    }));
+                  },
+                  child: Container(
+                      margin: EdgeInsets.all(10),
+                      height: MediaQuery.of(context).size.height / 4,
+                      width: MediaQuery.of(context).size.height,
+                      child: Card(
+                        child: Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.stretch, // add this
+                          children: [
+                            Flexible(
+                              flex: 3,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: CARD_BORDER,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                ),
+                                child:
+                                    Image.asset('assets/images/logo_garuda.png',
+                                        // width: 300,
+                                        fit: BoxFit.fill),
+                              ),
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Container(
+                                  margin: EdgeInsets.only(left: 10),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "Job Desc",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                )),
+                          ],
+                        ),
+                      )),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Pengenalan Perusahaan
+      ],
     );
   }
 }

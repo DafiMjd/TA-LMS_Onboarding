@@ -13,8 +13,119 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    LoginPageProvider loginPageProvider = context.watch<LoginPageProvider>();
+
+    void _login(String email, String password) {
+      loginPageProvider.isLoginButtonDisabled = true;
+      loginPageProvider.auth(email, password).catchError((onError) {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Auth Error"),
+                content: Text("$onError"),
+                actions: [
+                  TextButton(
+                      onPressed: () =>
+                          Navigator.of(context, rootNavigator: true).pop(),
+                      child: Text("okay"))
+                ],
+              );
+            });
+      });
+    }
+
+    Card BuildAuthCard() {
+      return Card(
+        elevation: 5,
+        child: Container(
+          margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Login to your account",
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+              ),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), labelText: "Email"),
+              ),
+              Visibility(
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "* Email harus diisi",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                visible: loginPageProvider.isEmailFieldEmpty,
+              ),
+              TextFormField(
+                  obscureText: loginPageProvider.isPasswordHidden,
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Password",
+                      suffix: InkWell(
+                          onTap: () => loginPageProvider.changePasswordHidden(),
+                          child: Icon(loginPageProvider.isPasswordHidden
+                              ? Icons.visibility_off
+                              : Icons.visibility)))),
+              Visibility(
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "* Password harus diisi",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                visible: loginPageProvider.isPasswordFieldEmpty,
+              ),
+              Container(
+                  alignment: Alignment.centerLeft,
+                  child: InkWell(
+                      onTap: () {},
+                      child: Text("Forgot Password?",
+                          style: TextStyle(fontWeight: FontWeight.w500)))),
+              IgnorePointer(
+                ignoring: loginPageProvider.isLoginButtonDisabled,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: loginPageProvider.isLoginButtonDisabled
+                            ? Colors.blue[300]
+                            : Colors.blue),
+                    onPressed: () {
+                      if (_emailController.text.isNotEmpty &&
+                          _passwordController.text.isNotEmpty) {
+                        loginPageProvider.isEmailFieldEmpty =
+                            _emailController.text.isEmpty;
+                        loginPageProvider.isPasswordFieldEmpty =
+                            _passwordController.text.isEmpty;
+                        _login(_emailController.text, _passwordController.text);
+                      } else {
+                        loginPageProvider.isEmailFieldEmpty =
+                            _emailController.text.isEmpty;
+                        loginPageProvider.isPasswordFieldEmpty =
+                            _passwordController.text.isEmpty;
+                      }
+                    },
+                    child: loginPageProvider.isLoginButtonDisabled
+                        ? Text("Wait")
+                        : Text("Login")),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         reverse: true,
@@ -48,46 +159,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ]),
-        ),
-      ),
-    );
-  }
-
-  Card BuildAuthCard() {
-    return Card(
-      elevation: 5,
-      child: Container(
-        margin: EdgeInsets.fromLTRB(10, 20, 10, 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Login to your account",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Email"),
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  border: OutlineInputBorder(), labelText: "Email"),
-            ),
-            Container(
-                alignment: Alignment.centerLeft,
-                child: InkWell(
-                    onTap: () {},
-                    child: Text("Forgot Password?",
-                        style: TextStyle(fontWeight: FontWeight.w500)))),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) {
-                    return DashboardPage();
-                  }));
-                },
-                child: Text("Login")),
-          ],
         ),
       ),
     );
