@@ -25,4 +25,8 @@ class AuthSecureStorage {
     final expiryDate = await _storage.read(key: _keyExpiryDate);
     return DateTime.parse(expiryDate!);
   }
+
+  static Future deleteAll() async {
+    await _storage.deleteAll();
+  }
 }

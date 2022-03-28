@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/views/activity/activity_page.dart';
@@ -9,8 +10,24 @@ import 'home/home_page.dart';
 
 int _currentIndex = 0;
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    DashboardTabProvider dashboardTabProvider =
+        Provider.of<DashboardTabProvider>(context, listen: false);
+
+    dashboardTabProvider.getUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {

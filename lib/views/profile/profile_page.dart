@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/profile/user_provider.dart';
+import 'package:lms_onboarding/providers/auth_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +18,8 @@ class ProfilePage {
 
   static SingleChildScrollView profileHome(BuildContext context) {
     final userProv = Provider.of<UserProvider>(context);
-    final _user = userProv.user;
+    final authProv = Provider.of<AuthProvider>(context);
+    final User _user = userProv.user;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -32,42 +35,44 @@ class ProfilePage {
                     size: MediaQuery.of(context).size.height * 0.14 - 20,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 15, left: 13, bottom: 15),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(children: [
-                          Text(
-                            _user.name,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          Text(
-                            _user.jobtitle,
-                            style: TextStyle(fontSize: 14),
-                            textAlign: TextAlign.end,
-                          )
-                        ]),
-                        Row(
-                          children: [
-                            Text(
-                              "Edit Profile",
-                              style: TextStyle(
-                                  fontSize: 14, color: EDIT_PROFILE_COLOR),
-                            ),
-                            VerticalDivider(
-                              width: 15,
-                            ),
-                            Icon(
-                              Icons.edit,
-                              size: 17,
-                              color: EDIT_PROFILE_COLOR,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
+                      margin: EdgeInsets.only(top: 15, left: 13, bottom: 15),
+                      child: 
+                      Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(children: [
+                                  Text(
+                                    _user.name,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    // _user.jobtitle,
+                                    "Jobtitle",
+                                    style: TextStyle(fontSize: 14),
+                                    textAlign: TextAlign.end,
+                                  )
+                                ]),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Edit Profile",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: EDIT_PROFILE_COLOR),
+                                    ),
+                                    VerticalDivider(
+                                      width: 15,
+                                    ),
+                                    Icon(
+                                      Icons.edit,
+                                      size: 17,
+                                      color: EDIT_PROFILE_COLOR,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )),
                 ],
               ),
             ),
@@ -131,14 +136,14 @@ class ProfilePage {
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.all(5),
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Text(
-                          _user.jobtitle,
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      )
+                      // Container(
+                      //   margin: EdgeInsets.all(5),
+                      //   width: MediaQuery.of(context).size.width * 0.5,
+                      //   child: Text(
+                      //     _user.jobtitle,
+                      //     style: TextStyle(fontSize: 16),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -231,7 +236,7 @@ class ProfilePage {
                         margin: EdgeInsets.all(5),
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: Text(
-                          "Birth Date",
+                          _user.birtdate,
                           style: TextStyle(fontSize: 16),
                         ),
                       )
@@ -291,7 +296,9 @@ class ProfilePage {
             margin: EdgeInsets.all(10),
             child: Card(
               child: ListTile(
-                onTap: () {},
+                onTap: () {
+                  authProv.logout();
+                },
                 title: Text("Logout",
                     style: TextStyle(fontSize: 16, color: Colors.red)),
                 trailing: Icon(

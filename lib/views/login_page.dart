@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/providers/login_page_provider.dart';
+import 'package:lms_onboarding/providers/auth_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    LoginPageProvider loginPageProvider = context.watch<LoginPageProvider>();
+    AuthProvider loginPageProvider = context.watch<AuthProvider>();
 
     void _login(String email, String password) {
       loginPageProvider.isLoginButtonDisabled = true;

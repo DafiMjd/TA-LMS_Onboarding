@@ -1,16 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lms_onboarding/models/user.dart';
+import 'package:lms_onboarding/providers/auth_provider.dart';
+import 'package:lms_onboarding/utils/constans.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import '../../utils/auth_secure_storage.dart';
 
 class UserProvider extends ChangeNotifier {
-  final _user = User(
-      user_id: 1,
-      role_id: 1,
-      jobtitle: "Mobile Dev",
-      name: "Dafi Majid Fadhlih",
-      gender: "Male",
-      phone_number: "08112312948",
-      email: "dafi.majid@gmail.com",
-      progress: 0.8);
 
-  User get user => _user;
-}
+  late User _user;
+  void reveiveUser(user) {
+    _user = user;
+  }
+  get user => _user;
+  
+
+ }

@@ -5,10 +5,13 @@ import 'package:lms_onboarding/utils/auth_secure_storage.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'dart:convert';
 
-class LoginPageProvider with ChangeNotifier {
+class AuthProvider with ChangeNotifier {
   late bool _isAuth = false;
   late String _token, _email;
   late DateTime _expiryDate;
+
+  String get token => _token;
+  String get email => _email;
 
   Future<void> _getAuthInfo() async {
     try {
@@ -16,8 +19,7 @@ class LoginPageProvider with ChangeNotifier {
       _expiryDate = await AuthSecureStorage.getExpiryDate();
       _email = await AuthSecureStorage.getEmail();
 
-      print("token: " + _token);
-      print("email: " + _email);
+
 
       if (_expiryDate.isAfter(DateTime.now()))
         _setIsAuth(true);
@@ -25,7 +27,6 @@ class LoginPageProvider with ChangeNotifier {
         _setIsAuth(false);
     } catch (e) {
       _setIsAuth(false);
-      print("error Auth: " + e.toString());
     }
   }
 
@@ -51,7 +52,6 @@ class LoginPageProvider with ChangeNotifier {
     String apiURL = "$BASE_URL/api/Auth/login-user";
 
     try {
-      print("dafi1");
       var apiResult = await http.post(Uri.parse(apiURL),
           headers: {
             "Access-Control-Allow-Origin":
@@ -63,15 +63,10 @@ class LoginPageProvider with ChangeNotifier {
           },
           body: jsonEncode({"email": email, "password": password}));
 
-      print("dafi2");
-
-      print("dafi2.1: " + apiResult.statusCode.toString());
-      print("dafi2.1: " + apiResult.body);
 
       Map<String, dynamic> responseData = jsonDecode(apiResult.body);
 
       if (apiResult.statusCode == 400) {
-        print("error1" + responseData['errorMessage']);
         throw responseData['errorMessage'];
       }
 
@@ -84,6 +79,11 @@ class LoginPageProvider with ChangeNotifier {
       isLoginButtonDisabled = false;
       throw e;
     }
+  }
+
+  Future<void> logout() async{
+    await AuthSecureStorage.deleteAll();
+    notifyListeners();
   }
 
   // button disable after login

@@ -39,7 +39,7 @@ class ActivityPage {
                         animation: true,
                         lineHeight: 20.0,
                         animationDuration: 2500,
-                        percent: 0.8,
+                        percent: 0,
                         center: Text("80.0%",
                             style: TextStyle(
                               color: Colors.white,
