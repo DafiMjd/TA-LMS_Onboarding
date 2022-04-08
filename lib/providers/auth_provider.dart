@@ -82,6 +82,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<void> logout() async{
+    
     await AuthSecureStorage.deleteAll();
     notifyListeners();
   }

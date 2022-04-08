@@ -6,6 +6,12 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DashboardTabProvider with ChangeNotifier {
+  int _botNavBarIndex = 0;
+  get botNavBarIndex => _botNavBarIndex;
+  set botNavBarIndex(val) {
+    _botNavBarIndex = val;
+  }
+
   int _tab = HOME_PAGE;
   int get tab => _tab;
   set tab(int val) {
@@ -20,10 +26,13 @@ class DashboardTabProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  late User _user;
-  get user => _user;
+  bool _isFetchingData = false;
+  get isFetchingData => _isFetchingData;
+  set isFetchingData(val) {
+    _isFetchingData = val;
+  }
 
-  Future<void> getUserInfo() async {
+  Future<User> getUserInfo() async {
     
     // getAuthInfo();
     String apiURL = "$BASE_URL/api/User/$_email";
@@ -44,10 +53,7 @@ class DashboardTabProvider with ChangeNotifier {
 
       Map<String, dynamic> responseData = jsonDecode(apiResult.body);
 
-      print(responseData.toString());
-
-      _user = User.createUser(responseData);
-      print("dafi12: " + user.toString());
+      return User.createUser(responseData);
 
       
     } catch (e) {

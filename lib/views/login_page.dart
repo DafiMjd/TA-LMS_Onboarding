@@ -3,7 +3,6 @@ import 'package:lms_onboarding/providers/auth_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:provider/provider.dart';
 
-import 'dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -19,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     AuthProvider loginPageProvider = context.watch<AuthProvider>();
-
     void _login(String email, String password) {
       loginPageProvider.isLoginButtonDisabled = true;
       loginPageProvider.auth(email, password).catchError((onError) {

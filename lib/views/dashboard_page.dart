@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
+import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/activity/activity_page.dart';
 import 'package:lms_onboarding/views/profile/profile_page.dart';
 import 'package:provider/provider.dart';
@@ -18,15 +20,48 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  late User user;
+
+  void getUser() async {
+    DashboardTabProvider dashboardTabProvider =
+        Provider.of<DashboardTabProvider>(context, listen: false);
+
+    dashboardTabProvider.isFetchingData = true;
+    try {
+      user = await dashboardTabProvider.getUserInfo();
+    } catch (e) {
+      user = User(
+          email: "null",
+          name: "null",
+          gender: "null",
+          phone_number: "null",
+          progress: 0,
+          jobtitle: Jobtitle(
+              id: 0, jobtitle_name: "null", jobtitle_description: "null"),
+          birtdate: "null");
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("HTTP Error"),
+              content: Text("$e"),
+              actions: [
+                TextButton(
+                    onPressed: () =>
+                        Navigator.of(context, rootNavigator: true).pop(),
+                    child: Text("okay"))
+              ],
+            );
+          });
+    }
+    dashboardTabProvider.isFetchingData = false;
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    DashboardTabProvider dashboardTabProvider =
-        Provider.of<DashboardTabProvider>(context, listen: false);
-
-    dashboardTabProvider.getUserInfo();
+    getUser();
   }
 
   @override
@@ -40,7 +75,25 @@ class _DashboardPageState extends State<DashboardPage> {
       DashboardTabProvider dashboardTabProvider, BuildContext context) {
     if (dashboardTabProvider.tab == HOME_PAGE) {
       return Scaffold(
-        appBar: HomePage.homeAppBar(context),
+        appBar: (dashboardTabProvider.isFetchingData)
+            ? PreferredSize(
+                child: AppBar(
+                  backgroundColor: ORANGE_GARUDA,
+                  flexibleSpace: Container(
+                    height: MediaQuery.of(context).size.height / 5,
+                    margin: EdgeInsets.only(
+                      top: 30,
+                      bottom: 30,
+                      left: 20,
+                    ),
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                preferredSize:
+                    Size.fromHeight(MediaQuery.of(context).size.height / 5))
+            : HomePage.homeAppBar(context, user),
         body: HomePage.homeBody(context),
         bottomNavigationBar: BottomNavBar(),
       );
@@ -53,7 +106,9 @@ class _DashboardPageState extends State<DashboardPage> {
     } else if (dashboardTabProvider.tab == PROFILE_PAGE) {
       return Scaffold(
         appBar: ProfilePage.profileAppBar(),
-        body: ProfilePage.profileHome(context),
+        body: (dashboardTabProvider.isFetchingData)
+            ? CircularProgressIndicator()
+            : ProfilePage.profileHome(context, user),
         bottomNavigationBar: BottomNavBar(),
       );
     }
@@ -63,20 +118,14 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-class BottomNavBar extends StatefulWidget {
+class BottomNavBar extends StatelessWidget {
   const BottomNavBar({Key? key}) : super(key: key);
-
-  @override
-  _BottomNavBarState createState() => _BottomNavBarState();
-}
-
-class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     DashboardTabProvider dashboardTabProvider =
         context.watch<DashboardTabProvider>();
     return BottomNavigationBar(
-      currentIndex: _currentIndex,
+      currentIndex: dashboardTabProvider.botNavBarIndex,
       items: [
         BottomNavigationBarItem(
             icon: Icon(Icons.home), label: "", backgroundColor: Colors.white),
@@ -88,10 +137,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
             backgroundColor: Colors.white),
       ],
       onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-          dashboardTabProvider.tab = index;
-        });
+        dashboardTabProvider.botNavBarIndex = index;
+        dashboardTabProvider.tab = dashboardTabProvider.botNavBarIndex;
       },
     );
   }

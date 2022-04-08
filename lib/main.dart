@@ -33,17 +33,6 @@ class MyApp extends StatelessWidget {
 
           }
         ),
-        ChangeNotifierProxyProvider<DashboardTabProvider, UserProvider>(
-          create: (context) => UserProvider(),
-          update: (context, dashboardProv, userProv) {
-              if (userProv != null) {
-
-              return userProv..reveiveUser(dashboardProv.user);
-              }
-                return UserProvider();
-
-          }
-        ),
       ],
       builder: (context, child) => Consumer<AuthProvider>(
           builder: (context, auth, child) => MaterialApp(

@@ -39,7 +39,7 @@ class ActivityPage {
                         animation: true,
                         lineHeight: 20.0,
                         animationDuration: 2500,
-                        percent: 0,
+                        percent: 0.8,
                         center: Text("80.0%",
                             style: TextStyle(
                               color: Colors.white,
@@ -78,17 +78,14 @@ class ActivityPage {
                         ),
                       )
                     : Expanded(
-                        child: Scrollbar(
-                          controller: _scrollController,
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: categoryProv.category.length,
-                              itemBuilder: (context, i) => CategoryItem(
-                                  categoryName:
-                                      categoryProv.category[i].categoryName,
-                                  categoryColor:
-                                      categoryProv.category[i].categoryColor)),
-                        ),
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categoryProv.category.length,
+                            itemBuilder: (context, i) => CategoryItem(
+                                categoryName:
+                                    categoryProv.category[i].categoryName,
+                                categoryColor:
+                                    categoryProv.category[i].categoryColor)),
                       )
               ],
             ),

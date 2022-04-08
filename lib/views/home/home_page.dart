@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/home/garuda_profile_page.dart';
 import 'package:lms_onboarding/views/home/job_desc_page.dart';
 
 class HomePage {
-  static PreferredSize homeAppBar(BuildContext context) {
+  static PreferredSize homeAppBar(BuildContext context, User user) {
     return PreferredSize(
       preferredSize: Size.fromHeight(MediaQuery.of(context).size.height / 5),
       child: AppBar(
@@ -33,7 +34,7 @@ class HomePage {
                 children: [
                   Container(
                     alignment: Alignment.topLeft,
-                    child: Text("Name",
+                    child: Text(user.name,
                         style: TextStyle(
                             fontSize: 20,
                             color: Colors.black,
@@ -41,7 +42,7 @@ class HomePage {
                   ),
                   Container(
                     alignment: Alignment.topLeft,
-                    child: Text("Job Title",
+                    child: Text(user.jobtitle.jobtitle_name,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black,

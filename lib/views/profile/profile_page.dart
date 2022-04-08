@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/user.dart';
+import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/providers/profile/user_provider.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
+import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
+import 'package:lms_onboarding/views/profile/edit_profile.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage {
@@ -16,10 +19,12 @@ class ProfilePage {
     );
   }
 
-  static SingleChildScrollView profileHome(BuildContext context) {
+  static SingleChildScrollView profileHome(BuildContext context, user) {
+    DashboardTabProvider dashboardTabProv =
+        Provider.of<DashboardTabProvider>(context, listen: false);
     final userProv = Provider.of<UserProvider>(context);
     final authProv = Provider.of<AuthProvider>(context);
-    final User _user = userProv.user;
+    final User _user = user;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -36,43 +41,44 @@ class ProfilePage {
                   ),
                   Container(
                       margin: EdgeInsets.only(top: 15, left: 13, bottom: 15),
-                      child: 
-                      Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(children: [
+                            Text(
+                              _user.name,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            Text(
+                              // _user.jobtitle,
+                              _user.jobtitle.jobtitle_name,
+                              style: TextStyle(fontSize: 14),
+                              textAlign: TextAlign.end,
+                            )
+                          ]),
+                          InkWell(
+                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(user: _user))),
+                            child: Row(
                               children: [
-                                Column(children: [
-                                  Text(
-                                    _user.name,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  Text(
-                                    // _user.jobtitle,
-                                    "Jobtitle",
-                                    style: TextStyle(fontSize: 14),
-                                    textAlign: TextAlign.end,
-                                  )
-                                ]),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Edit Profile",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: EDIT_PROFILE_COLOR),
-                                    ),
-                                    VerticalDivider(
-                                      width: 15,
-                                    ),
-                                    Icon(
-                                      Icons.edit,
-                                      size: 17,
-                                      color: EDIT_PROFILE_COLOR,
-                                    ),
-                                  ],
-                                )
+                                Text(
+                                  "Edit Profile",
+                                  style: TextStyle(
+                                      fontSize: 14, color: EDIT_PROFILE_COLOR),
+                                ),
+                                VerticalDivider(
+                                  width: 15,
+                                ),
+                                Icon(
+                                  Icons.edit,
+                                  size: 17,
+                                  color: EDIT_PROFILE_COLOR,
+                                ),
                               ],
-                            )),
+                            ),
+                          )
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -132,18 +138,19 @@ class ProfilePage {
                         margin: EdgeInsets.all(10),
                         width: MediaQuery.of(context).size.width * 0.35,
                         child: Text(
-                          "Job Title",
+                          
+                              "Jobtitle",
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
-                      // Container(
-                      //   margin: EdgeInsets.all(5),
-                      //   width: MediaQuery.of(context).size.width * 0.5,
-                      //   child: Text(
-                      //     _user.jobtitle,
-                      //     style: TextStyle(fontSize: 16),
-                      //   ),
-                      // )
+                      Container(
+                        margin: EdgeInsets.all(5),
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Text(
+                          _user.jobtitle.jobtitle_name,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -298,6 +305,8 @@ class ProfilePage {
               child: ListTile(
                 onTap: () {
                   authProv.logout();
+                  dashboardTabProv.tab = HOME_PAGE;
+                  dashboardTabProv.botNavBarIndex = 0;
                 },
                 title: Text("Logout",
                     style: TextStyle(fontSize: 16, color: Colors.red)),

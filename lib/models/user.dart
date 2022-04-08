@@ -1,10 +1,12 @@
 import 'package:intl/intl.dart';
+import 'package:lms_onboarding/models/jobtitle.dart';
 
 class User {
   int progress;
 
   String email, name, gender, phone_number;
   String birtdate;
+  Jobtitle jobtitle;
 
   User({
     required this.email,
@@ -13,6 +15,7 @@ class User {
     required this.phone_number,
     required this.progress,
     required this.birtdate,
+    required this.jobtitle,
   });
 
   factory User.createUser(Map<String, dynamic> json) {
@@ -27,6 +30,7 @@ class User {
         gender: json['gender'],
         phone_number: json['phone_number'],
         progress: json['progress'],
+        jobtitle: Jobtitle.fromJson(json['jobtitle_']),
         birtdate: dateFormatted);
   }
 }
