@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:lms_onboarding/models/jobtitle.dart';
 
 class User {
-  int progress;
+  double progress;
 
   String email, name, gender, phone_number;
   String birtdate;
@@ -29,8 +29,8 @@ class User {
         name: json['name'],
         gender: json['gender'],
         phone_number: json['phone_number'],
-        progress: json['progress'],
+        progress: json['progress'].toDouble(),
         jobtitle: Jobtitle.fromJson(json['jobtitle_']),
-        birtdate: dateFormatted);
+        birtdate: json['birthdate']);
   }
 }

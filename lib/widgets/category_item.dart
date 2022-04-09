@@ -30,6 +30,7 @@ class CategoryItem extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(5))),
               width: MediaQuery.of(context).size.height * 0.1,
               height: MediaQuery.of(context).size.height * 0.1,
+              child: Icon(Icons.task, color: Colors.grey.shade100, size: 28,),
             ),
             Text(
               categoryName,

@@ -1,30 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lms_onboarding/models/user.dart';
+import 'package:lms_onboarding/providers/data_provider.dart';
+import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
+import 'package:lms_onboarding/views/dashboard_page.dart';
 
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:provider/provider.dart';
 
-class EditProfile extends StatelessWidget {
+class EditProfile extends StatefulWidget {
   const EditProfile({Key? key, required this.user}) : super(key: key);
 
   final User user;
 
   @override
-  Widget build(BuildContext context) {
-    String _selectedGenderVal = user.gender;
-    List<String> genders = ["Laki-Laki", "Perempuan"];
-    String dateSelected = user.birtdate;
+  State<EditProfile> createState() => _EditProfileState();
+}
 
-    final TextEditingController _emailCtrl =
-        TextEditingController(text: user.email);
-    final TextEditingController _phoneNumCtrl =
-        TextEditingController(text: user.phone_number);
-    final TextEditingController _nameCtrl =
-        TextEditingController(text: user.name);
+class _EditProfileState extends State<EditProfile> {
+  late final TextEditingController _emailCtrl;
+  late final TextEditingController _phoneNumCtrl;
+  late final TextEditingController _nameCtrl;
+  late String _selectedGenderVal;
+  late DateTime _datePicked;
+  List<String> _genders = ["Laki-Laki", "Perempuan"];
+
+  late EditProfileProvider editProv;
+  late DataProvider dataProv;
+
+  void _editUser(String email, String name, String phoneNum, DateTime birthdate,
+      String gender) async {
+    editProv.isSaveButtonDisabled = true;
+
+
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String dateFormatted = formatter.format(birthdate);
+
+    try {
+      dataProv.editProfile(name, gender, phoneNum, dateFormatted);
+    } catch (onError) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("HTTP Error"),
+              content: Text("$onError"),
+              actions: [
+                TextButton(
+                    onPressed: () =>
+                        Navigator.of(context, rootNavigator: true).pop(),
+                    child: Text("okay"))
+              ],
+            );
+          });
+    }
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
+    editProv.isSaveButtonDisabled = false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _emailCtrl = TextEditingController(text: widget.user.email);
+    _phoneNumCtrl = TextEditingController(text: widget.user.phone_number);
+    _nameCtrl = TextEditingController(text: widget.user.name);
+
+    _selectedGenderVal = widget.user.gender;
+    _datePicked = DateTime.parse(widget.user.birtdate);
+
+    editProv = Provider.of<EditProfileProvider>(context, listen: false);
+    dataProv = Provider.of<DataProvider>(context, listen: false);
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: _datePicked,
+        firstDate: DateTime(1),
+        lastDate: DateTime(2101),
+        builder: (context, child) {
+          return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: ORANGE_GARUDA,
+                colorScheme: ColorScheme.light(primary: ORANGE_GARUDA),
+                buttonTheme:
+                    ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              child: child!);
+        });
+
+    if (picked != null && picked != _datePicked) {
+      setState(() {
+        _datePicked = picked;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Edit Profile"),
+          title: Text(
+            "Edit Profile",
+          ),
+          foregroundColor: Colors.black,
           backgroundColor: ORANGE_GARUDA,
         ),
         body: SingleChildScrollView(
@@ -57,11 +139,13 @@ class EditProfile extends StatelessWidget {
                       ),
 
                       // Fullname
-                      textField("Full Name"),
+                      titleField("Fullname", editProv.isNameFieldEmpty),
                       SizedBox(
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          onChanged: (value) => editProv.isNameFieldEmpty =
+                              _nameCtrl.text.isEmpty,
                           controller: _nameCtrl,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -71,25 +155,29 @@ class EditProfile extends StatelessWidget {
                       ),
 
                       // Email
-                      textField("Email"),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
-                      TextFormField(
-                          controller: _emailCtrl,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                          )),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      // titleField("Email", editProv.isEmailFieldEmpty),
+                      // SizedBox(
+                      //   height: DEFAULT_PADDING,
+                      // ),
+                      // TextFormField(
+                      //   onChanged: (value) => editProv.isEmailFieldEmpty =
+                      //       _emailCtrl.text.isEmpty,
+                      //   controller: _emailCtrl,
+                      //   decoration:
+                      //       const InputDecoration(border: OutlineInputBorder()),
+                      // ),
+                      // SizedBox(
+                      //   height: DEFAULT_PADDING,
+                      // ),
 
                       // Phone Number
-                      textField("Phone Number"),
+                      titleField("Phone Number", editProv.isPhoneNumFieldEmpty),
                       SizedBox(
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          onChanged: (value) => editProv.isPhoneNumFieldEmpty =
+                              _phoneNumCtrl.text.isEmpty,
                           controller: _phoneNumCtrl,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -103,72 +191,51 @@ class EditProfile extends StatelessWidget {
                       SizedBox(
                         height: DEFAULT_PADDING,
                       ),
-                      Container(
-                        padding: EdgeInsets.only(left: 7),
-                        height: 55,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(3),
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Colors.black38,
-                              width: 1.0,
-                            ),
-                            top: BorderSide(
-                              color: Colors.black38,
-                              width: 1.0,
-                            ),
-                            right: BorderSide(
-                              color: Colors.black38,
-                              width: 1.0,
-                            ),
-                            left: BorderSide(
-                              color: Colors.black38,
-                              width: 1.0,
+                      InkWell(
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.only(left: 7),
+                          height: 55,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Colors.black38,
+                                width: 1.0,
+                              ),
+                              top: BorderSide(
+                                color: Colors.black38,
+                                width: 1.0,
+                              ),
+                              right: BorderSide(
+                                color: Colors.black38,
+                                width: 1.0,
+                              ),
+                              left: BorderSide(
+                                color: Colors.black38,
+                                width: 1.0,
+                              ),
                             ),
                           ),
-                        ),
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                DatePicker.showDatePicker(context,
-                                    showTitleActions: true,
-                                    minTime: DateTime(1950, 1, 1),
-                                    maxTime: DateTime(2019, 31, 12),
-                                    theme: DatePickerTheme(
-                                        headerColor: ORANGE_GARUDA,
-                                        backgroundColor: BROWN_GARUDA,
-                                        itemStyle: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18),
-                                        doneStyle: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16)), onChanged: (date) {
-                                  print('change $date in time zone ' +
-                                      date.timeZoneOffset.inHours.toString());
-                                }, onConfirm: (date) {
-                                  print('confirm $date');
-                                  dateSelected = date.toString();
-                                },
-                                    currentTime: DateTime.now(),
-                                    locale: LocaleType.en);
-                              },
-                              child: Icon(
+                          child: Row(
+                            children: [
+                              Icon(
                                 Icons.date_range,
                                 size: 30,
                               ),
-                            ),
-                            VerticalDivider(width: 10, color: Colors.black38),
-                            Container(
-                              margin: EdgeInsets.all(5),
-                              width: MediaQuery.of(context).size.width * 0.5,
-                              child: Text(
-                                dateSelected,
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            )
-                          ],
+                              VerticalDivider(width: 10, color: Colors.black38),
+                              Container(
+                                margin: EdgeInsets.all(5),
+                                width: MediaQuery.of(context).size.width * 0.5,
+                                child: Text(
+                                  _datePicked.toString(),
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -183,7 +250,7 @@ class EditProfile extends StatelessWidget {
                       DropdownButtonFormField(
                         hint: Text(_selectedGenderVal),
                         dropdownColor: Colors.white,
-                        items: genders.map((val) {
+                        items: _genders.map((val) {
                           return DropdownMenuItem(
                             value: val,
                             child: Text(
@@ -193,7 +260,6 @@ class EditProfile extends StatelessWidget {
                         }).toList(),
                         onChanged: (value) {
                           _selectedGenderVal = value.toString();
-                          print("dafi: " + _selectedGenderVal);
                         },
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -204,7 +270,28 @@ class EditProfile extends StatelessWidget {
                         height: DEFAULT_PADDING,
                       ),
                       ElevatedButton(
-                          onPressed: () {}, child: Text("Save Changes")),
+                        onPressed: (editProv.isSaveButtonDisabled)
+                            ? () {}
+                            : () {
+                                if (_emailCtrl.text.isNotEmpty &&
+                                    _nameCtrl.text.isNotEmpty &&
+                                    _phoneNumCtrl.text.isNotEmpty) {
+                                  _editUser(
+                                      _emailCtrl.text,
+                                      _nameCtrl.text,
+                                      _phoneNumCtrl.text,
+                                      _datePicked,
+                                      _selectedGenderVal);
+                                }
+                              },
+                        child: editProv.isSaveButtonDisabled
+                            ? Text(
+                                "Wait",
+                              )
+                            : Text(
+                                "Save Changes",
+                              ),
+                      ),
                     ],
                   ),
                 )),
@@ -221,4 +308,17 @@ class EditProfile extends StatelessWidget {
       ),
     );
   }
+
+  Container titleField(title, isEmpty) => Container(
+      alignment: Alignment.centerLeft,
+      child: (isEmpty)
+          ? Text(
+              title + "*",
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.w600, color: Colors.red),
+            )
+          : Text(
+              title,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ));
 }

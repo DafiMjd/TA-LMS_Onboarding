@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/providers/activity/category_provider.dart';
+import 'package:lms_onboarding/providers/data_provider.dart';
+import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/providers/profile/user_provider.dart';
 import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:provider/provider.dart';
@@ -22,14 +24,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProxyProvider<AuthProvider, DashboardTabProvider>(
-          create: (context) => DashboardTabProvider(),
-          update: (context, authProv, dashboardProv) {
-              if (dashboardProv != null) {
+        ChangeNotifierProvider(create: (context) => DashboardTabProvider()),
+        ChangeNotifierProvider(create: (context) => EditProfileProvider()),
+        ChangeNotifierProxyProvider<AuthProvider, DataProvider>(
+          create: (context) => DataProvider(),
+          update: (context, authProv, dataProv) {
+              if (dataProv != null) {
 
-              return dashboardProv..recieveToken(authProv);
+              return dataProv..recieveToken(authProv);
               }
-                return DashboardTabProvider();
+                return DataProvider();
 
           }
         ),

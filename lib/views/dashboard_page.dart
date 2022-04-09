@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
+import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/activity/activity_page.dart';
+import 'package:lms_onboarding/views/bottom_navbar.dart';
+import 'package:lms_onboarding/views/home/home_page.dart';
 import 'package:lms_onboarding/views/profile/profile_page.dart';
 import 'package:provider/provider.dart';
-
-import 'home/home_page.dart';
 
 int _currentIndex = 0;
 
@@ -21,14 +23,13 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   late User user;
+  late List<ActivityCategory> categories;
+  late DataProvider dataProv;
 
-  void getUser() async {
-    DashboardTabProvider dashboardTabProvider =
-        Provider.of<DashboardTabProvider>(context, listen: false);
-
-    dashboardTabProvider.isFetchingData = true;
+  void fetchUser() async {
+    dataProv.isFetchingData = true;
     try {
-      user = await dashboardTabProvider.getUserInfo();
+      user = await dataProv.getUserInfo();
     } catch (e) {
       user = User(
           email: "null",
@@ -54,92 +55,83 @@ class _DashboardPageState extends State<DashboardPage> {
             );
           });
     }
-    dashboardTabProvider.isFetchingData = false;
+    dataProv.isFetchingData = false;
+  }
+
+  void fetchCategories() async {
+    dataProv.isFetchingData = true;
+
+    try {
+      categories = await dataProv.fetchActivityCategories();
+
+    } catch(e) {
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("HTTP Error"),
+              content: Text("$e"),
+              actions: [
+                TextButton(
+                    onPressed: () =>
+                        Navigator.of(context, rootNavigator: true).pop(),
+                    child: Text("okay"))
+              ],
+            );
+          });
+
+    }
+    dataProv.isFetchingData = false;
+
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getUser();
+    dataProv = Provider.of<DataProvider>(context, listen: false);
+    fetchUser();
+    fetchCategories();
   }
 
   @override
   Widget build(BuildContext context) {
     DashboardTabProvider dashboardTabProvider =
         context.watch<DashboardTabProvider>();
-    return page(dashboardTabProvider, context);
-  }
 
-  Scaffold page(
-      DashboardTabProvider dashboardTabProvider, BuildContext context) {
-    if (dashboardTabProvider.tab == HOME_PAGE) {
+    Widget page() {
+      if (dashboardTabProvider.tab == HOME_PAGE) {
+        return (dataProv.isFetchingData)
+            ? loadingScreen()
+            : HomePage(
+                user: user,
+              );
+      }
+      if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
+        return (dataProv.isFetchingData)
+            ? loadingScreen()
+            : ActivityPage(
+                userProgress: user.progress,
+                categories: categories,
+              );
+      } else if (dashboardTabProvider.tab == PROFILE_PAGE) {
+        return (dataProv.isFetchingData)
+            ? loadingScreen()
+            : ProfilePage(
+                user: user,
+              );
+      }
       return Scaffold(
-        appBar: (dashboardTabProvider.isFetchingData)
-            ? PreferredSize(
-                child: AppBar(
-                  backgroundColor: ORANGE_GARUDA,
-                  flexibleSpace: Container(
-                    height: MediaQuery.of(context).size.height / 5,
-                    margin: EdgeInsets.only(
-                      top: 30,
-                      bottom: 30,
-                      left: 20,
-                    ),
-                    child: CircularProgressIndicator(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                preferredSize:
-                    Size.fromHeight(MediaQuery.of(context).size.height / 5))
-            : HomePage.homeAppBar(context, user),
-        body: HomePage.homeBody(context),
-        bottomNavigationBar: BottomNavBar(),
-      );
-    } else if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
-      return Scaffold(
-        appBar: ActivityPage.activityAppBar(),
-        body: ActivityPage.activityHome(context),
-        bottomNavigationBar: BottomNavBar(),
-      );
-    } else if (dashboardTabProvider.tab == PROFILE_PAGE) {
-      return Scaffold(
-        appBar: ProfilePage.profileAppBar(),
-        body: (dashboardTabProvider.isFetchingData)
-            ? CircularProgressIndicator()
-            : ProfilePage.profileHome(context, user),
         bottomNavigationBar: BottomNavBar(),
       );
     }
-    return Scaffold(
-      bottomNavigationBar: BottomNavBar(),
-    );
-  }
-}
 
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    DashboardTabProvider dashboardTabProvider =
-        context.watch<DashboardTabProvider>();
-    return BottomNavigationBar(
-      currentIndex: dashboardTabProvider.botNavBarIndex,
-      items: [
-        BottomNavigationBarItem(
-            icon: Icon(Icons.home), label: "", backgroundColor: Colors.white),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.task), label: "", backgroundColor: Colors.white),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.account_box_rounded),
-            label: "",
-            backgroundColor: Colors.white),
-      ],
-      onTap: (index) {
-        dashboardTabProvider.botNavBarIndex = index;
-        dashboardTabProvider.tab = dashboardTabProvider.botNavBarIndex;
-      },
+    return page();
+  }
+
+  Scaffold loadingScreen() {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(child: CircularProgressIndicator()),
     );
   }
 }

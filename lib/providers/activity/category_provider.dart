@@ -1,18 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/models/category.dart';
+import 'package:lms_onboarding/models/activity_category.dart';
 
 class CategoryProvider extends ChangeNotifier {
-  final List<Category> _category = [
-    Category(categoryName: "Week 1 Activity", categoryColor: Colors.amber),
-    Category(categoryName: "30 Days Activity", categoryColor: Colors.amber),
-    Category(categoryName: "60 Days Activity", categoryColor: Colors.green),
-    Category(categoryName: "90 Days Activity", categoryColor: Colors.green),
-    Category(
-        categoryName: "120 Days Activity", categoryColor: Colors.redAccent),
-    Category(
-        categoryName: "150 Days Activity", categoryColor: Colors.redAccent),
+  final List<ActivityCategory> _category = [
+    // ActivityCategory(categoryName: "Week 1 Activity", categoryColor: Colors.green, id: 1, categoryDesc: "dafi", duration: 1,),
+    
   ];
 
-  List<Category> get category => _category;
+  List<ActivityCategory> get category => _category;
 }

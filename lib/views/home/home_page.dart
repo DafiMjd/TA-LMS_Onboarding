@@ -1,12 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/user.dart';
+import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
+import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/views/home/garuda_profile_page.dart';
 import 'package:lms_onboarding/views/home/job_desc_page.dart';
+import 'package:provider/provider.dart';
 
-class HomePage {
-  static PreferredSize homeAppBar(BuildContext context, User user) {
-    return PreferredSize(
+class HomePage extends StatefulWidget {
+  const HomePage({ Key? key, required this.user }) : super(key: key);
+
+  final User user;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PreferredSize(
       preferredSize: Size.fromHeight(MediaQuery.of(context).size.height / 5),
       child: AppBar(
         elevation: 0,
@@ -34,7 +51,7 @@ class HomePage {
                 children: [
                   Container(
                     alignment: Alignment.topLeft,
-                    child: Text(user.name,
+                    child: Text(widget.user.name,
                         style: TextStyle(
                             fontSize: 20,
                             color: Colors.black,
@@ -42,7 +59,7 @@ class HomePage {
                   ),
                   Container(
                     alignment: Alignment.topLeft,
-                    child: Text(user.jobtitle.jobtitle_name,
+                    child: Text(widget.user.jobtitle.jobtitle_name,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black,
@@ -54,11 +71,9 @@ class HomePage {
           ),
         ),
       ),
-    );
-  }
-
-  static Stack homeBody(BuildContext context) {
-    return Stack(
+    ),
+    
+      body: Stack(
       children: [
         // background
         Container(
@@ -199,6 +214,8 @@ class HomePage {
 
         // Pengenalan Perusahaan
       ],
+    ),
+      bottomNavigationBar: BottomNavBar()
     );
   }
 }
