@@ -20,12 +20,14 @@ class DataProvider extends ChangeNotifier {
     _isFetchingData = val;
   }
 
+  // Users
   Future<User> getUserInfo() async {
     // getAuthInfo();
     String apiURL = "$BASE_URL/api/User/$_email";
+    print("dafi token: " + _token);
 
     try {
-      var apiResult = await http.get(
+      var result = await http.get(
         Uri.parse(apiURL),
         headers: {
           "Access-Control-Allow-Origin":
@@ -38,15 +40,19 @@ class DataProvider extends ChangeNotifier {
         },
       );
 
-      Map<String, dynamic> responseData = jsonDecode(apiResult.body);
+      print("dafi majid: " + result.body.toString());
 
-      return User.createUser(responseData);
+      // Map<String, dynamic> responseData = jsonDecode(result.body);
+
+      // return User.createUser(responseData);
+      return compute(parseUser, result.body);
     } catch (e) {
+      print("dafi e" + e.toString());
       throw (e);
     }
   }
 
-  Future<void> editProfile(
+  Future<User> editProfile(
       String name, String gender, String phoneNum, String date) async {
     // getAuthInfo();
     String apiURL = "$BASE_URL/api/User/";
@@ -70,14 +76,16 @@ class DataProvider extends ChangeNotifier {
             "birthdate": date,
           }));
 
-      print("dafi majid: " + result.body.toString());
+      return getUserInfo();
     } catch (e) {
       print("dafi erro " + e.toString());
 
       throw (e);
     }
   }
+  // =======
 
+  // Acitivy Category
   Future<List<ActivityCategory>> fetchActivityCategories() async {
     String url = "$BASE_URL/api/ActivityCategory";
 
@@ -95,23 +103,66 @@ class DataProvider extends ChangeNotifier {
         },
       );
 
-      var parsed = jsonDecode(result.body);
+      // var parsed = jsonDecode(result.body);
 
-      return parsed
-          .map<ActivityCategory>((json) => ActivityCategory.fromJson(json))
-          .toList();
+      // return parsed
+      //     .map<ActivityCategory>((json) => ActivityCategory.fromJson(json))
+      //     .toList();
+      return compute(parseActivityCategories, result.body);
     } catch (e) {
       throw (e);
     }
   }
+  // =======
 
-  List<ActivityCategory> parseActivityCategories(String responseBody) {
-    List<Map<String, dynamic>> parsed =
-        jsonDecode(responseBody).cast<Map<String, dynamic>>();
+  // Change Password
+  Future<void> changePassword(String curPass, String newPass) async {
+    // getAuthInfo();
+    String apiURL = "$BASE_URL/api/User/edit-password";
 
+    try {
+      var result = await http.put(Uri.parse(apiURL),
+          headers: {
+            "Access-Control-Allow-Origin":
+                "*", // Required for CORS support to work
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Expose-Headers": "Authorization, authenticated",
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $_token',
+          },
+          body: jsonEncode({
+            "email": _email,
+            "password": curPass,
+            "new_password": newPass,
+          }));
 
-    return parsed
-        .map<ActivityCategory>((json) => ActivityCategory.fromJson(json))
-        .toList();
+      Map<String, dynamic> responseData = jsonDecode(result.body);
+      if (result.statusCode == 400) {
+        throw responseData['errorMessage'];
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
+  // =======
 }
+
+// Acitivy Category
+List<ActivityCategory> parseActivityCategories(String responseBody) {
+  List<Map<String, dynamic>> parsed =
+      jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+  return parsed
+      .map<ActivityCategory>((json) => ActivityCategory.fromJson(json))
+      .toList();
+}
+// =======
+
+// Users
+User parseUser(String responseBody) {
+  final parsed = jsonDecode(responseBody);
+
+  return User.createUser(parsed);
+}
+// =======

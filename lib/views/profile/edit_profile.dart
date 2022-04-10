@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lms_onboarding/models/user.dart';
+import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
@@ -28,6 +29,7 @@ class _EditProfileState extends State<EditProfile> {
 
   late EditProfileProvider editProv;
   late DataProvider dataProv;
+  late DashboardTabProvider dashProv;
 
   void _editUser(String email, String name, String phoneNum, DateTime birthdate,
       String gender) async {
@@ -38,7 +40,8 @@ class _EditProfileState extends State<EditProfile> {
     final String dateFormatted = formatter.format(birthdate);
 
     try {
-      dataProv.editProfile(name, gender, phoneNum, dateFormatted);
+      var newUser = await dataProv.editProfile(name, gender, phoneNum, dateFormatted);
+      dashProv.user = newUser;
     } catch (onError) {
       return showDialog(
           context: context,
@@ -73,6 +76,8 @@ class _EditProfileState extends State<EditProfile> {
 
     editProv = Provider.of<EditProfileProvider>(context, listen: false);
     dataProv = Provider.of<DataProvider>(context, listen: false);
+
+    dashProv = Provider.of<DashboardTabProvider>(context, listen: false);
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -270,6 +275,11 @@ class _EditProfileState extends State<EditProfile> {
                         height: DEFAULT_PADDING,
                       ),
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                        primary: editProv.isSaveButtonDisabled
+                            ? Colors.blue[300]
+                            : Colors.blue),
+                        
                         onPressed: (editProv.isSaveButtonDisabled)
                             ? () {}
                             : () {

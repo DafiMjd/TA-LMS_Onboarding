@@ -12,8 +12,6 @@ import 'package:lms_onboarding/views/home/home_page.dart';
 import 'package:lms_onboarding/views/profile/profile_page.dart';
 import 'package:provider/provider.dart';
 
-int _currentIndex = 0;
-
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
@@ -25,27 +23,32 @@ class _DashboardPageState extends State<DashboardPage> {
   late User user;
   late List<ActivityCategory> categories;
   late DataProvider dataProv;
+  late DashboardTabProvider dashProv;
 
   void fetchUser() async {
     dataProv.isFetchingData = true;
+
     try {
-      user = await dataProv.getUserInfo();
-    } catch (e) {
+      var u = await dataProv.getUserInfo();
+      dashProv.user = u;
+      print("dafi user: " + dashProv.user.name);
+
+    } catch (onError) {
       user = User(
           email: "null",
           name: "null",
           gender: "null",
           phone_number: "null",
           progress: 0,
+          birtdate: "null",
           jobtitle: Jobtitle(
-              id: 0, jobtitle_name: "null", jobtitle_description: "null"),
-          birtdate: "null");
+              id: 0, jobtitle_name: "null", jobtitle_description: "null"));
       return showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               title: Text("HTTP Error"),
-              content: Text("$e"),
+              content: Text("$onError"),
               actions: [
                 TextButton(
                     onPressed: () =>
@@ -55,6 +58,7 @@ class _DashboardPageState extends State<DashboardPage> {
             );
           });
     }
+
     dataProv.isFetchingData = false;
   }
 
@@ -63,8 +67,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
     try {
       categories = await dataProv.fetchActivityCategories();
-
-    } catch(e) {
+    } catch (e) {
       return showDialog(
           context: context,
           builder: (context) {
@@ -79,16 +82,15 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             );
           });
-
     }
     dataProv.isFetchingData = false;
-
   }
 
   @override
   void initState() {
     super.initState();
     dataProv = Provider.of<DataProvider>(context, listen: false);
+    dashProv = Provider.of<DashboardTabProvider>(context, listen: false);
     fetchUser();
     fetchCategories();
   }
@@ -97,6 +99,8 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     DashboardTabProvider dashboardTabProvider =
         context.watch<DashboardTabProvider>();
+    
+    user = dashboardTabProvider.user;
 
     Widget page() {
       if (dashboardTabProvider.tab == HOME_PAGE) {

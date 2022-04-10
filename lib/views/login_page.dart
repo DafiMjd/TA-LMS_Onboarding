@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     AuthProvider loginPageProvider = context.watch<AuthProvider>();
+
     void _login(String email, String password) {
       loginPageProvider.isLoginButtonDisabled = true;
       loginPageProvider.auth(email, password).catchError((onError) {
@@ -36,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             });
       });
+      loginPageProvider.isLoginButtonDisabled = false;
     }
 
     Card BuildAuthCard() {

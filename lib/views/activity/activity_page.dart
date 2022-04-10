@@ -77,16 +77,16 @@ class ActivityPage extends StatelessWidget {
                         style: TextStyle(fontSize: 17),
                       )),
                   // Horizontal ListView
-                  // (categoryProv.category.isEmpty)
-                  //     ? Center(
-                  //         child: Text(
-                  //           "No Data",
-                  //           style: TextStyle(
-                  //             fontSize: 25,
-                  //           ),
-                  //         ),
-                  //       )
-                  //     : 
+                  (categories.isEmpty)
+                      ? Center(
+                          child: Text(
+                            "No Data",
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                        )
+                      : 
                       Expanded(
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,

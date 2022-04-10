@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
@@ -19,5 +20,19 @@ class DashboardTabProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  User _user = User(
+          email: "null",
+          name: "null",
+          gender: "null",
+          phone_number: "null",
+          progress: 0,
+          birtdate: "null",
+          jobtitle: Jobtitle(
+              id: 0, jobtitle_name: "null", jobtitle_description: "null"));
+  get user => _user;
+  set user(val) {
+    _user = val;
+    notifyListeners();
+  }
   
 }

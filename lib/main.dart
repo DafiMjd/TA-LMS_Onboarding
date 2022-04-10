@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/providers/activity/category_provider.dart';
 import 'package:lms_onboarding/providers/data_provider.dart';
+import 'package:lms_onboarding/providers/profile/change_password_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/providers/profile/user_provider.dart';
 import 'package:lms_onboarding/views/dashboard_page.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => DashboardTabProvider()),
         ChangeNotifierProvider(create: (context) => EditProfileProvider()),
+        ChangeNotifierProvider(create: (context) => ChangePasswordProvider()),
         ChangeNotifierProxyProvider<AuthProvider, DataProvider>(
           create: (context) => DataProvider(),
           update: (context, authProv, dataProv) {
