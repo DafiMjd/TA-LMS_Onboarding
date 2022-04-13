@@ -9,6 +9,7 @@ import 'package:lms_onboarding/providers/auth_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/bottom_navbar.dart';
+import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:lms_onboarding/views/profile/change_password.dart';
 import 'package:lms_onboarding/views/profile/edit_profile.dart';
 import 'package:provider/provider.dart';
@@ -324,7 +325,10 @@ FutureOr onGoBack(dynamic value) {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ChangePassword())),
+                                          ChangePassword())).then((value) {
+                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardPage()));
+    
+                                          }),
                   title:
                       Text("Change Password", style: TextStyle(fontSize: 16)),
                   trailing: Icon(Icons.arrow_forward_ios),
@@ -338,9 +342,9 @@ FutureOr onGoBack(dynamic value) {
               child: Card(
                 child: ListTile(
                   onTap: () {
-                    authProv.logout();
                     dashboardTabProv.tab = HOME_PAGE;
                     dashboardTabProv.botNavBarIndex = 0;
+                    authProv.logout();
                   },
                   title: Text("Logout",
                       style: TextStyle(fontSize: 16, color: Colors.red)),

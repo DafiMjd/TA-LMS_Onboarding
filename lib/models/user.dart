@@ -19,9 +19,9 @@ class User {
   });
 
   factory User.createUser(Map<String, dynamic> json) {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    final DateTime birtDate = DateTime.parse(json['birthdate']);
-    final String dateFormatted = formatter.format(birtDate);
+    // final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    // final DateTime birtDate = DateTime.parse(json['birthdate']);
+    // final String dateFormatted = formatter.format(birtDate);
 
 
     return User(

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:lms_onboarding/utils/auth_secure_storage.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
 
 class AuthProvider with ChangeNotifier {
   late bool _isAuth = false;
@@ -84,6 +85,8 @@ class AuthProvider with ChangeNotifier {
   Future<void> logout() async{
     
     await AuthSecureStorage.deleteAll();
+    await _deleteAppDir();
+    await _deleteCacheDir();
     notifyListeners();
   }
 
@@ -123,5 +126,25 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
   // ==========================
+
+  /// this will delete cache
+  Future<void> _deleteCacheDir() async {
+    final cacheDir = await getTemporaryDirectory();
+    print("dafi dapet");
+
+    if (cacheDir.existsSync()) {
+      cacheDir.deleteSync(recursive: true);
+    }
+  }
+
+  /// this will delete app's storage
+  Future<void> _deleteAppDir() async {
+    final appDir = await getApplicationSupportDirectory();
+    print("dafi dapet 2");
+
+    if (appDir.existsSync()) {
+      appDir.deleteSync(recursive: true);
+    }
+  }
 
 }

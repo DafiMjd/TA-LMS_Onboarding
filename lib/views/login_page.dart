@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             });
       });
-      loginPageProvider.isLoginButtonDisabled = false;
+      // loginPageProvider.isLoginButtonDisabled = false;
     }
 
     Card BuildAuthCard() {
