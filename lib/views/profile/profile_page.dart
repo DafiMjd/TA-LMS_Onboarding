@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
-import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
@@ -24,7 +23,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late DataProvider dataProv;
   late AuthProvider authProv;
   late DashboardTabProvider dashboardTabProv;
 
@@ -38,7 +36,6 @@ FutureOr onGoBack(dynamic value) {
     dashboardTabProv =
         Provider.of<DashboardTabProvider>(context, listen: false);
     authProv = Provider.of<AuthProvider>(context, listen: false);
-    dataProv = Provider.of<DataProvider>(context, listen: false);
   }
 
   @override

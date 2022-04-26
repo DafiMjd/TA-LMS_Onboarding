@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
-import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
@@ -28,7 +27,6 @@ class _EditProfileState extends State<EditProfile> {
   List<String> _genders = ["Laki-Laki", "Perempuan"];
 
   late EditProfileProvider editProv;
-  late DataProvider dataProv;
   late DashboardTabProvider dashProv;
 
   void _editUser(String email, String name, String phoneNum, DateTime birthdate,
@@ -40,7 +38,7 @@ class _EditProfileState extends State<EditProfile> {
     final String dateFormatted = formatter.format(birthdate);
 
     try {
-      var newUser = await dataProv.editProfile(name, gender, phoneNum, dateFormatted);
+      var newUser = await editProv.editProfile(name, gender, phoneNum, dateFormatted);
       dashProv.user = newUser;
     } catch (onError) {
       return showDialog(
@@ -75,7 +73,6 @@ class _EditProfileState extends State<EditProfile> {
     _datePicked = DateTime.parse(widget.user.birtdate);
 
     editProv = Provider.of<EditProfileProvider>(context, listen: false);
-    dataProv = Provider.of<DataProvider>(context, listen: false);
 
     dashProv = Provider.of<DashboardTabProvider>(context, listen: false);
   }

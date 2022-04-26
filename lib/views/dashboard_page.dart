@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
-import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/activity/activity_page.dart';
@@ -22,74 +23,112 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   late User user;
   late List<ActivityCategory> categories;
-  late DataProvider dataProv;
+  // late DashboardPageProvider dashProv;
   late DashboardTabProvider dashProv;
 
+  void errorFetchingUser(e) async {
+    user = User(
+        email: "null",
+        name: "null",
+        gender: "null",
+        phone_number: "null",
+        progress: 0,
+        birtdate: "null",
+        jobtitle: Jobtitle(
+            id: 0, jobtitle_name: "null", jobtitle_description: "null"));
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("HTTP Error"),
+            content: Text("$e"),
+            actions: [
+              TextButton(
+                  onPressed: () =>
+                      Navigator.of(context, rootNavigator: true).pop(),
+                  child: Text("okay"))
+            ],
+          );
+        });
+  }
+
   void fetchUser() async {
-    dataProv.isFetchingData = true;
+    dashProv.isFetchingData = true;
 
     try {
-      var u = await dataProv.getUserInfo();
-      dashProv.user = u;
-      print("dafi user: " + dashProv.user.name);
+        var u = await dashProv.getUserInfo();
+        dashProv.user = u;
+        dashProv.isFetchingData = false;
+      } catch (e) {
+        dashProv.isFetchingData = false;
+        errorFetchingUser(e);
+      }
 
-    } catch (onError) {
-      user = User(
-          email: "null",
-          name: "null",
-          gender: "null",
-          phone_number: "null",
-          progress: 0,
-          birtdate: "null",
-          jobtitle: Jobtitle(
-              id: 0, jobtitle_name: "null", jobtitle_description: "null"));
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("HTTP Error"),
-              content: Text("$onError"),
-              actions: [
-                TextButton(
-                    onPressed: () =>
-                        Navigator.of(context, rootNavigator: true).pop(),
-                    child: Text("okay"))
-              ],
-            );
-          });
-    }
+    // runZonedGuarded(() async {
+    //   try {
+    //     var u = await dashProv.getUserInfo();
+    //     dashProv.user = u;
+    //     dashProv.isFetchingData = false;
+    //   } catch (e) {
+    //     dashProv.isFetchingData = false;
+    //     errorFetchingUser(e);
+    //   }
+    // }, (e, s) async {
+    //   print("uncaught");
+    //     dashProv.isFetchingData = false;
+    //     errorFetchingUser(e);
+    // });
+  
+  }
 
-    dataProv.isFetchingData = false;
+  void errorFetchingCategories(e) async {
+    categories = [];
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("HTTP Error"),
+            content: Text("$e"),
+            actions: [
+              TextButton(
+                  onPressed: () =>
+                      Navigator.of(context, rootNavigator: true).pop(),
+                  child: Text("okay"))
+            ],
+          );
+        });
   }
 
   void fetchCategories() async {
-    dataProv.isFetchingData = true;
+    dashProv.isFetchingData = true;
 
     try {
-      categories = await dataProv.fetchActivityCategories();
-    } catch (e) {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("HTTP Error"),
-              content: Text("$e"),
-              actions: [
-                TextButton(
-                    onPressed: () =>
-                        Navigator.of(context, rootNavigator: true).pop(),
-                    child: Text("okay"))
-              ],
-            );
-          });
-    }
-    dataProv.isFetchingData = false;
+        categories = await dashProv.fetchActivityCategories();
+        dashProv.isFetchingData = false;
+      } catch (e) {
+        dashProv.isFetchingData = false;
+        errorFetchingCategories(e);
+      }
+
+    // runZonedGuarded(() async {
+    //   try {
+    //     categories = await dashProv.fetchActivityCategories();
+    //     dashProv.isFetchingData = false;
+    //   } catch (e) {
+    //     dashProv.isFetchingData = false;
+    //     errorFetchingCategories(e);
+    //   }
+    // }, (e, s) async {
+    //   categories = [];
+    //   dashProv.isFetchingData = false;
+    //   errorFetchingCategories(e);
+    // });
+  
   }
 
   @override
   void initState() {
     super.initState();
-    dataProv = Provider.of<DataProvider>(context, listen: false);
     dashProv = Provider.of<DashboardTabProvider>(context, listen: false);
     fetchUser();
     fetchCategories();
@@ -99,27 +138,27 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     DashboardTabProvider dashboardTabProvider =
         context.watch<DashboardTabProvider>();
-    
+
     user = dashboardTabProvider.user;
 
     Widget page() {
       if (dashboardTabProvider.tab == HOME_PAGE) {
-        return (dataProv.isFetchingData)
-            ? loadingScreen()
+        return (dashProv.isFetchingData)
+            ? LoadingScreen()
             : HomePage(
                 user: user,
               );
       }
       if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
-        return (dataProv.isFetchingData)
-            ? loadingScreen()
+        return (dashProv.isFetchingData)
+            ? LoadingScreen()
             : ActivityPage(
                 userProgress: user.progress,
                 categories: categories,
               );
       } else if (dashboardTabProvider.tab == PROFILE_PAGE) {
-        return (dataProv.isFetchingData)
-            ? loadingScreen()
+        return (dashProv.isFetchingData)
+            ? LoadingScreen()
             : ProfilePage(
                 user: user,
               );
@@ -131,8 +170,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return page();
   }
+}
 
-  Scaffold loadingScreen() {
+class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(child: CircularProgressIndicator()),

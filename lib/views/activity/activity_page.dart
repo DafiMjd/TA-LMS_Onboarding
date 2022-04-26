@@ -3,6 +3,9 @@ import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/providers/activity/category_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/utils/formatter.dart';
+import 'package:lms_onboarding/utils/status_utils.dart';
+import 'package:lms_onboarding/views/activity/browse_activity_page.dart';
+import 'package:lms_onboarding/views/activity/pre_activity_page.dart';
 import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/widgets/activity_item.dart';
 import 'package:lms_onboarding/widgets/category_item.dart';
@@ -86,16 +89,20 @@ class ActivityPage extends StatelessWidget {
                             ),
                           ),
                         )
-                      : 
-                      Expanded(
+                      : Expanded(
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: categories.length,
                               itemBuilder: (context, i) => CategoryItem(
-                                  categoryName:
-                                      categories[i].categoryName,
-                                  categoryColor:
-                                      categories[i].categoryColor)),
+                                    categoryName: categories[i].categoryName,
+                                    categoryColor: categories[i].categoryColor,
+                                    press: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return BrowseActivityPage(category: categories[i]);
+                                      }));
+                                    },
+                                  )),
                         )
                 ],
               ),
@@ -116,10 +123,13 @@ class ActivityPage extends StatelessWidget {
                       Divider(height: 15, color: Colors.transparent),
 
                       // activity card
-                      ActivityItem(
-                        title: "Belajar",
-                        description: "Flutter",
-                        statusId: "assigned",
+                      InkWell(
+                        onTap: () {},
+                        child: ActivityItem(
+                          title: "Belajar",
+                          description: "Flutter",
+                          statusId: "assigned",
+                        ),
                       ),
                     ],
                   ),
@@ -131,4 +141,3 @@ class ActivityPage extends StatelessWidget {
     );
   }
 }
-

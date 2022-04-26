@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart';
+import 'package:lms_onboarding/providers/activity/browse_activity_provider.dart';
 import 'package:lms_onboarding/providers/activity/category_provider.dart';
-import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/providers/profile/change_password_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/providers/profile/user_provider.dart';
+import 'package:lms_onboarding/views/activity/browse_activity_page.dart';
 import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:provider/provider.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
@@ -21,24 +23,66 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => DashboardTabProvider()),
+        // ChangeNotifierProvider(create: (context) => DashboardTabProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => DashboardTabProvider()),
-        ChangeNotifierProvider(create: (context) => EditProfileProvider()),
-        ChangeNotifierProvider(create: (context) => ChangePasswordProvider()),
-        ChangeNotifierProxyProvider<AuthProvider, DataProvider>(
-          create: (context) => DataProvider(),
-          update: (context, authProv, dataProv) {
-              if (dataProv != null) {
+        ChangeNotifierProxyProvider<AuthProvider, BrowseActivityPageProvider>(
+          create: (context) => BrowseActivityPageProvider(),
+          update: (context, authProv, dashPorv) {
+              if (dashPorv != null) {
 
-              return dataProv..recieveToken(authProv);
+              return dashPorv..recieveToken(authProv);
               }
-                return DataProvider();
+                return BrowseActivityPageProvider();
 
           }
         ),
+        ChangeNotifierProxyProvider<AuthProvider, DashboardTabProvider>(
+          create: (context) => DashboardTabProvider(),
+          update: (context, authProv, dashPorv) {
+              if (dashPorv != null) {
+
+              return dashPorv..recieveToken(authProv);
+              }
+                return DashboardTabProvider();
+
+          }
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, ChangePasswordProvider>(
+          create: (context) => ChangePasswordProvider(),
+          update: (context, authProv, dashPorv) {
+              if (dashPorv != null) {
+
+              return dashPorv..recieveToken(authProv);
+              }
+                return ChangePasswordProvider();
+
+          }
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, EditProfileProvider>(
+          create: (context) => EditProfileProvider(),
+          update: (context, authProv, editProv) {
+              if (editProv != null) {
+
+              return editProv..recieveToken(authProv);
+              }
+                return EditProfileProvider();
+
+          }
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, ActivityDetailPageProvider>(
+          create: (context) => ActivityDetailPageProvider(),
+          update: (context, authProv, editProv) {
+              if (editProv != null) {
+
+              return editProv..recieveToken(authProv);
+              }
+                return ActivityDetailPageProvider();
+
+          }
+        ),
+      
       ],
       builder: (context, child) => Consumer<AuthProvider>(
           builder: (context, auth, child) => MaterialApp(

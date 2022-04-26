@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
-import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/providers/profile/change_password_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
@@ -25,7 +24,6 @@ class _ChangePasswordState extends State<ChangePassword> {
   late final TextEditingController _confirmPassCtrl;
 
   late ChangePasswordProvider changePassProv;
-  late DataProvider dataProv;
   late AuthProvider authProv;
 
   @override
@@ -35,7 +33,6 @@ class _ChangePasswordState extends State<ChangePassword> {
     _newPassCtrl = TextEditingController();
     _confirmPassCtrl = TextEditingController();
 
-    dataProv = Provider.of<DataProvider>(context, listen: false);
     authProv = Provider.of<AuthProvider>(context, listen: false);
   }
 
@@ -45,7 +42,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     changePassProv.isSaveButtonDisabled = true;
 
     try {
-      await dataProv.changePassword(curPass, newPass);
+      await changePassProv.changePassword(curPass, newPass);
       Navigator.pop(context);
       authProv.logout();
       changePassProv.isSaveButtonDisabled = false;

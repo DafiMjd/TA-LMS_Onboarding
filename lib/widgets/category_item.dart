@@ -6,15 +6,18 @@ import 'package:provider/provider.dart';
 class CategoryItem extends StatelessWidget {
   final String categoryName;
   final Color categoryColor;
+  final VoidCallback press;
+  
 
-  CategoryItem({required this.categoryName, required this.categoryColor});
+  CategoryItem({required this.categoryName, required this.categoryColor, 
+      required this.press});
 
   @override
   Widget build(BuildContext context) {
     var prov = Provider.of<CategoryProvider>(context, listen: false);
 
     return InkWell(
-      onTap: () {},
+      onTap: press,
       child: Container(
         margin: EdgeInsets.only(
           left: 18,

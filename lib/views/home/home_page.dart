@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/user.dart';
-import 'package:lms_onboarding/providers/data_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/views/home/garuda_profile_page.dart';
@@ -119,6 +118,7 @@ class _HomePageState extends State<HomePage> {
                       height: MediaQuery.of(context).size.height / 4,
                       width: MediaQuery.of(context).size.height,
                       child: Card(
+                        elevation: 5,
                         child: Column(
                           crossAxisAlignment:
                               CrossAxisAlignment.stretch, // add this
@@ -170,6 +170,7 @@ class _HomePageState extends State<HomePage> {
                       height: MediaQuery.of(context).size.height / 4,
                       width: MediaQuery.of(context).size.height,
                       child: Card(
+                        elevation: 5,
                         child: Column(
                           crossAxisAlignment:
                               CrossAxisAlignment.stretch, // add this
