@@ -55,7 +55,7 @@ class PreActivityProvider extends ChangeNotifier {
           body: jsonEncode(
               {"id": id, "user_email": _email, "activity_note": note}));
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
@@ -90,7 +90,7 @@ class PreActivityProvider extends ChangeNotifier {
           },
           body: jsonEncode({"id": id, "user_email": _email, "status": status}));
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 

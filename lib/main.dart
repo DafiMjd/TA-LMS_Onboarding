@@ -29,75 +29,57 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProxyProvider<AuthProvider, BrowseActivityPageProvider>(
-          create: (context) => BrowseActivityPageProvider(),
-          update: (context, authProv, dashPorv) {
+            create: (context) => BrowseActivityPageProvider(),
+            update: (context, authProv, dashPorv) {
               if (dashPorv != null) {
-
-              return dashPorv..recieveToken(authProv);
+                return dashPorv..recieveToken(authProv);
               }
-                return BrowseActivityPageProvider();
-
-          }
-        ),
+              return BrowseActivityPageProvider();
+            }),
         ChangeNotifierProxyProvider<AuthProvider, DashboardTabProvider>(
-          create: (context) => DashboardTabProvider(),
-          update: (context, authProv, dashPorv) {
+            create: (context) => DashboardTabProvider(),
+            update: (context, authProv, dashPorv) {
               if (dashPorv != null) {
-
-              return dashPorv..recieveToken(authProv);
+                return dashPorv..recieveToken(authProv);
               }
-                return DashboardTabProvider();
-
-          }
-        ),
+              return DashboardTabProvider();
+            }),
         ChangeNotifierProxyProvider<AuthProvider, ChangePasswordProvider>(
-          create: (context) => ChangePasswordProvider(),
-          update: (context, authProv, dashPorv) {
+            create: (context) => ChangePasswordProvider(),
+            update: (context, authProv, dashPorv) {
               if (dashPorv != null) {
-
-              return dashPorv..recieveToken(authProv);
+                return dashPorv..recieveToken(authProv);
               }
-                return ChangePasswordProvider();
-
-          }
-        ),
+              return ChangePasswordProvider();
+            }),
         ChangeNotifierProxyProvider<AuthProvider, EditProfileProvider>(
-          create: (context) => EditProfileProvider(),
-          update: (context, authProv, editProv) {
+            create: (context) => EditProfileProvider(),
+            update: (context, authProv, editProv) {
               if (editProv != null) {
-
-              return editProv..recieveToken(authProv);
+                return editProv..recieveToken(authProv);
               }
-                return EditProfileProvider();
-
-          }
-        ),
+              return EditProfileProvider();
+            }),
         ChangeNotifierProxyProvider<AuthProvider, ActivityDetailPageProvider>(
-          create: (context) => ActivityDetailPageProvider(),
-          update: (context, authProv, editProv) {
+            create: (context) => ActivityDetailPageProvider(),
+            update: (context, authProv, editProv) {
               if (editProv != null) {
-
-              return editProv..recieveToken(authProv);
+                return editProv..recieveToken(authProv);
               }
-                return ActivityDetailPageProvider();
-
-          }
-        ),
+              return ActivityDetailPageProvider();
+            }),
         ChangeNotifierProxyProvider<AuthProvider, PreActivityProvider>(
-          create: (context) => PreActivityProvider(),
-          update: (context, authProv, preActProv) {
+            create: (context) => PreActivityProvider(),
+            update: (context, authProv, preActProv) {
               if (preActProv != null) {
-
-              return preActProv..recieveToken(authProv);
+                return preActProv..recieveToken(authProv);
               }
-                return PreActivityProvider();
-
-          }
-        ),
-      
+              return PreActivityProvider();
+            }),
       ],
       builder: (context, child) => Consumer<AuthProvider>(
           builder: (context, auth, child) => MaterialApp(
+                debugShowCheckedModeBanner: false,
                 home: auth.getIsAuth() ? DashboardPage() : LoginPage(),
               )),
     );

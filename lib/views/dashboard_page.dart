@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/jobtitle.dart';
+import 'package:lms_onboarding/models/role.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
@@ -34,6 +35,7 @@ class _DashboardPageState extends State<DashboardPage> {
         phone_number: "null",
         progress: 0,
         birtdate: "null",
+        role: Role(id: 0, name: "null"),
         jobtitle: Jobtitle(
             id: 0, jobtitle_name: "null", jobtitle_description: "null"));
     return showDialog(

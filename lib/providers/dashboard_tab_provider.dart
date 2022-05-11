@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/jobtitle.dart';
+import 'package:lms_onboarding/models/role.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
@@ -29,6 +30,7 @@ class DashboardTabProvider with ChangeNotifier {
           phone_number: "null",
           progress: 0,
           birtdate: "null",
+          role: Role(id: 0, name: 'null'),
           jobtitle: Jobtitle(
               id: 0, jobtitle_name: "null", jobtitle_description: "null"));
   get user => _user;
@@ -69,7 +71,7 @@ class DashboardTabProvider with ChangeNotifier {
         },
       );
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
@@ -100,7 +102,8 @@ class DashboardTabProvider with ChangeNotifier {
         },
       );
 
-      if (result.statusCode == 502) {
+      
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
@@ -139,7 +142,7 @@ User parseUser(String responseBody) {
   try {
     final parsed = jsonDecode(responseBody);
 
-    return User.createUser(parsed);
+    return User.fromJson(parsed);
   } catch (e) {
     rethrow;
   }

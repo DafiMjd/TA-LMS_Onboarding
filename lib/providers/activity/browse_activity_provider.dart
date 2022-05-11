@@ -66,7 +66,7 @@ class BrowseActivityPageProvider extends ChangeNotifier {
         },
       );
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
@@ -98,10 +98,9 @@ class BrowseActivityPageProvider extends ChangeNotifier {
         },
       );
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
-
       if (result.statusCode == 400) {
         Map<String, dynamic> responseData = jsonDecode(result.body);
         throw responseData['errorMessage'];
@@ -135,7 +134,7 @@ class BrowseActivityPageProvider extends ChangeNotifier {
         return [];
       }
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
@@ -172,7 +171,7 @@ class BrowseActivityPageProvider extends ChangeNotifier {
         return [];
       }
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 

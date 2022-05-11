@@ -106,7 +106,7 @@ class ChangePasswordProvider extends ChangeNotifier {
             "new_password": newPass,
           }));
 
-      if (result.statusCode == 502) {
+      if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 

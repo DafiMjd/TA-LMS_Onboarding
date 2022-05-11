@@ -33,13 +33,18 @@ class _EditProfileState extends State<EditProfile> {
       String gender) async {
     editProv.isSaveButtonDisabled = true;
 
-
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String dateFormatted = formatter.format(birthdate);
 
     try {
-      var newUser = await editProv.editProfile(name, gender, phoneNum, dateFormatted);
-      dashProv.user = newUser;
+      dashProv.user = await editProv.editProfile(
+          name,
+          gender,
+          phoneNum,
+          dateFormatted,
+          widget.user.progress,
+          widget.user.role.id,
+          widget.user.jobtitle.id);
     } catch (onError) {
       return showDialog(
           context: context,
@@ -273,10 +278,9 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                        primary: editProv.isSaveButtonDisabled
-                            ? Colors.blue[300]
-                            : Colors.blue),
-                        
+                            primary: editProv.isSaveButtonDisabled
+                                ? Colors.blue[300]
+                                : Colors.blue),
                         onPressed: (editProv.isSaveButtonDisabled)
                             ? () {}
                             : () {
