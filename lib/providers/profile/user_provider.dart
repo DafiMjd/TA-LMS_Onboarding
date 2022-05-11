@@ -11,7 +11,7 @@ import '../../utils/auth_secure_storage.dart';
 class UserProvider extends ChangeNotifier {
 
   late User _user;
-  void reveiveUser(user) {
+  void receiveUser(user) {
     _user = user;
   }
   get user => _user;

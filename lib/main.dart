@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart';
 import 'package:lms_onboarding/providers/activity/browse_activity_provider.dart';
 import 'package:lms_onboarding/providers/activity/category_provider.dart';
+import 'package:lms_onboarding/providers/activity/pre_activity_provider.dart';
 import 'package:lms_onboarding/providers/profile/change_password_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/providers/profile/user_provider.dart';
@@ -79,6 +80,17 @@ class MyApp extends StatelessWidget {
               return editProv..recieveToken(authProv);
               }
                 return ActivityDetailPageProvider();
+
+          }
+        ),
+        ChangeNotifierProxyProvider<AuthProvider, PreActivityProvider>(
+          create: (context) => PreActivityProvider(),
+          update: (context, authProv, preActProv) {
+              if (preActProv != null) {
+
+              return preActProv..recieveToken(authProv);
+              }
+                return PreActivityProvider();
 
           }
         ),

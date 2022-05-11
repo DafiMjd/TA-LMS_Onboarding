@@ -1,14 +1,13 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:lms_onboarding/models/activity_owned.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:lms_onboarding/models/activity.dart';
 import 'dart:convert';
 
-import 'package:lms_onboarding/models/activity_detail.dart';
-import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
-class ActivityDetailPageProvider extends ChangeNotifier {
+class PreActivityProvider extends ChangeNotifier {
   late String _token, _email;
   void recieveToken(auth) {
     _token = auth.token;
@@ -20,35 +19,41 @@ class ActivityDetailPageProvider extends ChangeNotifier {
   get isFetchingData => _isFetchingData;
   set isFetchingData(val) {
     _isFetchingData = val;
+    notifyListeners();
   }
 
-  bool _isButtonDisabled = false;
-  get isButtonDisabled => _isButtonDisabled;
-  set isButtonDisabled(val) {
-    _isButtonDisabled = val;
+  bool _isLate = false;
+  get isLate => _isLate;
+  set isLate(val) {
+    _isLate = val;
+    // notifyListeners();
+  }
+
+  bool _isNoteEmpty = true;
+  get isNoteEmpty => _isNoteEmpty;
+  set isNoteEmpty(val) {
+    _isNoteEmpty = val;
+    notifyListeners();
   }
 
   // API Request
 
-  Future<List<ActivityDetail>> fetchDetailsByActivityId(
-      Activity activity) async {
-    var id = activity.id;
-
-    String url = "$BASE_URL/api/ActivityDetail/$id";
+  Future<List<ActivityOwned>> editActivityNote(int id, String note) async {
+    String url = "$BASE_URL/api/ActivitiesOwned/activity-note";
 
     try {
-      var result = await http.get(
-        Uri.parse(url),
-        headers: {
-          "Access-Control-Allow-Origin":
-              "*", // Required for CORS support to work
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Credentials": "true",
-          "Access-Control-Expose-Headers": "Authorization, authenticated",
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $_token',
-        },
-      );
+      var result = await http.put(Uri.parse(url),
+          headers: {
+            "Access-Control-Allow-Origin":
+                "*", // Required for CORS support to work
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Expose-Headers": "Authorization, authenticated",
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $_token',
+          },
+          body: jsonEncode(
+              {"id": id, "user_email": _email, "activity_note": note}));
 
       if (result.statusCode == 502) {
         throw "Server Down";
@@ -63,14 +68,7 @@ class ActivityDetailPageProvider extends ChangeNotifier {
         return [];
       }
 
-      List<Map<String, dynamic>> parsed =
-          jsonDecode(result.body).cast<Map<String, dynamic>>();
-      // colnames = getColumnNames(parsed[0]);
-      for (int i = 0; i < parsed.length; i++) {
-        parsed[i]['activity_'] = activity;
-      }
-
-      return compute(parseActivityDetails, parsed);
+      return compute(parseActivitiesOwned, result.body);
     } catch (e) {
       rethrow;
     }
@@ -113,12 +111,6 @@ class ActivityDetailPageProvider extends ChangeNotifier {
 
   // ========
 
-}
-
-List<ActivityDetail> parseActivityDetails(List<Map<String, dynamic>> parsed) {
-  return parsed
-      .map<ActivityDetail>((json) => ActivityDetail.fromJson(json))
-      .toList();
 }
 
 List<ActivityOwned> parseActivitiesOwned(String responseBody) {

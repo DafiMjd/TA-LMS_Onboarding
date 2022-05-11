@@ -19,8 +19,6 @@ class AuthProvider with ChangeNotifier {
       _expiryDate = await AuthSecureStorage.getExpiryDate();
       _email = await AuthSecureStorage.getEmail();
 
-
-
       if (_expiryDate.isAfter(DateTime.now()))
         _setIsAuth(true);
       else
@@ -63,7 +61,6 @@ class AuthProvider with ChangeNotifier {
           },
           body: jsonEncode({"email": email, "password": password}));
 
-
       Map<String, dynamic> responseData = jsonDecode(apiResult.body);
 
       if (apiResult.statusCode == 400) {
@@ -81,8 +78,7 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> logout() async{
-    
+  Future<void> logout() async {
     await AuthSecureStorage.deleteAll();
     notifyListeners();
   }
@@ -123,6 +119,5 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
   // ==========================
-
 
 }

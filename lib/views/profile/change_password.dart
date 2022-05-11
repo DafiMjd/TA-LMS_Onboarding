@@ -37,7 +37,6 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   void _changePassword(String curPass, String newPass) async {
-    print("dafi1");
 
     changePassProv.isSaveButtonDisabled = true;
 
@@ -48,7 +47,6 @@ class _ChangePasswordState extends State<ChangePassword> {
       changePassProv.isSaveButtonDisabled = false;
     } catch (e) {
       changePassProv.isSaveButtonDisabled = false;
-      print("dafi ee: " + e.toString());
       return showDialog(
           context: context,
           builder: (context) {
@@ -65,7 +63,6 @@ class _ChangePasswordState extends State<ChangePassword> {
           });
     }
     changePassProv.isSaveButtonDisabled = false;
-    print("dafi2");
   }
 
   @override
@@ -187,7 +184,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       _newPassCtrl.text !=
                                           _confirmPassCtrl.text;
                                   if (!changePassProv.isPassDifferent) {
-                                    print("dafi in");
                                     _changePassword(
                                         _curPassCtrl.text, _newPassCtrl.text);
                                   }
