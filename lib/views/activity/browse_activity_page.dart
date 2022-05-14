@@ -24,18 +24,80 @@ class _BrowseActivityPageState extends State<BrowseActivityPage> {
   late BrowseActivityPageProvider prov;
   late List<StatusMenu> menus;
   late List<ActivityOwned> activitiesOwned;
+  late String curMenuId;
 
   @override
   void initState() {
     super.initState();
     prov = Provider.of<BrowseActivityPageProvider>(context, listen: false);
+    curMenuId = 'all_activity';
 
     initMenu();
-    fetchActivities(widget.category.id, 'all_activity');
+    fetchActivities(widget.category.id, curMenuId);
   }
 
   void initMenu() {
     prov.menus = _changeMenuState(prov.menus, 0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    BrowseActivityPageProvider prov =
+        context.watch<BrowseActivityPageProvider>();
+
+    return Scaffold(
+      appBar: AppBar(
+          foregroundColor: Colors.black,
+          backgroundColor: ORANGE_GARUDA,
+          title: Text(widget.category.categoryName)),
+      body: Column(children: [
+        _topNavBarBuilder(),
+        Space.space(),
+        (prov.isFetchingData)
+            ? CircularProgressIndicator()
+            :
+
+            // activity card
+
+            RefreshIndicator(
+                onRefresh: () async {
+                  setState(() {
+                    fetchActivities(widget.category.id, curMenuId);
+                  });
+                },
+                child: (activitiesOwned.isEmpty)
+                    ? SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height/3,
+                          child: Text(
+                            'No Activity',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: activitiesOwned.length,
+                        itemBuilder: (context, i) {
+                          return InkWell(
+                            onTap: () => Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return PreActivityPage(
+                                  actOwnedId: activitiesOwned[i].id);
+                            })),
+                            child: ActivityItem(
+                              title: activitiesOwned[i].activity.activity_name,
+                              description: activitiesOwned[i]
+                                  .activity
+                                  .activity_description,
+                              statusId: activitiesOwned[i].status,
+                            ),
+                          );
+                        }),
+              ),
+      ]),
+    );
   }
 
   void errorFetchingActivities(e) async {
@@ -74,51 +136,6 @@ class _BrowseActivityPageState extends State<BrowseActivityPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    BrowseActivityPageProvider prov =
-        context.watch<BrowseActivityPageProvider>();
-
-    return Scaffold(
-      appBar: AppBar(
-          foregroundColor: Colors.black,
-          backgroundColor: ORANGE_GARUDA,
-          title: Text(widget.category.categoryName)),
-      body: Column(children: [
-        _topNavBarBuilder(),
-        Space.space(),
-        (prov.isFetchingData)
-            ? CircularProgressIndicator()
-            : (activitiesOwned.isEmpty)
-                ? Text(
-                    'No Activity',
-                    style: TextStyle(fontSize: 24),
-                  )
-                :
-                // activity card
-
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: activitiesOwned.length,
-                    itemBuilder: (context, i) {
-                      return InkWell(
-                        onTap: () => Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return PreActivityPage(
-                              activityOwned: activitiesOwned[i]);
-                        })),
-                        child: ActivityItem(
-                          title: activitiesOwned[i].activity.activity_name,
-                          description:
-                              activitiesOwned[i].activity.activity_description,
-                          statusId: activitiesOwned[i].status,
-                        ),
-                      );
-                    }),
-      ]),
-    );
-  }
-
   Container _topNavBarBuilder() {
     List<StatusMenu> menu = context.read<BrowseActivityPageProvider>().menus;
     return Container(
@@ -143,6 +160,7 @@ class _BrowseActivityPageState extends State<BrowseActivityPage> {
   }
 
   List<StatusMenu> _changeMenuState(List<StatusMenu> menu, index) {
+    curMenuId = menu[index].id;
     for (int i = 0; i < menu.length; i++) {
       if (i == index) {
         menu[i].selected = true;

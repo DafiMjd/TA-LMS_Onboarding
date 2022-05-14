@@ -11,6 +11,7 @@ import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/activity/activity_page.dart';
 import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/views/home/home_page.dart';
+import 'package:lms_onboarding/views/leaderboard/leaderboard_page.dart';
 import 'package:lms_onboarding/views/profile/profile_page.dart';
 import 'package:provider/provider.dart';
 
@@ -28,17 +29,19 @@ class _DashboardPageState extends State<DashboardPage> {
   late DashboardTabProvider dashProv;
 
   void errorFetchingUser(e) async {
-    user = User(
-        email: "null",
-        name: "null",
-        gender: "null",
-        phone_number: "null",
-        progress: 0,
-        birtdate: "null",
+    User user = User(
+          email: "null",
+          name: "null",
+          gender: "null",
+          phone_number: "null",
+          progress: 0,
+          birtdate: "null",
+          assignedActivities: 0,
+          finishedActivities: 0,
         role: Role(id: 0, name: "null"),
-        jobtitle: Jobtitle(
-            id: 0, jobtitle_name: "null", jobtitle_description: "null"));
-    return showDialog(
+          jobtitle: Jobtitle(
+              id: 0, jobtitle_name: "null", jobtitle_description: "null"));
+  return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -58,29 +61,13 @@ class _DashboardPageState extends State<DashboardPage> {
     dashProv.isFetchingData = true;
 
     try {
-        var u = await dashProv.getUserInfo();
-        dashProv.user = u;
-        dashProv.isFetchingData = false;
-      } catch (e) {
-        dashProv.isFetchingData = false;
-        errorFetchingUser(e);
-      }
-
-    // runZonedGuarded(() async {
-    //   try {
-    //     var u = await dashProv.getUserInfo();
-    //     dashProv.user = u;
-    //     dashProv.isFetchingData = false;
-    //   } catch (e) {
-    //     dashProv.isFetchingData = false;
-    //     errorFetchingUser(e);
-    //   }
-    // }, (e, s) async {
-    //   print("uncaught");
-    //     dashProv.isFetchingData = false;
-    //     errorFetchingUser(e);
-    // });
-  
+      var u = await dashProv.getUserInfo();
+      dashProv.user = u;
+      dashProv.isFetchingData = false;
+    } catch (e) {
+      dashProv.isFetchingData = false;
+      errorFetchingUser(e);
+    }
   }
 
   void errorFetchingCategories(e) async {
@@ -105,27 +92,12 @@ class _DashboardPageState extends State<DashboardPage> {
     dashProv.isFetchingData = true;
 
     try {
-        categories = await dashProv.fetchActivityCategories();
-        dashProv.isFetchingData = false;
-      } catch (e) {
-        dashProv.isFetchingData = false;
-        errorFetchingCategories(e);
-      }
-
-    // runZonedGuarded(() async {
-    //   try {
-    //     categories = await dashProv.fetchActivityCategories();
-    //     dashProv.isFetchingData = false;
-    //   } catch (e) {
-    //     dashProv.isFetchingData = false;
-    //     errorFetchingCategories(e);
-    //   }
-    // }, (e, s) async {
-    //   categories = [];
-    //   dashProv.isFetchingData = false;
-    //   errorFetchingCategories(e);
-    // });
-  
+      categories = await dashProv.fetchActivityCategories();
+      dashProv.isFetchingData = false;
+    } catch (e) {
+      dashProv.isFetchingData = false;
+      errorFetchingCategories(e);
+    }
   }
 
   @override
@@ -151,11 +123,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 user: user,
               );
       }
-      if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
+      else if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
         return (dashProv.isFetchingData)
             ? LoadingScreen()
             : ActivityPage(
-                userProgress: user.progress,
+                user: user,
                 categories: categories,
               );
       } else if (dashboardTabProvider.tab == PROFILE_PAGE) {
@@ -164,6 +136,8 @@ class _DashboardPageState extends State<DashboardPage> {
             : ProfilePage(
                 user: user,
               );
+      } else if (dashboardTabProvider.tab == LEADERBOARD_PAGE) {
+        return (dashProv.isFetchingData) ? LoadingScreen() : LeaderboardPage();
       }
       return Scaffold(
         bottomNavigationBar: BottomNavBar(),

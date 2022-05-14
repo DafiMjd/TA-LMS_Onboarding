@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/providers/activity/category_provider.dart';
+import 'package:lms_onboarding/providers/activity/activity_provider.dart';
 import 'package:provider/provider.dart';
 
 class CategoryItem extends StatelessWidget {
@@ -14,7 +14,7 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var prov = Provider.of<CategoryProvider>(context, listen: false);
+    var prov = Provider.of<ActivityProvider>(context, listen: false);
 
     return InkWell(
       onTap: press,

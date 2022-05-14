@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Container(
                     alignment: Alignment.topLeft,
-                    child: Text(widget.user.jobtitle.jobtitle_name,
+                    child: Text(widget.user.jobtitle!.jobtitle_name,
                         style: TextStyle(
                             fontSize: 15,
                             color: Colors.black,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart';
 import 'package:lms_onboarding/providers/activity/browse_activity_provider.dart';
-import 'package:lms_onboarding/providers/activity/category_provider.dart';
+import 'package:lms_onboarding/providers/activity/activity_provider.dart';
 import 'package:lms_onboarding/providers/activity/pre_activity_provider.dart';
+import 'package:lms_onboarding/providers/leaderboard/leaderboard_provider.dart';
 import 'package:lms_onboarding/providers/profile/change_password_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/providers/profile/user_provider.dart';
@@ -26,7 +27,6 @@ class MyApp extends StatelessWidget {
       providers: [
         // ChangeNotifierProvider(create: (context) => DashboardTabProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
-        ChangeNotifierProvider(create: (context) => CategoryProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProxyProvider<AuthProvider, BrowseActivityPageProvider>(
             create: (context) => BrowseActivityPageProvider(),
@@ -75,6 +75,22 @@ class MyApp extends StatelessWidget {
                 return preActProv..recieveToken(authProv);
               }
               return PreActivityProvider();
+            }),
+        ChangeNotifierProxyProvider<AuthProvider, LeaderboardProvider>(
+            create: (context) => LeaderboardProvider(),
+            update: (context, authProv, leaderboardProv) {
+              if (leaderboardProv != null) {
+                return leaderboardProv..recieveToken(authProv);
+              }
+              return LeaderboardProvider();
+            }),
+        ChangeNotifierProxyProvider<AuthProvider, ActivityProvider>(
+            create: (context) => ActivityProvider(),
+            update: (context, authProv, actProv) {
+              if (actProv != null) {
+                return actProv..recieveToken(authProv);
+              }
+              return ActivityProvider();
             }),
       ],
       builder: (context, child) => Consumer<AuthProvider>(

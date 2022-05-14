@@ -48,8 +48,7 @@ FutureOr onGoBack(dynamic value) {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body:  
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             // profile pic, name, etc
@@ -75,7 +74,7 @@ FutureOr onGoBack(dynamic value) {
                                 style: TextStyle(fontSize: 16),
                               ),
                               Text(
-                                widget.user.jobtitle.jobtitle_name,
+                                widget.user.jobtitle!.jobtitle_name,
                                 style: TextStyle(fontSize: 14),
                                 textAlign: TextAlign.end,
                               )
@@ -120,6 +119,7 @@ FutureOr onGoBack(dynamic value) {
                 children: [
                   // Full Name
                   Container(
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -140,7 +140,6 @@ FutureOr onGoBack(dynamic value) {
                         ),
                         Container(
                           margin: EdgeInsets.all(5),
-                          width: MediaQuery.of(context).size.width * 0.5,
                           child: Text(
                             widget.user.name,
                             style: TextStyle(fontSize: 16),
@@ -148,10 +147,12 @@ FutureOr onGoBack(dynamic value) {
                         )
                       ],
                     ),
+                  
                   ),
 
                   // Job Title
                   Container(
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -172,9 +173,8 @@ FutureOr onGoBack(dynamic value) {
                         ),
                         Container(
                           margin: EdgeInsets.all(5),
-                          width: MediaQuery.of(context).size.width * 0.5,
                           child: Text(
-                            widget.user.jobtitle.jobtitle_name,
+                            widget.user.jobtitle!.jobtitle_name,
                             style: TextStyle(fontSize: 16),
                           ),
                         )
@@ -184,6 +184,7 @@ FutureOr onGoBack(dynamic value) {
 
                   // Email
                   Container(
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -193,6 +194,7 @@ FutureOr onGoBack(dynamic value) {
                       ),
                     ),
                     child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                           margin: EdgeInsets.all(10),
@@ -203,11 +205,12 @@ FutureOr onGoBack(dynamic value) {
                           ),
                         ),
                         Container(
+                          width: MediaQuery.of(context).size.width * 0.4,
                           margin: EdgeInsets.all(5),
-                          width: MediaQuery.of(context).size.width * 0.5,
                           child: Text(
                             widget.user.email,
                             style: TextStyle(fontSize: 16),
+                            overflow: TextOverflow.clip,
                           ),
                         )
                       ],
@@ -216,6 +219,7 @@ FutureOr onGoBack(dynamic value) {
 
                   // Phone Number
                   Container(
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -236,7 +240,6 @@ FutureOr onGoBack(dynamic value) {
                         ),
                         Container(
                           margin: EdgeInsets.all(5),
-                          width: MediaQuery.of(context).size.width * 0.5,
                           child: Text(
                             widget.user.phone_number,
                             style: TextStyle(fontSize: 16),
@@ -248,6 +251,7 @@ FutureOr onGoBack(dynamic value) {
 
                   // Birth Date
                   Container(
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -268,7 +272,6 @@ FutureOr onGoBack(dynamic value) {
                         ),
                         Container(
                           margin: EdgeInsets.all(5),
-                          width: MediaQuery.of(context).size.width * 0.5,
                           child: Text(
                             widget.user.birtdate,
                             style: TextStyle(fontSize: 16),
@@ -280,6 +283,7 @@ FutureOr onGoBack(dynamic value) {
 
                   // Gender
                   Container(
+                    width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
@@ -300,7 +304,6 @@ FutureOr onGoBack(dynamic value) {
                         ),
                         Container(
                           margin: EdgeInsets.all(5),
-                          width: MediaQuery.of(context).size.width * 0.5,
                           child: Text(
                             widget.user.gender,
                             style: TextStyle(fontSize: 16),
@@ -318,14 +321,16 @@ FutureOr onGoBack(dynamic value) {
               margin: EdgeInsets.all(10),
               child: Card(
                 child: ListTile(
-                   onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChangePassword())).then((value) {
-                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashboardPage()));
-    
-                                          }),
+                  onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChangePassword()))
+                      .then((value) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DashboardPage()));
+                  }),
                   title:
                       Text("Change Password", style: TextStyle(fontSize: 16)),
                   trailing: Icon(Icons.arrow_forward_ios),
@@ -333,7 +338,7 @@ FutureOr onGoBack(dynamic value) {
               ),
             ),
 
-            // Change Password
+            // Logout
             Container(
               margin: EdgeInsets.all(10),
               child: Card(

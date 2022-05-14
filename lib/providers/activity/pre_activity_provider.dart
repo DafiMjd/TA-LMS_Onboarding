@@ -19,7 +19,7 @@ class PreActivityProvider extends ChangeNotifier {
   get isFetchingData => _isFetchingData;
   set isFetchingData(val) {
     _isFetchingData = val;
-    notifyListeners();
+    // notifyListeners();
   }
 
   bool _isLate = false;
@@ -109,6 +109,42 @@ class PreActivityProvider extends ChangeNotifier {
     }
   }
 
+  Future<ActivityOwned> fetchActOwnedById(int id) async {
+    String url = "$BASE_URL/api/ActivitiesOwnedById/$id";
+
+    try {
+      var result = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Expose-Headers": "Authorization, authenticated",
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $_token',
+        },
+      );
+
+      if (result.body == []) {
+        throw "No Data";
+      }
+
+      if (result.statusCode == 502 || result.statusCode == 500) {
+        throw "Server Down";
+      }
+
+      if (result.statusCode == 400) {
+        Map<String, dynamic> responseData = jsonDecode(result.body);
+        throw responseData['errorMessage'];
+      }
+
+      return compute(parseActivityOwned, result.body);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // ========
 
 }
@@ -125,5 +161,5 @@ List<ActivityOwned> parseActivitiesOwned(String responseBody) {
 ActivityOwned parseActivityOwned(String responseBody) {
   final parsed = jsonDecode(responseBody);
 
-  return ActivityOwned.fromJson(parsed);
+  return ActivityOwned.fromJson(parsed[0]);
 }

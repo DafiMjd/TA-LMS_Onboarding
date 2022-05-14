@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:lms_onboarding/models/activity.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/providers/activity/pre_activity_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
@@ -8,51 +8,104 @@ import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/utils/formatter.dart';
 import 'package:lms_onboarding/utils/status_utils.dart';
 import 'package:lms_onboarding/views/activity/activity_detail_page.dart';
-import 'package:lms_onboarding/views/activity/try.dart';
+import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
+import 'package:lms_onboarding/widgets/loading_widget.dart';
 import 'package:lms_onboarding/widgets/space.dart';
 import 'package:provider/provider.dart';
 
-class PreActivityPage extends StatelessWidget {
-  const PreActivityPage({Key? key, required this.activityOwned})
-      : super(key: key);
+class PreActivityPage extends StatefulWidget {
+  const PreActivityPage({Key? key, required this.actOwnedId}) : super(key: key);
 
-  final ActivityOwned activityOwned;
+  final int actOwnedId;
+
+  @override
+  State<PreActivityPage> createState() => _PreActivityPageState();
+}
+
+class _PreActivityPageState extends State<PreActivityPage> {
+  late PreActivityProvider prov;
+  late ActivityOwned actOwned;
+
+  @override
+  void initState() {
+    super.initState();
+
+    prov = Provider.of(context, listen: false);
+    _fetchActOwned(widget.actOwnedId);
+  }
 
   @override
   Widget build(BuildContext context) {
+    prov = context.watch<PreActivityProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text("Activity"),
         foregroundColor: Colors.black,
         backgroundColor: ORANGE_GARUDA,
       ),
-      body: SingleChildScrollView(
-          child: Container(
-        margin: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            ActivityTitleCard(activityOwned: activityOwned),
-            Space.doubleSpace(),
-            ActivityStatusCard(
-              activityOwned: activityOwned,
+      body: (prov.isFetchingData)
+          ? LoadingWidget()
+          : RefreshIndicator(
+              onRefresh: () async {
+                refresh();
+              },
+              child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: Column(
+                      children: [
+                        ActivityTitleCard(activityOwned: actOwned),
+                        Space.doubleSpace(),
+                        ActivityStatusCard(
+                          activityOwned: actOwned,
+                        ),
+                        Space.doubleSpace(),
+                        ActivityNoteCard(
+                            activityOwned: actOwned, refresh: refresh),
+                      ],
+                    ),
+                  )),
             ),
-            Space.doubleSpace(),
-            ActivityNoteCard(
-              activityOwned: activityOwned,
-            ),
-          ],
-        ),
-      )),
     );
+  }
+
+  void refresh() {
+    setState(() {
+      _fetchActOwned(actOwned.id);
+    });
+  }
+
+  void _error(e) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorAlertDialog(error: e.toString(), title: "HTTP Error");
+        });
+  }
+
+  void _fetchActOwned(int id) async {
+    prov.isFetchingData = true;
+
+    try {
+      actOwned = await prov.fetchActOwnedById(id);
+      print(actOwned.activity.activity_name);
+      prov.isFetchingData = false;
+    } catch (e) {
+      prov.isFetchingData = false;
+      return _error(e);
+    }
   }
 }
 
 class ActivityNoteCard extends StatefulWidget {
-  const ActivityNoteCard({Key? key, required this.activityOwned})
+  const ActivityNoteCard(
+      {Key? key, required this.activityOwned, required this.refresh})
       : super(key: key);
 
   final ActivityOwned activityOwned;
+  final Function refresh;
 
   @override
   State<ActivityNoteCard> createState() => _ActivityNoteCardState();
@@ -98,6 +151,9 @@ class _ActivityNoteCardState extends State<ActivityNoteCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextFormField(
+                    inputFormatters: <TextInputFormatter>[
+                      LengthLimitingTextInputFormatter(200),
+                    ],
                     maxLines: 2,
                     controller: _textCtrl,
                     onChanged: (val) {
@@ -119,10 +175,10 @@ class _ActivityNoteCardState extends State<ActivityNoteCard> {
                                   });
                             }
                           : () {
-                              setActivityNote(widget.activityOwned.id,
-                                  _textCtrl.text);
+                              setActivityNote(
+                                  widget.activityOwned.id, _textCtrl.text);
 
-                              // Navigator.pop(context);
+                              widget.refresh();
                             },
                       child: Text("Save")),
                 ],
@@ -137,7 +193,6 @@ class _ActivityNoteCardState extends State<ActivityNoteCard> {
     try {
       await prov.editActivityNote(id, note);
       prov.isFetchingData = false;
-      Navigator.pop(context);
     } catch (e) {
       prov.isFetchingData = false;
       return showDialog(
@@ -232,7 +287,6 @@ class ActivityTitleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var prov = Provider.of<PreActivityProvider>(context, listen: false);
     return Card(
         elevation: 5,
@@ -253,11 +307,17 @@ class ActivityTitleCard extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     if (activityOwned.status == 'assigned') {
-                      _editActStatus(activityOwned.id, 'on_progress', prov, context);
+                      _editActStatus(
+                          activityOwned.id, 'on_progress', prov, context);
                     }
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return ActivityDetailPage(activityOwned: activityOwned);
+                      return ActivityDetailPage(
+                        actOwnedId: activityOwned.id,
+                        actOwned: activityOwned,
+                        act: activityOwned.activity,
+                        title: activityOwned.activity.activity_name,
+                      );
                       // return Try();
                     }));
                   },

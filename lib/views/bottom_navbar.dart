@@ -9,12 +9,17 @@ class BottomNavBar extends StatelessWidget {
     DashboardTabProvider dashboardTabProvider =
         context.watch<DashboardTabProvider>();
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       currentIndex: dashboardTabProvider.botNavBarIndex,
       items: [
         BottomNavigationBarItem(
             icon: Icon(Icons.home), label: "", backgroundColor: Colors.white),
         BottomNavigationBarItem(
             icon: Icon(Icons.task), label: "", backgroundColor: Colors.white),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.leaderboard_outlined),
+            label: "",
+            backgroundColor: Colors.white),
         BottomNavigationBarItem(
             icon: Icon(Icons.account_box_rounded),
             label: "",
