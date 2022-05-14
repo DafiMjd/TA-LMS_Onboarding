@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
@@ -92,6 +93,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(200),
+                          ],
                           onChanged: (value) => changePassProv
                               .isCurPassFieldEmpty = _curPassCtrl.text.isEmpty,
                           obscureText: changePassProv.isCurPassHidden,
@@ -115,6 +119,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(200),
+                          ],
                           onChanged: (value) => changePassProv
                               .isNewPassFieldEmpty = _newPassCtrl.text.isEmpty,
                           obscureText: changePassProv.isNewPassHidden,
@@ -138,6 +145,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                         height: DEFAULT_PADDING,
                       ),
                       TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(200),
+                          ],
                           onChanged: (value) =>
                               changePassProv.isConfPassFieldEmpty =
                                   _confirmPassCtrl.text.isEmpty,
