@@ -1,3 +1,4 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity.dart';
 import 'package:lms_onboarding/models/activity_detail.dart';
@@ -5,11 +6,13 @@ import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
+import 'package:lms_onboarding/views/activity/detail_video_player.dart';
 import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
 import 'package:lms_onboarding/widgets/loading_widget.dart';
 import 'package:lms_onboarding/widgets/space.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 
 class ActivityDetailPage extends StatefulWidget {
   const ActivityDetailPage(
@@ -200,9 +203,17 @@ class ActivityDetailWidget extends StatefulWidget {
 class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
   late ActivityDetailPageProvider prov;
   bool isChecked = false;
+
+  int currPlayIndex = 0;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-
     prov = context.watch<ActivityDetailPageProvider>();
     if (widget.detail == null) {
       return _getDeskripsi();
@@ -243,15 +254,19 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
         ),
       );
     } else if (widget.detail!.detail_type == 'image') {
+      return Container(margin: EdgeInsets.only(bottom: 10), child: getImage());
+    } else if (widget.detail!.detail_type == 'video') {
       return Container(
+        height: MediaQuery.of(context).size.height / 3,
+        width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(bottom: 10),
-          child:
-              Image.network(BASE_URL + '/api/ShowVideo/202205180041491.png'));
+          child: DetailVideoPlayer(
+            link: widget.detail!.detail_link!,
+          ));
     } else if (widget.detail!.detail_type == 'pdf') {
       return InkWell(
         onTap: () {
           prov.downloadPdf('s');
-          
         },
         child: Container(
           margin: EdgeInsets.only(bottom: 10),
@@ -265,6 +280,29 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
       );
     }
     return Container();
+  }
+
+  Widget getImage() {
+    late var image;
+    try {
+      image = Image.network(
+        // BASE_URL + '/' + widget.detail!.detail_link!,
+        'https://a36c-103-100-135-183.ngrok.io/api/ShowImage/202205192243361.png',
+        // loadingBuilder: (context, child, loadingProgress) => Column(
+        //   children: [
+        //     LoadingWidget(),
+        //     Space.space(),
+        //     Text('loading image'),
+        //   ],
+        // ),
+        errorBuilder: (context, child, e) => Text('image not found'),
+      );
+    } catch (e) {
+      print('dafi' + e.toString());
+      image = Text('image not found');
+    }
+
+    return image;
   }
 
   Container _getDeskripsi() {

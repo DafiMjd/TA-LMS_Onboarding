@@ -5,6 +5,7 @@ import 'package:lms_onboarding/providers/leaderboard/leaderboard_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/views/leaderboard/leaderboard_page.dart';
+import 'package:lms_onboarding/widgets/space.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,17 +19,13 @@ class VideoTest extends StatefulWidget {
 class _VideoTestState extends State<VideoTest> {
   // TargetPlatform? _platform;
   late VideoPlayerController _videoPlayerController1;
-  // late VideoPlayerController _videoPlayerController2;
   ChewieController? _chewieController;
-
-  late LeaderboardProvider prov;
 
   @override
   void initState() {
     super.initState();
     initializePlayer();
 
-    prov = Provider.of(context, listen: false);
   }
 
   List<String> srcs = [
@@ -36,48 +33,13 @@ class _VideoTestState extends State<VideoTest> {
     "https://assets.mixkit.co/videos/preview/mixkit-a-girl-blowing-a-bubble-gum-at-an-amusement-park-1226-large.mp4"
   ];
 
-  void fetchVideo() async {
-    prov.isFetchingData = true;
-
-    try {
-      var u = await prov.fetchVideo('20220518203340Intro Podcast.mp4');
-      prov.isFetchingData = false;
-    } catch (e) {
-      prov.isFetchingData = false;
-      error(e);
-    }
-  }
-
-  void error(e) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("HTTP Error"),
-            content: Text("$e"),
-            actions: [
-              TextButton(
-                  onPressed: () =>
-                      Navigator.of(context, rootNavigator: true).pop(),
-                  child: Text("okay"))
-            ],
-          );
-        });
-  }
-
   Future<void> initializePlayer() async {
     _videoPlayerController1 = VideoPlayerController.network(
-        BASE_URL + '/api/ShowVideo/20220518202657IntroPd.mp4');
-    // _videoPlayerController1 = VideoPlayerController.network(
-    //     'https://assets.mixkit.co/videos/preview/mixkit-daytime-city-traffic-aerial-view-56-large.mp4');
-    // _videoPlayerController2 =
-    //     VideoPlayerController.network(BASE_URL + '/api/ShowVideo/20220518202820Intro Podcast.mp4');
+        BASE_URL + '/api/ShowVideo/intro pendek.mp4');
     await Future.wait([
       _videoPlayerController1.initialize(),
-      // _videoPlayerController2.initialize()
     ]);
     _createChewieController();
-    setState(() {});
   }
 
   void _createChewieController() {
@@ -144,18 +106,6 @@ class _VideoTestState extends State<VideoTest> {
           ),
         ];
       },
-      // subtitle: Subtitles(subtitles),
-      subtitleBuilder: (context, dynamic subtitle) => Container(
-        padding: const EdgeInsets.all(10.0),
-        child: subtitle is InlineSpan
-            ? RichText(
-                text: subtitle,
-              )
-            : Text(
-                subtitle.toString(),
-                style: const TextStyle(color: Colors.black),
-              ),
-      ),
 
       // Try playing around with some of these other options:
 
@@ -213,83 +163,85 @@ class _VideoTestState extends State<VideoTest> {
                     ),
             ),
           ),
-          TextButton(
-            onPressed: () {
-              _chewieController?.enterFullScreen();
-              AutoOrientation.portraitUpMode();
-            },
-            child: const Text('Fullscreen'),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Text('Orientation'),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _videoPlayerController1.pause();
-                      _videoPlayerController1.seekTo(Duration.zero);
-                      _createChewieController();
-                    });
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text("Landscape Video"),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: TextButton(
-                  onPressed: () {
-                    // setState(() {
-                    //   _platform = TargetPlatform.android;
-                    // });
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text("Android controls"),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: TextButton(
-                  onPressed: () {
-                    // setState(() {
-                    //   _platform = TargetPlatform.iOS;
-                    // });
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text("iOS controls"),
-                  ),
-                ),
-              )
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: TextButton(
-                  onPressed: () {
-                    // setState(() {
-                    //   _platform = TargetPlatform.windows;
-                    // });
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Text("Desktop controls"),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          Container(),
+          // TextButton(
+          //   onPressed: () {
+          //     _chewieController?.enterFullScreen();
+          //     AutoOrientation.portraitUpMode();
+          //   },
+          //   child: const Text('Fullscreen'),
+          // ),
+          // TextButton(
+          //   onPressed: () {},
+          //   child: const Text('Orientation'),
+          // ),
+          // Row(
+          //   children: <Widget>[
+          //     Expanded(
+          //       child: TextButton(
+          //         onPressed: () {
+          //           setState(() {
+          //             _videoPlayerController1.pause();
+          //             _videoPlayerController1.seekTo(Duration.zero);
+          //             _createChewieController();
+          //           });
+          //         },
+          //         child: const Padding(
+          //           padding: EdgeInsets.symmetric(vertical: 16.0),
+          //           child: Text("Landscape Video"),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // Row(
+          //   children: <Widget>[
+          //     Expanded(
+          //       child: TextButton(
+          //         onPressed: () {
+          //           // setState(() {
+          //           //   _platform = TargetPlatform.android;
+          //           // });
+          //         },
+          //         child: const Padding(
+          //           padding: EdgeInsets.symmetric(vertical: 16.0),
+          //           child: Text("Android controls"),
+          //         ),
+          //       ),
+          //     ),
+          //     Expanded(
+          //       child: TextButton(
+          //         onPressed: () {
+          //           // setState(() {
+          //           //   _platform = TargetPlatform.iOS;
+          //           // });
+          //         },
+          //         child: const Padding(
+          //           padding: EdgeInsets.symmetric(vertical: 16.0),
+          //           child: Text("iOS controls"),
+          //         ),
+          //       ),
+          //     )
+          //   ],
+          // ),
+          // Row(
+          //   children: <Widget>[
+          //     Expanded(
+          //       child: TextButton(
+          //         onPressed: () {
+          //           // setState(() {
+          //           //   _platform = TargetPlatform.windows;
+          //           // });
+          //         },
+          //         child: const Padding(
+          //           padding: EdgeInsets.symmetric(vertical: 16.0),
+          //           child: Text("Desktop controls"),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+        
         ],
       ),
       bottomNavigationBar: BottomNavBar(),
