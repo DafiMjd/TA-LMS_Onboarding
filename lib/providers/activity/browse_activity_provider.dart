@@ -16,7 +16,7 @@ class BrowseActivityPageProvider extends ChangeNotifier {
         id: "all_activity", statusName: "All Activity", selected: false),
     StatusMenu(id: "assigned", statusName: "Assigned", selected: false),
     StatusMenu(id: "on_progress", statusName: "On Progress", selected: false),
-    StatusMenu(id: "submittted", statusName: "Submitted", selected: false),
+    StatusMenu(id: "submitted", statusName: "Submitted", selected: false),
     StatusMenu(id: "late", statusName: "Late", selected: false),
     StatusMenu(id: "Rejected", statusName: "Rejected", selected: false),
     StatusMenu(id: "completed", statusName: "Completed", selected: false),
@@ -151,6 +151,7 @@ class BrowseActivityPageProvider extends ChangeNotifier {
 
   Future<List<ActivityOwned>> fetchActOwnedByCatByStatus(int id, String status) async {
     String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$_email/$id/$status";
+    print(status);
 
     try {
       var result = await http.get(

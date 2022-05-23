@@ -153,6 +153,38 @@ class ActivityDetailPageProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> downloadPdf(String fileName) async {
+    String url = "$BASE_URL/api/DownloadPdf/20220519165300pdfdummy.pdf";
+
+    try {
+      var result = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Expose-Headers": "Authorization, authenticated",
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $_token',
+        },
+      );
+
+      if (result.statusCode == 502 || result.statusCode == 500) {
+        throw "Server Down";
+      }
+
+      if (result.statusCode == 400) {
+        Map<String, dynamic> responseData = jsonDecode(result.body);
+        throw responseData['errorMessage'];
+      }
+
+      // return compute(parseActivityOwned, result.body);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   // ========
 
 }

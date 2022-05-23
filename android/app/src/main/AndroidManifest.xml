@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lms_onboarding">
    <application
+        android:usesCleartextTraffic="true"
         android:label="lms_onboarding"
         android:icon="@mipmap/ic_launcher">
         <activity

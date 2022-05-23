@@ -24,6 +24,10 @@ class BottomNavBar extends StatelessWidget {
             icon: Icon(Icons.account_box_rounded),
             label: "",
             backgroundColor: Colors.white),
+        BottomNavigationBarItem(
+            icon: Icon(Icons.video_call),
+            label: "",
+            backgroundColor: Colors.white),
       ],
       onTap: (index) {
         dashboardTabProvider.botNavBarIndex = index;

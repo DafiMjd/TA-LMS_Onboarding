@@ -13,6 +13,7 @@ import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/views/home/home_page.dart';
 import 'package:lms_onboarding/views/leaderboard/leaderboard_page.dart';
 import 'package:lms_onboarding/views/profile/profile_page.dart';
+import 'package:lms_onboarding/views/video_test.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -30,18 +31,18 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void errorFetchingUser(e) async {
     User user = User(
-          email: "null",
-          name: "null",
-          gender: "null",
-          phone_number: "null",
-          progress: 0,
-          birtdate: "null",
-          assignedActivities: 0,
-          finishedActivities: 0,
+        email: "null",
+        name: "null",
+        gender: "null",
+        phone_number: "null",
+        progress: 0,
+        birtdate: "null",
+        assignedActivities: 0,
+        finishedActivities: 0,
         role: Role(id: 0, name: "null"),
-          jobtitle: Jobtitle(
-              id: 0, jobtitle_name: "null", jobtitle_description: "null"));
-  return showDialog(
+        jobtitle: Jobtitle(
+            id: 0, jobtitle_name: "null", jobtitle_description: "null"));
+    return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -122,8 +123,7 @@ class _DashboardPageState extends State<DashboardPage> {
             : HomePage(
                 user: user,
               );
-      }
-      else if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
+      } else if (dashboardTabProvider.tab == ACTIVITY_PAGE) {
         return (dashProv.isFetchingData)
             ? LoadingScreen()
             : ActivityPage(
@@ -138,6 +138,8 @@ class _DashboardPageState extends State<DashboardPage> {
               );
       } else if (dashboardTabProvider.tab == LEADERBOARD_PAGE) {
         return (dashProv.isFetchingData) ? LoadingScreen() : LeaderboardPage();
+      } else if (dashboardTabProvider.tab == VIDE_TEST) {
+        return (dashProv.isFetchingData) ? LoadingScreen() : VideoTest();
       }
       return Scaffold(
         bottomNavigationBar: BottomNavBar(),

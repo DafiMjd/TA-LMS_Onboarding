@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +54,9 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
               ),
               TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(200),
+                          ],
                 controller: _emailController,
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: "Email"),
@@ -68,6 +72,9 @@ class _LoginPageState extends State<LoginPage> {
                 visible: loginPageProvider.isEmailFieldEmpty,
               ),
               TextFormField(
+                          inputFormatters: <TextInputFormatter>[
+                            LengthLimitingTextInputFormatter(200),
+                          ],
                   obscureText: loginPageProvider.isPasswordHidden,
                   controller: _passwordController,
                   decoration: InputDecoration(
@@ -88,12 +95,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 visible: loginPageProvider.isPasswordFieldEmpty,
               ),
-              Container(
-                  alignment: Alignment.centerLeft,
-                  child: InkWell(
-                      onTap: () {},
-                      child: Text("Forgot Password?",
-                          style: TextStyle(fontWeight: FontWeight.w500)))),
+              // Container(
+              //     alignment: Alignment.centerLeft,
+              //     child: InkWell(
+              //         onTap: () {},
+              //         child: Text("Forgot Password?",
+              //             style: TextStyle(fontWeight: FontWeight.w500)))),
               IgnorePointer(
                 ignoring: loginPageProvider.isLoginButtonDisabled,
                 child: ElevatedButton(

@@ -3,6 +3,7 @@ import 'package:lms_onboarding/models/activity.dart';
 import 'package:lms_onboarding/models/activity_detail.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart';
+import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
@@ -58,58 +59,58 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
           ? LoadingWidget()
           : SingleChildScrollView(
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Card(
-                      elevation: 3,
-                      child: Container(
-                        padding: EdgeInsets.all(15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ActivityDetailWidget(
-                              type: 'header',
-                              text: 'Deskripsi',
-                            ),
-                            ActivityDetailWidget(
-                              type: 'text',
-                              text: actOwned.activity.activity_description,
-                              // text: 'dafi'
-                            ),
-                            (prov.isFetchingActDetails)
-                                ? CircularProgressIndicator()
-                                : (actDetails.isEmpty)
-                                    ? Container()
-                                    : ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: actDetails.length,
-                                        itemBuilder: (context, i) {
-                                          return ActivityDetailWidget(
-                                            detail: actDetails[i],
-                                          );
-                                        }),
-                          ],
-                        ),
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Card(
+                    elevation: 3,
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ActivityDetailWidget(
+                            type: 'header',
+                            text: 'Deskripsi',
+                          ),
+                          ActivityDetailWidget(
+                            type: 'text',
+                            text: actOwned.activity.activity_description,
+                            // text: 'dafi'
+                          ),
+                          (prov.isFetchingActDetails)
+                              ? CircularProgressIndicator()
+                              : (actDetails.isEmpty)
+                                  ? Container()
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: actDetails.length,
+                                      itemBuilder: (context, i) {
+                                        return ActivityDetailWidget(
+                                          detail: actDetails[i],
+                                        );
+                                      }),
+                        ],
                       ),
                     ),
-                    Space.doubleSpace(),
-                    ElevatedButton(
-                      onPressed: (prov.isButtonDisabled)
-                          ? () {}
-                          : () {
-                              _editActivityStatus('submitted');
-                            },
-                      child: Text('Mark As Done'),
-                      style: ElevatedButton.styleFrom(
-                          primary: (prov.isButtonDisabled)
-                              ? Colors.blue[200]
-                              : Colors.blue),
-                    ),
-                  ],
-                ),
-              )),
+                  ),
+                  Space.doubleSpace(),
+                  ElevatedButton(
+                    onPressed: (prov.isButtonDisabled)
+                        ? () {}
+                        : () {
+                            _editActivityStatus('submitted');
+                          },
+                    child: Text('Mark As Done'),
+                    style: ElevatedButton.styleFrom(
+                        primary: (prov.isButtonDisabled)
+                            ? Colors.blue[200]
+                            : Colors.blue),
+                  ),
+                ],
+              ),
+            )),
     );
   }
 
@@ -197,16 +198,19 @@ class ActivityDetailWidget extends StatefulWidget {
 }
 
 class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
+  late ActivityDetailPageProvider prov;
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
+
+    prov = context.watch<ActivityDetailPageProvider>();
     if (widget.detail == null) {
       return _getDeskripsi();
     }
     return _getDetailContent();
   }
 
-  Container _getDetailContent() {
+  _getDetailContent() {
     if (widget.detail!.detail_type == 'header') {
       return Container(
         margin: EdgeInsets.only(bottom: 10),
@@ -236,6 +240,27 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
             ),
             Text(widget.detail!.detail_desc),
           ],
+        ),
+      );
+    } else if (widget.detail!.detail_type == 'image') {
+      return Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child:
+              Image.network(BASE_URL + '/api/ShowVideo/202205180041491.png'));
+    } else if (widget.detail!.detail_type == 'pdf') {
+      return InkWell(
+        onTap: () {
+          prov.downloadPdf('s');
+          
+        },
+        child: Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: Row(
+            children: [
+              Icon(Icons.picture_as_pdf),
+              Text(widget.detail!.detail_name),
+            ],
+          ),
         ),
       );
     }
