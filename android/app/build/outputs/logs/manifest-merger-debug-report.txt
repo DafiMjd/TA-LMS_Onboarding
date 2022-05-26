@@ -10,14 +10,14 @@ INJECTED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/and
 INJECTED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/android/app/src/main/AndroidManifest.xml:1:1-37:12
 MERGED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/android/app/src/main/AndroidManifest.xml:1:1-37:12
 MERGED from [:permission_handler_android] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/permission_handler_android/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
-MERGED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-17:12
-MERGED from [:flutter_plugin_android_lifecycle] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:device_info] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/device_info/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:sqflite] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/sqflite/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:path_provider_android] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/path_provider_android/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:auto_orientation] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/auto_orientation/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:video_player_android] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/video_player_android/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_secure_storage] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_secure_storage/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-13:12
 MERGED from [:android_path_provider] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/android_path_provider/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:flutter_native_splash] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_native_splash/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:flutter_downloader] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_downloader/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-14:12
 MERGED from [:wakelock] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/wakelock/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.multidex:multidex:2.0.0] /Users/dafimj/.gradle/caches/transforms-2/files-2.1/a2f650a70b204393ba1526e0273d563e/multidex-2.0.0/AndroidManifest.xml:17:1-22:12
@@ -84,8 +84,6 @@ ADDED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/androi
 		ADDED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/android/app/src/main/AndroidManifest.xml:5:20-76
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
 ADDED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/android/app/src/main/AndroidManifest.xml:6:3-77
-MERGED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-80
-MERGED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-80
 	android:name
 		ADDED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/android/app/src/main/AndroidManifest.xml:6:20-75
 uses-permission#android.permission.REQUEST_INSTALL_PACKAGES
@@ -164,12 +162,10 @@ INJECTED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/and
 INJECTED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/android/app/src/main/AndroidManifest.xml
 MERGED from [:permission_handler_android] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/permission_handler_android/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:permission_handler_android] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/permission_handler_android/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
-MERGED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
-MERGED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
-MERGED from [:flutter_plugin_android_lifecycle] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
-MERGED from [:flutter_plugin_android_lifecycle] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_plugin_android_lifecycle/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:device_info] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/device_info/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:device_info] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/device_info/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:sqflite] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/sqflite/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:sqflite] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/sqflite/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/path_provider_android/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:path_provider_android] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/path_provider_android/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:auto_orientation] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/auto_orientation/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
@@ -180,6 +176,8 @@ MERGED from [:flutter_secure_storage] /Users/dafimj/Documents/TA/mobile_onboardi
 MERGED from [:flutter_secure_storage] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_secure_storage/intermediates/library_manifest/debug/AndroidManifest.xml:8:5-11:53
 MERGED from [:android_path_provider] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/android_path_provider/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:android_path_provider] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/android_path_provider/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:flutter_native_splash] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_native_splash/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:flutter_native_splash] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_native_splash/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_downloader] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_downloader/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:flutter_downloader] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_downloader/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:wakelock] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/wakelock/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
@@ -265,19 +263,7 @@ INJECTED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/and
 		INJECTED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/android/app/src/main/AndroidManifest.xml
 		INJECTED from /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/android/app/src/debug/AndroidManifest.xml
 queries
-ADDED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:9:5-15:15
-MERGED from [:flutter_downloader] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_downloader/intermediates/library_manifest/debug/AndroidManifest.xml:8:5-12:15
-MERGED from [:flutter_downloader] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_downloader/intermediates/library_manifest/debug/AndroidManifest.xml:8:5-12:15
-intent#action:name:android.intent.action.GET_CONTENT+data:mimeType:*/*
-ADDED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:10:9-14:18
-action#android.intent.action.GET_CONTENT
-ADDED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-72
-	android:name
-		ADDED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:11:21-69
-data
-ADDED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:13:13-44
-	android:mimeType
-		ADDED from [:file_picker] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/file_picker/intermediates/library_manifest/debug/AndroidManifest.xml:13:19-41
+ADDED from [:flutter_downloader] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_downloader/intermediates/library_manifest/debug/AndroidManifest.xml:8:5-12:15
 intent#action:name:android.intent.action.VIEW
 ADDED from [:flutter_downloader] /Users/dafimj/Documents/TA/mobile_onboarding/TA-LMS_Onboarding/build/flutter_downloader/intermediates/library_manifest/debug/AndroidManifest.xml:9:9-11:18
 action#android.intent.action.VIEW

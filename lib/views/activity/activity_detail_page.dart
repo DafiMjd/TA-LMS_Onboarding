@@ -1,6 +1,6 @@
-
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity.dart';
 import 'package:lms_onboarding/models/activity_detail.dart';
@@ -16,7 +16,6 @@ import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
 import 'package:lms_onboarding/widgets/loading_widget.dart';
 import 'package:lms_onboarding/widgets/space.dart';
 import 'package:provider/provider.dart';
-
 
 class ActivityDetailPage extends StatefulWidget {
   const ActivityDetailPage(
@@ -91,7 +90,7 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
                               : (actDetails.isEmpty)
                                   ? Container()
                                   : ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
+                                      physics: NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       itemCount: actDetails.length,
                                       itemBuilder: (context, i) {
@@ -254,11 +253,13 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
         ],
       );
     } else if (widget.detail!.detail_type == 'image') {
-      return Container(margin: EdgeInsets.only(bottom: 10), child: getImage());
+      return Container(
+          margin: EdgeInsets.only(bottom: 10),
+          child: getImage(widget.detail!.detail_link!));
     } else if (widget.detail!.detail_type == 'video') {
       return Container(
-        height: MediaQuery.of(context).size.height / 3,
-        width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 3,
+          width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(bottom: 10),
           child: DetailVideoPlayer(
             link: widget.detail!.detail_link!,
@@ -266,32 +267,21 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
     } else if (widget.detail!.detail_type == 'pdf') {
       return Container(
         margin: EdgeInsets.only(bottom: 10),
-        child: DetailPdf(fileName: widget.detail!.detail_name, fileLink: widget.detail!.detail_link!,),
+        child: DetailPdf(
+          fileName: widget.detail!.detail_name,
+          fileLink: widget.detail!.detail_link!,
+        ),
       );
     }
     return Container();
   }
 
-  Widget getImage() {
-    late var image;
-    try {
-      image = Image.network(
-        // BASE_URL + '/' + widget.detail!.detail_link!,
-        BASE_URL + '/api/ShowImage/202205192243361.png',
-        // loadingBuilder: (context, child, loadingProgress) => Column(
-        //   children: [
-        //     LoadingWidget(),
-        //     Space.space(),
-        //     Text('loading image'),
-        //   ],
-        // ),
-        errorBuilder: (context, child, e) => Text('image not found'),
-      );
-    } catch (e) {
-      image = Text('image not found');
-    }
+  Widget getImage(String link) {
 
-    return image;
+    return CachedNetworkImage(
+        imageUrl: BASE_URL + '/' + link,
+        placeholder: (context, url) => SizedBox(height: 20, width: 20, child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Text('image not found'));
   }
 
   Container _getDeskripsi() {

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity.dart';
 import 'package:lms_onboarding/models/activity_detail.dart';
@@ -165,10 +166,7 @@ class _HomeActivityDetailWidgetState extends State<HomeActivityDetailWidget> {
     } else if (widget.detail!.detail_type == 'image') {
       return Container(
           margin: EdgeInsets.only(bottom: 10),
-          child: Image.network(
-            BASE_URL + '/api/ShowImage/202205192243361.png',
-            errorBuilder: (context, child, e) => Text('image not found'),
-          ));
+          child: getImage(widget.detail!.detail_link!));
     } else if (widget.detail!.detail_type == 'video') {
       return Container(
           height: MediaQuery.of(context).size.height / 3,
@@ -187,6 +185,14 @@ class _HomeActivityDetailWidgetState extends State<HomeActivityDetailWidget> {
       );
     }
     return Container();
+  }
+
+  Widget getImage(String link) {
+
+    return CachedNetworkImage(
+        imageUrl: BASE_URL + '/' + link,
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Text('image not found'));
   }
 
   // _getDetailContent() {

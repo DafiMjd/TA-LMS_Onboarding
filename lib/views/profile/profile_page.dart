@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
@@ -59,17 +60,13 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Card(
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.account_circle,
-                      size: MediaQuery.of(context).size.height * 0.14 - 20,
-                    ),
-                    // (widget.user.profPicLink == null)
-                    //     ? Icon(
-                    //         Icons.account_circle,
-                    //         size:
-                    //             MediaQuery.of(context).size.height * 0.14 - 20,
-                    //       )
-                    // : getProfPic(widget.user.profPicLink),
+                    (widget.user.profPicLink == null)
+                        ? Icon(
+                            Icons.account_circle,
+                            size:
+                                MediaQuery.of(context).size.height * 0.14 - 20,
+                          )
+                    : getProfPic(widget.user.profPicLink),
                     Container(
                         margin: EdgeInsets.only(top: 15, left: 13, bottom: 15),
                         child: Column(
@@ -372,19 +369,14 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget getProfPic(link) {
-    var url = BASE_URL + '/' + link;
-    return Image.network(
-      url,
-      errorBuilder: (context, child, e) => Icon(
-        Icons.account_circle,
-        size: MediaQuery.of(context).size.height * 0.14 - 20,
-      ),
-    );
+    var url = BASE_URL + 'dd/' + link;
 
-    // return CachedNetworkImage(
-    //   imageUrl: url,
-    //   placeholder: (context, url) => new CircularProgressIndicator(),
-    //   errorWidget: (context, url, error) => new Icon(Icons.error),
-    // );
+    return CachedNetworkImage(
+        imageUrl: url,
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(
+              Icons.account_circle,
+              size: MediaQuery.of(context).size.height * 0.14 - 20,
+            ));
   }
 }
