@@ -1,5 +1,6 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/utils/status_utils.dart';
 
 class ActivityItem extends StatelessWidget {

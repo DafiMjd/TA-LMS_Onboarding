@@ -1,12 +1,13 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
-import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
-import 'package:lms_onboarding/views/dashboard_page.dart';
+import 'package:lms_onboarding/widgets/space.dart';
 
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,7 @@ class _EditProfileState extends State<EditProfile> {
   late final TextEditingController _nameCtrl;
   late String _selectedGenderVal;
   late DateTime _datePicked;
-  List<String> _genders = ["Laki-Laki", "Perempuan"];
+  final List<String> _genders = ["Laki-Laki", "Perempuan"];
 
   late EditProfileProvider editProv;
   late DashboardTabProvider dashProv;
@@ -142,15 +143,11 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
 
                       // Fullname
                       titleField("Fullname", editProv.isNameFieldEmpty),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       TextFormField(
                           inputFormatters: <TextInputFormatter>[
                             LengthLimitingTextInputFormatter(100),
@@ -161,15 +158,11 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                           )),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
 
                       // Phone Number
                       titleField("Phone Number", editProv.isPhoneNumFieldEmpty),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       TextFormField(
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
@@ -182,15 +175,11 @@ class _EditProfileState extends State<EditProfile> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                           )),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
 
                       // Birth Date
                       textField("Birth Date"),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       InkWell(
                         onTap: () {
                           _selectDate(context);
@@ -238,15 +227,11 @@ class _EditProfileState extends State<EditProfile> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
 
                       // Gender
                       textField("Gender"),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       DropdownButtonFormField(
                         hint: Text(_selectedGenderVal),
                         dropdownColor: Colors.white,
@@ -266,9 +251,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
 
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: editProv.isSaveButtonDisabled

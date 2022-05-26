@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
@@ -8,7 +10,7 @@ import 'package:lms_onboarding/models/activity_detail.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
-class ActivityDetailPageProvider extends ChangeNotifier {
+class ActivityDetailProvider extends ChangeNotifier {
   late String _token, _email;
   void recieveToken(auth) {
     _token = auth.token;
@@ -56,6 +58,10 @@ class ActivityDetailPageProvider extends ChangeNotifier {
         },
       );
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
@@ -102,6 +108,10 @@ class ActivityDetailPageProvider extends ChangeNotifier {
         throw "Server Down";
       }
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 400) {
         Map<String, dynamic> responseData = jsonDecode(result.body);
         throw responseData['errorMessage'];
@@ -138,6 +148,10 @@ class ActivityDetailPageProvider extends ChangeNotifier {
         throw "No Data";
       }
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
@@ -169,6 +183,10 @@ class ActivityDetailPageProvider extends ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
 
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";

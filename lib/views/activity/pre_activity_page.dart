@@ -1,14 +1,14 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/providers/activity/pre_activity_provider.dart';
-import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/utils/formatter.dart';
 import 'package:lms_onboarding/utils/status_utils.dart';
 import 'package:lms_onboarding/views/activity/activity_detail_page.dart';
-import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
 import 'package:lms_onboarding/widgets/loading_widget.dart';
 import 'package:lms_onboarding/widgets/space.dart';
@@ -31,7 +31,7 @@ class _PreActivityPageState extends State<PreActivityPage> {
   void initState() {
     super.initState();
 
-    prov = Provider.of(context, listen: false);
+    prov = Provider.of<PreActivityProvider>(context, listen: false);
     _fetchActOwned(widget.actOwnedId);
   }
 
@@ -56,14 +56,14 @@ class _PreActivityPageState extends State<PreActivityPage> {
                     margin: EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        ActivityTitleCard(activityOwned: actOwned),
+                        ActivityTitleCard(actOwned: actOwned),
                         Space.doubleSpace(),
                         ActivityStatusCard(
-                          activityOwned: actOwned,
+                          actOwned: actOwned,
                         ),
                         Space.doubleSpace(),
                         ActivityNoteCard(
-                            activityOwned: actOwned, refresh: refresh),
+                            actOwned: actOwned, refresh: refresh),
                       ],
                     ),
                   )),
@@ -90,7 +90,6 @@ class _PreActivityPageState extends State<PreActivityPage> {
 
     try {
       actOwned = await prov.fetchActOwnedById(id);
-      print(actOwned.activity.activity_name);
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
@@ -101,10 +100,10 @@ class _PreActivityPageState extends State<PreActivityPage> {
 
 class ActivityNoteCard extends StatefulWidget {
   const ActivityNoteCard(
-      {Key? key, required this.activityOwned, required this.refresh})
+      {Key? key, required this.actOwned, required this.refresh})
       : super(key: key);
 
-  final ActivityOwned activityOwned;
+  final ActivityOwned actOwned;
   final Function refresh;
 
   @override
@@ -121,7 +120,7 @@ class _ActivityNoteCardState extends State<ActivityNoteCard> {
     super.initState();
 
     prov = Provider.of<PreActivityProvider>(context, listen: false);
-    var note = widget.activityOwned.activity_note;
+    var note = widget.actOwned.activity_note;
     if (note.isEmpty) {
       _textCtrl = TextEditingController();
     } else {
@@ -176,7 +175,7 @@ class _ActivityNoteCardState extends State<ActivityNoteCard> {
                             }
                           : () {
                               setActivityNote(
-                                  widget.activityOwned.id, _textCtrl.text);
+                                  widget.actOwned.id, _textCtrl.text);
 
                               widget.refresh();
                             },
@@ -204,22 +203,50 @@ class _ActivityNoteCardState extends State<ActivityNoteCard> {
   }
 }
 
-class ActivityStatusCard extends StatelessWidget {
-  const ActivityStatusCard({Key? key, required this.activityOwned})
+class ActivityStatusCard extends StatefulWidget {
+  const ActivityStatusCard({Key? key, required this.actOwned})
       : super(key: key);
 
-  final ActivityOwned activityOwned;
+  final ActivityOwned actOwned;
+
+  @override
+  State<ActivityStatusCard> createState() => _ActivityStatusCardState();
+}
+
+class _ActivityStatusCardState extends State<ActivityStatusCard> {
+  late PreActivityProvider prov;
+  late Map<String, dynamic> timeRemaining;
+
+  final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+  late String startDate;
+  late String dueDate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    prov = Provider.of<PreActivityProvider>(context, listen: false);
+
+    _setTimeDiff();
+
+    if (timeRemaining['difference'].isNegative && widget.actOwned.status != 'late') {
+      prov.editActivityStatus(widget.actOwned.id, 'late');
+
+    }
+  }
+
+  _setTimeDiff() {
+    startDate = formatter.format(widget.actOwned.start_date);
+    dueDate = formatter.format(widget.actOwned.end_date);
+
+    timeRemaining =
+        Formatter.dateFormatter(DateTime.now(), widget.actOwned.end_date);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
-    var startDate = formatter.format(activityOwned.start_date);
-    var dueDate = formatter.format(activityOwned.end_date);
-
-    DateTime x = DateTime.parse('2000-01-01 17:00');
-    DateTime y = DateTime.parse('2000-01-04 18:30');
-    Map<String, dynamic> difference = Formatter.dateFormatter(
-        activityOwned.start_date, activityOwned.end_date);
+    // DateTime x = DateTime.parse('2000-01-01 17:00');
+    // DateTime y = DateTime.parse('2000-01-04 18:30');
 
     return Card(
         elevation: 5,
@@ -238,12 +265,12 @@ class ActivityStatusCard extends StatelessWidget {
                   Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: STATUSES[activityOwned.status]!['color'],
+                        color: STATUSES[widget.actOwned.status]!['color'],
                         borderRadius: BorderRadius.all(Radius.circular(20))),
                     width: 86,
                     height: 16,
                     child: Text(
-                      STATUSES[activityOwned.status]!['title'],
+                      STATUSES[widget.actOwned.status]!['title'],
                       style: TextStyle(color: Colors.white, fontSize: 11),
                     ),
                   ),
@@ -255,21 +282,24 @@ class ActivityStatusCard extends StatelessWidget {
                 height: 1,
               ),
               Row(children: [
+                Text("Start Date: ", style: TextStyle(fontSize: 17)),
+                Text(startDate, style: TextStyle(fontSize: 17)),
+              ]),
+              Space.space(),
+              Row(children: [
                 Text("Due Date: ", style: TextStyle(fontSize: 17)),
                 Text(dueDate, style: TextStyle(fontSize: 17)),
               ]),
-              SizedBox(
-                height: DEFAULT_PADDING,
-              ),
+              Space.space(),
               Row(children: [
                 Text("Time Remaining: ", style: TextStyle(fontSize: 17)),
                 Text(
-                    (difference['difference'].isNegative)
-                        ? 'Late ' + difference['difString']
-                        : difference['difString'],
+                    (timeRemaining['difference'].isNegative)
+                        ? 'Late ' + timeRemaining['difString']
+                        : timeRemaining['difString'],
                     style: TextStyle(
                         fontSize: 17,
-                        color: (difference['difference'].isNegative)
+                        color: (timeRemaining['difference'].isNegative)
                             ? Colors.red
                             : Colors.black)),
               ]),
@@ -280,10 +310,10 @@ class ActivityStatusCard extends StatelessWidget {
 }
 
 class ActivityTitleCard extends StatelessWidget {
-  const ActivityTitleCard({Key? key, required this.activityOwned})
+  const ActivityTitleCard({Key? key, required this.actOwned})
       : super(key: key);
 
-  final ActivityOwned activityOwned;
+  final ActivityOwned actOwned;
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +326,7 @@ class ActivityTitleCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                activityOwned.activity.activity_name,
+                actOwned.activity.activity_name,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Container(
@@ -306,17 +336,17 @@ class ActivityTitleCard extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    if (activityOwned.status == 'assigned') {
+                    if (actOwned.status == 'assigned') {
                       _editActStatus(
-                          activityOwned.id, 'on_progress', prov, context);
+                          actOwned.id, 'on_progress', prov, context);
                     }
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return ActivityDetailPage(
-                        actOwnedId: activityOwned.id,
-                        actOwned: activityOwned,
-                        act: activityOwned.activity,
-                        title: activityOwned.activity.activity_name,
+                        actOwnedId: actOwned.id,
+                        actOwned: actOwned,
+                        act: actOwned.activity,
+                        title: actOwned.activity.activity_name,
                       );
                       // return Try();
                     }));

@@ -106,6 +106,10 @@ class ChangePasswordProvider extends ChangeNotifier {
             "new_password": newPass,
           }));
 
+          if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }

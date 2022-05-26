@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 
 import 'package:http/http.dart' as http;
@@ -38,6 +41,9 @@ class LeaderboardProvider extends ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
       if (result.statusCode == 400) {
         Map<String, dynamic> responseData = jsonDecode(result.body);
         throw responseData['errorMessage'];
@@ -51,33 +57,18 @@ class LeaderboardProvider extends ChangeNotifier {
     }
   }
 
-Future<List<User>> fetchVideo(String fileName) async {
-    String url = "$BASE_URL/api/ShowVideo/$fileName";
-
-    try {
-      var result = await http.get(
-        Uri.parse(url),
-        headers: {
-          "Access-Control-Allow-Origin":
-              "*", // Required for CORS support to work
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Credentials": "true",
-          "Access-Control-Expose-Headers": "Authorization, authenticated",
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $_token',
-        },
-      );
-      if (result.statusCode == 400) {
-        Map<String, dynamic> responseData = jsonDecode(result.body);
-        throw responseData['errorMessage'];
-      }
-      if (result.statusCode == 502 || result.statusCode == 500) {
-        throw "Server Down";
-      }
-      return compute(parseUsers, result.body);
-    } catch (e) {
-      rethrow;
-    }
+  Future<Uint8List> _readFileByte(String filePath) async {
+    Uri myUri = Uri.parse(filePath);
+    File audioFile = new File.fromUri(myUri);
+    late Uint8List bytes;
+    await audioFile.readAsBytes().then((value) {
+      bytes = Uint8List.fromList(value);
+      print('dafi: ' + bytes.toString());
+    }).catchError((onError) {
+      print('Exception Error while reading audio from path:' +
+          onError.toString());
+    });
+    return bytes;
   }
 
   // ============

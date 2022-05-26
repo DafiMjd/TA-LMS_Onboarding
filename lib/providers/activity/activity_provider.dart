@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/models/user.dart';
@@ -42,6 +41,9 @@ class ActivityProvider extends ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
       if (result.statusCode == 400) {
         Map<String, dynamic> responseData = jsonDecode(result.body);
         throw responseData['errorMessage'];
@@ -71,6 +73,9 @@ class ActivityProvider extends ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
       if (result.statusCode == 400) {
         Map<String, dynamic> responseData = jsonDecode(result.body);
         throw responseData['errorMessage'];
@@ -102,6 +107,9 @@ Future<List<ActivityOwned>> fetchActsOwned(String status) async {
           'Authorization': 'Bearer $_token',
         },
       );
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
       if (result.statusCode == 400) {
         Map<String, dynamic> responseData = jsonDecode(result.body);
         throw responseData['errorMessage'];

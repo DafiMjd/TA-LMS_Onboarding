@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/role.dart';
@@ -73,13 +72,16 @@ class DashboardTabProvider with ChangeNotifier {
         },
       );
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
       return compute(parseUser, result.body);
     } catch (e) {
-      print("dafi e" + e.toString());
       rethrow;
     }
   }
@@ -103,6 +105,10 @@ class DashboardTabProvider with ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
 
       
       if (result.statusCode == 502 || result.statusCode == 500) {

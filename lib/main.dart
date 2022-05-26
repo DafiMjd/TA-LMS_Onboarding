@@ -1,20 +1,28 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart';
 import 'package:lms_onboarding/providers/activity/browse_activity_provider.dart';
 import 'package:lms_onboarding/providers/activity/activity_provider.dart';
 import 'package:lms_onboarding/providers/activity/pre_activity_provider.dart';
+import 'package:lms_onboarding/providers/home/home_activity_detail_provider.dart';
+import 'package:lms_onboarding/providers/home/home_provider.dart';
 import 'package:lms_onboarding/providers/leaderboard/leaderboard_provider.dart';
 import 'package:lms_onboarding/providers/profile/change_password_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
 import 'package:lms_onboarding/providers/profile/user_provider.dart';
-import 'package:lms_onboarding/views/activity/browse_activity_page.dart';
 import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:provider/provider.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
 import 'views/login_page.dart';
 
-void main() {
+void main() async {
+    AutoOrientation.portraitUpMode;
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: false, ignoreSsl: true);
   runApp(const MyApp());
 }
 
@@ -60,13 +68,13 @@ class MyApp extends StatelessWidget {
               }
               return EditProfileProvider();
             }),
-        ChangeNotifierProxyProvider<AuthProvider, ActivityDetailPageProvider>(
-            create: (context) => ActivityDetailPageProvider(),
+        ChangeNotifierProxyProvider<AuthProvider, ActivityDetailProvider>(
+            create: (context) => ActivityDetailProvider(),
             update: (context, authProv, editProv) {
               if (editProv != null) {
                 return editProv..recieveToken(authProv);
               }
-              return ActivityDetailPageProvider();
+              return ActivityDetailProvider();
             }),
         ChangeNotifierProxyProvider<AuthProvider, PreActivityProvider>(
             create: (context) => PreActivityProvider(),
@@ -91,6 +99,22 @@ class MyApp extends StatelessWidget {
                 return actProv..recieveToken(authProv);
               }
               return ActivityProvider();
+            }),
+        ChangeNotifierProxyProvider<AuthProvider, HomeProvider>(
+            create: (context) => HomeProvider(),
+            update: (context, authProv, homeProv) {
+              if (homeProv != null) {
+                return homeProv..recieveToken(authProv);
+              }
+              return HomeProvider();
+            }),
+        ChangeNotifierProxyProvider<AuthProvider, HomeActivityDetailProvider>(
+            create: (context) => HomeActivityDetailProvider(),
+            update: (context, authProv, homeActDetailProv) {
+              if (homeActDetailProv != null) {
+                return homeActDetailProv..recieveToken(authProv);
+              }
+              return HomeActivityDetailProvider();
             }),
       ],
       builder: (context, child) => Consumer<AuthProvider>(

@@ -1,11 +1,11 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity.dart';
-import 'package:lms_onboarding/models/activity_detail.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/models/status_menu.dart';
 import 'package:lms_onboarding/utils/constans.dart';
-import 'package:lms_onboarding/utils/status_utils.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -66,6 +66,10 @@ class BrowseActivityPageProvider extends ChangeNotifier {
         },
       );
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
@@ -98,6 +102,10 @@ class BrowseActivityPageProvider extends ChangeNotifier {
         },
       );
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
@@ -129,6 +137,10 @@ class BrowseActivityPageProvider extends ChangeNotifier {
         },
       );
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
 
       if (result.body == []) {
         return [];
@@ -151,7 +163,6 @@ class BrowseActivityPageProvider extends ChangeNotifier {
 
   Future<List<ActivityOwned>> fetchActOwnedByCatByStatus(int id, String status) async {
     String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$_email/$id/$status";
-    print(status);
 
     try {
       var result = await http.get(
@@ -166,6 +177,10 @@ class BrowseActivityPageProvider extends ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
 
 
       if (result.body == []) {

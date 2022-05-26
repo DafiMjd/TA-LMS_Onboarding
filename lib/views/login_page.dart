@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
@@ -41,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       // loginPageProvider.isLoginButtonDisabled = false;
     }
 
-    Card BuildAuthCard() {
+    Card buildAuthCard() {
       return Card(
         elevation: 5,
         child: Container(
@@ -143,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
               alignment: Alignment.topCenter,
               child: Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: MediaQuery.of(context).size.height / 6,
                     width: MediaQuery.of(context).size.height / 3,
                     child: Image.asset('assets/images/logo_garuda.png'),
@@ -162,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                 margin: EdgeInsets.all(10),
                 height: MediaQuery.of(context).size.height * 0.5,
                 width: MediaQuery.of(context).size.width,
-                child: BuildAuthCard(),
+                child: buildAuthCard(),
               ),
             ),
           ]),

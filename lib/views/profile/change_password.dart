@@ -1,14 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
-import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
-import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/providers/profile/change_password_provider.dart';
-import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
-import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
-import 'package:lms_onboarding/views/dashboard_page.dart';
+import 'package:lms_onboarding/widgets/space.dart';
 
 import 'package:provider/provider.dart';
 
@@ -89,9 +86,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       // Fullname
                       titleField("Current Password",
                           changePassProv.isCurPassFieldEmpty),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       TextFormField(
                           inputFormatters: <TextInputFormatter>[
                             LengthLimitingTextInputFormatter(200),
@@ -108,16 +103,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   child: Icon(changePassProv.isCurPassHidden
                                       ? Icons.visibility_off
                                       : Icons.visibility)))),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
 
                       // Password
                       titleField(
                           "New Password", changePassProv.isNewPassFieldEmpty),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       TextFormField(
                           inputFormatters: <TextInputFormatter>[
                             LengthLimitingTextInputFormatter(200),
@@ -134,16 +125,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   child: Icon(changePassProv.isNewPassHidden
                                       ? Icons.visibility_off
                                       : Icons.visibility)))),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
 
                       // Confirm Password
                       titleField("Confirm Password",
                           changePassProv.isConfPassFieldEmpty),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       TextFormField(
                           inputFormatters: <TextInputFormatter>[
                             LengthLimitingTextInputFormatter(200),
@@ -161,9 +148,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   child: Icon(changePassProv.isConfPassHidden
                                       ? Icons.visibility_off
                                       : Icons.visibility)))),
-                      SizedBox(
-                        height: DEFAULT_PADDING,
-                      ),
+                      Space.space(),
                       Visibility(
                         child: Container(
                           alignment: Alignment.centerLeft,
@@ -175,9 +160,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         visible: changePassProv.isPassDifferent,
                       ),
 
-                      SizedBox(
-                        height: DEFAULT_PADDING * 2,
-                      ),
+                      Space.doubleSpace(),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: changePassProv.isSaveButtonDisabled
@@ -197,7 +180,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     _changePassword(
                                         _curPassCtrl.text, _newPassCtrl.text);
                                   }
-                                  ;
                                 }
                               },
                         child: changePassProv.isSaveButtonDisabled

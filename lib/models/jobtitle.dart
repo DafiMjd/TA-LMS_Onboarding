@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
+
 class Jobtitle {
   final int id;
   final String jobtitle_name, jobtitle_description;

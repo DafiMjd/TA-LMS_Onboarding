@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
@@ -8,7 +10,6 @@ import 'package:lms_onboarding/utils/formatter.dart';
 import 'package:lms_onboarding/views/activity/browse_activity_page.dart';
 import 'package:lms_onboarding/views/activity/pre_activity_page.dart';
 import 'package:lms_onboarding/views/bottom_navbar.dart';
-import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:lms_onboarding/widgets/activity_item.dart';
 import 'package:lms_onboarding/widgets/category_item.dart';
 import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
@@ -68,7 +69,7 @@ class _ActivityPageState extends State<ActivityPage> {
               },
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
-                child: Container(
+                child: SizedBox(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
@@ -124,52 +125,50 @@ class _ActivityPageState extends State<ActivityPage> {
 
                       Flexible(
                           flex: 2,
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Container(
-                                    margin: EdgeInsets.only(left: 10),
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "Running Activity",
-                                      style: TextStyle(fontSize: 17),
-                                    )),
-                                Divider(height: 15, color: Colors.transparent),
+                          child: Column(
+                            children: [
+                              Container(
+                                  margin: EdgeInsets.only(left: 10),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Running Activity",
+                                    style: TextStyle(fontSize: 17),
+                                  )),
+                              Divider(height: 15, color: Colors.transparent),
 
-                                // activity card
-                                (actsOwned.isEmpty)
-                                    ? Center(
-                                        child: Text(
-                                          "No Data",
-                                          style: TextStyle(
-                                            fontSize: 25,
-                                          ),
+                              // activity card
+                              (actsOwned.isEmpty)
+                                  ? Center(
+                                      child: Text(
+                                        "No Data",
+                                        style: TextStyle(
+                                          fontSize: 25,
                                         ),
-                                      )
-                                    : ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: actsOwned.length,
-                                        itemBuilder: (context, i) {
-                                          return InkWell(
-                                            onTap: () => Navigator.push(context,
-                                                MaterialPageRoute(
-                                                    builder: (context) {
-                                              return PreActivityPage(
-                                                  actOwnedId: actsOwned[i].id);
-                                            })),
-                                            child: ActivityItem(
-                                              title: actsOwned[i]
-                                                  .activity
-                                                  .activity_name,
-                                              description: actsOwned[i]
-                                                  .activity
-                                                  .activity_description,
-                                              statusId: actsOwned[i].status,
-                                            ),
-                                          );
-                                        }),
-                              ],
-                            ),
+                                      ),
+                                    )
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: actsOwned.length,
+                                      itemBuilder: (context, i) {
+                                        return InkWell(
+                                          onTap: () => Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return PreActivityPage(
+                                                actOwnedId: actsOwned[i].id);
+                                          })),
+                                          child: ActivityItem(
+                                            title: actsOwned[i]
+                                                .activity
+                                                .activity_name,
+                                            description: actsOwned[i]
+                                                .activity
+                                                .activity_description,
+                                            statusId: actsOwned[i].status,
+                                          ),
+                                        );
+                                      }),
+                            ],
                           )),
                     ],
                   ),

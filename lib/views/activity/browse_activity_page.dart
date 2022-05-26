@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
@@ -68,7 +70,7 @@ class _BrowseActivityPageState extends State<BrowseActivityPage> {
                 child: (activitiesOwned.isEmpty)
                     ? SingleChildScrollView(
                         physics: AlwaysScrollableScrollPhysics(),
-                        child: Container(
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.height/3,
                           child: Text(
                             'No Activity',

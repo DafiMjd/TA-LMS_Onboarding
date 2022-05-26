@@ -1,5 +1,6 @@
+// ignore_for_file: unrelated_type_equality_checks
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 
 import 'package:http/http.dart' as http;
@@ -55,6 +56,9 @@ class PreActivityProvider extends ChangeNotifier {
           body: jsonEncode(
               {"id": id, "user_email": _email, "activity_note": note}));
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
@@ -89,7 +93,9 @@ class PreActivityProvider extends ChangeNotifier {
             'Authorization': 'Bearer $_token',
           },
           body: jsonEncode({"id": id, "user_email": _email, "status": status}));
-
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
@@ -125,6 +131,10 @@ class PreActivityProvider extends ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
 
       if (result.body == []) {
         throw "No Data";

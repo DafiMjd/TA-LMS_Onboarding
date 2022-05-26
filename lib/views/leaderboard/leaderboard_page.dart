@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/leaderboard/leaderboard_provider.dart';
@@ -9,7 +11,7 @@ import 'package:lms_onboarding/widgets/progress_bar.dart';
 import 'package:provider/provider.dart';
 
 class LeaderboardPage extends StatefulWidget {
-  LeaderboardPage({Key? key}) : super(key: key);
+  const LeaderboardPage({Key? key}) : super(key: key);
 
   @override
   State<LeaderboardPage> createState() => _LeaderboardPageState();

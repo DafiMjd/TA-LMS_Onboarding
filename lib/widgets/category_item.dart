@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/providers/activity/activity_provider.dart';
-import 'package:provider/provider.dart';
 
 class CategoryItem extends StatelessWidget {
   final String categoryName;
@@ -9,12 +8,11 @@ class CategoryItem extends StatelessWidget {
   final VoidCallback press;
   
 
-  CategoryItem({required this.categoryName, required this.categoryColor, 
+  const CategoryItem({required this.categoryName, required this.categoryColor, 
       required this.press});
 
   @override
   Widget build(BuildContext context) {
-    var prov = Provider.of<ActivityProvider>(context, listen: false);
 
     return InkWell(
       onTap: press,

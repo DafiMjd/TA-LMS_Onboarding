@@ -1,7 +1,6 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/utils/constans.dart';
-import 'package:lms_onboarding/widgets/space.dart';
 import 'package:video_player/video_player.dart';
 
 class DetailVideoPlayer extends StatefulWidget {
@@ -32,7 +31,6 @@ class _DetailVideoPlayerState extends State<DetailVideoPlayer> {
   }
 
   Future<void> initializePlayer() async {
-    print('dafi' + BASE_URL + '/' + widget.link);
     _videoPlayerController1 =
         VideoPlayerController.network(BASE_URL + '/' + widget.link);
     await Future.wait([
@@ -78,7 +76,7 @@ class _DetailVideoPlayerState extends State<DetailVideoPlayer> {
                       children: const [
                         CircularProgressIndicator(),
                         SizedBox(height: 20),
-                        Text('Loading'),
+                        Text('Loading video'),
                       ],
                     ),
             ),

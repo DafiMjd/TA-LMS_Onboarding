@@ -1,3 +1,5 @@
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -50,7 +52,7 @@ class AuthProvider with ChangeNotifier {
     String apiURL = "$BASE_URL/api/Auth/login-user";
 
     try {
-      var apiResult = await http.post(Uri.parse(apiURL),
+      var result = await http.post(Uri.parse(apiURL),
           headers: {
             "Access-Control-Allow-Origin":
                 "*", // Required for CORS support to work
@@ -61,9 +63,17 @@ class AuthProvider with ChangeNotifier {
           },
           body: jsonEncode({"email": email, "password": password}));
 
-      Map<String, dynamic> responseData = jsonDecode(apiResult.body);
+      Map<String, dynamic> responseData = jsonDecode(result.body);
 
-      if (apiResult.statusCode == 400) {
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
+      if (result.statusCode == 502 || result.statusCode == 500) {
+        throw "Server Down";
+      }
+
+      if (result.statusCode == 400) {
         throw responseData['errorMessage'];
       }
 
@@ -74,7 +84,7 @@ class AuthProvider with ChangeNotifier {
       isLoginButtonDisabled = false;
     } catch (e) {
       isLoginButtonDisabled = false;
-      throw e;
+      rethrow;
     }
   }
 

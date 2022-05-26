@@ -1,4 +1,4 @@
-import 'dart:async';
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
@@ -7,13 +7,12 @@ import 'package:lms_onboarding/models/role.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
-import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/activity/activity_page.dart';
 import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/views/home/home_page.dart';
 import 'package:lms_onboarding/views/leaderboard/leaderboard_page.dart';
 import 'package:lms_onboarding/views/profile/profile_page.dart';
-import 'package:lms_onboarding/views/video_test.dart';
+import 'package:lms_onboarding/views/download_test.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -139,7 +138,7 @@ class _DashboardPageState extends State<DashboardPage> {
       } else if (dashboardTabProvider.tab == LEADERBOARD_PAGE) {
         return (dashProv.isFetchingData) ? LoadingScreen() : LeaderboardPage();
       } else if (dashboardTabProvider.tab == VIDE_TEST) {
-        return (dashProv.isFetchingData) ? LoadingScreen() : VideoTest();
+        return (dashProv.isFetchingData) ? LoadingScreen() : DowloadTest();
       }
       return Scaffold(
         bottomNavigationBar: BottomNavBar(),

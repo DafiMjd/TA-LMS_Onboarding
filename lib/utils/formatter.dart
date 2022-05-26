@@ -9,9 +9,9 @@ class Formatter {
   }
 
   static Map<String, dynamic> dateFormatter(DateTime start, DateTime end) {
+
     var difference = end.difference(start);
     var difDays = difference.inDays;
-
 
     // getting hour diff
     start = start.add(Duration(days: difDays));
@@ -23,12 +23,22 @@ class Formatter {
     var difference3 = end.difference(start);
     var difMin = difference3.inMinutes;
 
-    String difString = difDays.toString() + ' D ' + difHour.toString() + ' H ' + difMin.toString() + ' M';
+    String difString = '';
 
+    if (difference.inHours < 24) {
+      print('dafi');
+      difString = difHour.toString() + ' Hours ' + difMin.toString() + ' Mins';
+    } else {
+      difString =
+          difDays.toString() + ' Days ' + difHour.toString() + ' Hours ';
+    }
 
-    Map<String, dynamic> difReturn = {'difference': difference, 'difString': difString};
+    Map<String, dynamic> difReturn = {
+      'difference': difference,
+      'difString': difString
+    };
 
     return difReturn;
   }
-  
+
 }

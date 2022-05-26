@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/status_menu.dart';
 import 'package:lms_onboarding/providers/activity/browse_activity_provider.dart';

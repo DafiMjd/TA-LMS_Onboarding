@@ -1,18 +1,22 @@
-import 'package:chewie/chewie.dart';
+
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity.dart';
 import 'package:lms_onboarding/models/activity_detail.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
+
 import 'package:lms_onboarding/utils/custom_colors.dart';
+import 'package:lms_onboarding/views/activity/detail_pdf.dart';
 import 'package:lms_onboarding/views/activity/detail_video_player.dart';
-import 'package:lms_onboarding/views/dashboard_page.dart';
+
 import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
 import 'package:lms_onboarding/widgets/loading_widget.dart';
 import 'package:lms_onboarding/widgets/space.dart';
 import 'package:provider/provider.dart';
-import 'package:video_player/video_player.dart';
+
 
 class ActivityDetailPage extends StatefulWidget {
   const ActivityDetailPage(
@@ -34,13 +38,13 @@ class ActivityDetailPage extends StatefulWidget {
 
 class _ActivityDetailPageState extends State<ActivityDetailPage> {
   late List<ActivityDetail> actDetails;
-  late ActivityDetailPageProvider prov;
+  late ActivityDetailProvider prov;
   late ActivityOwned actOwned;
 
   @override
   void initState() {
     super.initState();
-    prov = Provider.of<ActivityDetailPageProvider>(context, listen: false);
+    prov = Provider.of<ActivityDetailProvider>(context, listen: false);
 
     // _fetchActOwned(widget.actOwnedId);
     // actOwned = widget.actOwned;
@@ -51,7 +55,7 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    prov = context.watch<ActivityDetailPageProvider>();
+    prov = context.watch<ActivityDetailProvider>();
     return Scaffold(
       appBar: AppBar(
           backgroundColor: ORANGE_GARUDA,
@@ -87,6 +91,7 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
                               : (actDetails.isEmpty)
                                   ? Container()
                                   : ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       itemCount: actDetails.length,
                                       itemBuilder: (context, i) {
@@ -125,7 +130,6 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
 
   void _getStatus(ActivityOwned actOwned) {
     if (actOwned.status == 'submitted' || actOwned.status == 'completed') {
-      print('dafi');
       prov.isButtonDisabled = true;
     } else {
       prov.isButtonDisabled = false;
@@ -201,20 +205,19 @@ class ActivityDetailWidget extends StatefulWidget {
 }
 
 class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
-  late ActivityDetailPageProvider prov;
+  late ActivityDetailProvider prov;
   bool isChecked = false;
 
   int currPlayIndex = 0;
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    prov = context.watch<ActivityDetailPageProvider>();
+    prov = context.watch<ActivityDetailProvider>();
     if (widget.detail == null) {
       return _getDeskripsi();
     }
@@ -235,23 +238,20 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
           margin: EdgeInsets.only(bottom: 10),
           child: Text(widget.detail!.detail_desc));
     } else if (widget.detail!.detail_type == 'to_do') {
-      return Container(
-        // margin: EdgeInsets.only(bottom: 5),
-        child: Row(
-          children: [
-            Checkbox(
-              checkColor: Colors.white,
-              fillColor: MaterialStateProperty.resolveWith(getColor),
-              value: isChecked,
-              onChanged: (bool? value) {
-                setState(() {
-                  isChecked = value!;
-                });
-              },
-            ),
-            Text(widget.detail!.detail_desc),
-          ],
-        ),
+      return Row(
+        children: [
+          Checkbox(
+            checkColor: Colors.white,
+            fillColor: MaterialStateProperty.resolveWith(getColor),
+            value: isChecked,
+            onChanged: (bool? value) {
+              setState(() {
+                isChecked = value!;
+              });
+            },
+          ),
+          Text(widget.detail!.detail_desc),
+        ],
       );
     } else if (widget.detail!.detail_type == 'image') {
       return Container(margin: EdgeInsets.only(bottom: 10), child: getImage());
@@ -264,19 +264,9 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
             link: widget.detail!.detail_link!,
           ));
     } else if (widget.detail!.detail_type == 'pdf') {
-      return InkWell(
-        onTap: () {
-          prov.downloadPdf('s');
-        },
-        child: Container(
-          margin: EdgeInsets.only(bottom: 10),
-          child: Row(
-            children: [
-              Icon(Icons.picture_as_pdf),
-              Text(widget.detail!.detail_name),
-            ],
-          ),
-        ),
+      return Container(
+        margin: EdgeInsets.only(bottom: 10),
+        child: DetailPdf(fileName: widget.detail!.detail_name, fileLink: widget.detail!.detail_link!,),
       );
     }
     return Container();
@@ -287,7 +277,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
     try {
       image = Image.network(
         // BASE_URL + '/' + widget.detail!.detail_link!,
-        'https://a36c-103-100-135-183.ngrok.io/api/ShowImage/202205192243361.png',
+        BASE_URL + '/api/ShowImage/202205192243361.png',
         // loadingBuilder: (context, child, loadingProgress) => Column(
         //   children: [
         //     LoadingWidget(),
@@ -298,7 +288,6 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
         errorBuilder: (context, child, e) => Text('image not found'),
       );
     } catch (e) {
-      print('dafi' + e.toString());
       image = Text('image not found');
     }
 

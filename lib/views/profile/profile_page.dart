@@ -1,7 +1,8 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:lms_onboarding/models/jobtitle.dart';
 import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
 import 'package:lms_onboarding/providers/auth_provider.dart';
@@ -26,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late AuthProvider authProv;
   late DashboardTabProvider dashboardTabProv;
 
-FutureOr onGoBack(dynamic value) {
+  FutureOr onGoBack(dynamic value) {
     setState(() {});
   }
 
@@ -62,6 +63,13 @@ FutureOr onGoBack(dynamic value) {
                       Icons.account_circle,
                       size: MediaQuery.of(context).size.height * 0.14 - 20,
                     ),
+                    // (widget.user.profPicLink == null)
+                    //     ? Icon(
+                    //         Icons.account_circle,
+                    //         size:
+                    //             MediaQuery.of(context).size.height * 0.14 - 20,
+                    //       )
+                    // : getProfPic(widget.user.profPicLink),
                     Container(
                         margin: EdgeInsets.only(top: 15, left: 13, bottom: 15),
                         child: Column(
@@ -147,7 +155,6 @@ FutureOr onGoBack(dynamic value) {
                         )
                       ],
                     ),
-                  
                   ),
 
                   // Job Title
@@ -362,5 +369,22 @@ FutureOr onGoBack(dynamic value) {
       ),
       bottomNavigationBar: BottomNavBar(),
     );
+  }
+
+  Widget getProfPic(link) {
+    var url = BASE_URL + '/' + link;
+    return Image.network(
+      url,
+      errorBuilder: (context, child, e) => Icon(
+        Icons.account_circle,
+        size: MediaQuery.of(context).size.height * 0.14 - 20,
+      ),
+    );
+
+    // return CachedNetworkImage(
+    //   imageUrl: url,
+    //   placeholder: (context, url) => new CircularProgressIndicator(),
+    //   errorWidget: (context, url, error) => new Icon(Icons.error),
+    // );
   }
 }

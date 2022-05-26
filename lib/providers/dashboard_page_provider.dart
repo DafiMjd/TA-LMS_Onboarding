@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:lms_onboarding/models/activity.dart';
-import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/activity_detail.dart';
-import 'package:lms_onboarding/models/user.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
 import 'package:http/http.dart' as http;
@@ -22,8 +20,6 @@ class DashboardPageProvider extends ChangeNotifier {
     _isFetchingData = val;
   }
 
-
-
   // Activity
   Future<Activity> fetchActivityById(int id) async {
     String url = "$BASE_URL/api/Activities/$id";
@@ -42,7 +38,10 @@ class DashboardPageProvider extends ChangeNotifier {
         },
       );
 
-      
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
@@ -74,8 +73,10 @@ class DashboardPageProvider extends ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
 
-      
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
@@ -110,6 +111,10 @@ class DashboardPageProvider extends ChangeNotifier {
           'Authorization': 'Bearer $_token',
         },
       );
+
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
 
       if (result.statusCode == 400) {
         Map<String, dynamic> responseData = jsonDecode(result.body);
@@ -151,10 +156,10 @@ List<Activity> parseActivities(String responseBody) {
 }
 
 List<ActivityDetail> parseActivityDetails(List<Map<String, dynamic>> parsed) {
-    return parsed
-        .map<ActivityDetail>((json) => ActivityDetail.fromJson(json))
-        .toList();
-  }
+  return parsed
+      .map<ActivityDetail>((json) => ActivityDetail.fromJson(json))
+      .toList();
+}
 
 
 

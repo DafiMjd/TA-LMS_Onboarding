@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/user.dart';
@@ -73,13 +75,16 @@ class EditProfileProvider extends ChangeNotifier {
         },
       );
 
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
 
       return compute(parseUser, result.body);
     } catch (e) {
-      print("dafi e" + e.toString());
       rethrow;
     }
   }
@@ -110,6 +115,10 @@ class EditProfileProvider extends ChangeNotifier {
             "phone_number": phoneNum,
             "progress": progress
           }));
+
+          if (result.statusCode == 404) {
+        throw "Not Found";
+      }
 
       
       if (result.statusCode == 502 || result.statusCode == 500) {

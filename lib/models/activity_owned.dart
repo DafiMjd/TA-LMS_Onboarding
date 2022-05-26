@@ -33,9 +33,6 @@ class ActivityOwned {
     var cat = (json['category_'] == null)
         ? null
         : ActivityCategory.fromJson(json['category_']);
-    var user = (json['user_'] == null)
-        ? null
-        : User.fromJson(json['user_']);
     return ActivityOwned(
         id: json['id'],
         activity: Activity.fromJson(json['activities_']),

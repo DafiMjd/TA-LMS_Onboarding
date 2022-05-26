@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: constant_identifier_names
+
 import 'package:lms_onboarding/utils/custom_colors.dart';
 
 const Map<String, Map<String, dynamic>> STATUSES = {
