@@ -62,8 +62,7 @@ class _PreActivityPageState extends State<PreActivityPage> {
                           actOwned: actOwned,
                         ),
                         Space.doubleSpace(),
-                        ActivityNoteCard(
-                            actOwned: actOwned, refresh: refresh),
+                        ActivityNoteCard(actOwned: actOwned, refresh: refresh),
                       ],
                     ),
                   )),
@@ -90,6 +89,7 @@ class _PreActivityPageState extends State<PreActivityPage> {
 
     try {
       actOwned = await prov.fetchActOwnedById(id);
+      print('dafi: ' + actOwned.mentor_email!);
       prov.isFetchingData = false;
     } catch (e) {
       prov.isFetchingData = false;
@@ -229,9 +229,12 @@ class _ActivityStatusCardState extends State<ActivityStatusCard> {
 
     _setTimeDiff();
 
-    if (timeRemaining['difference'].isNegative && widget.actOwned.status != 'late') {
+    if (timeRemaining['difference'].isNegative &&
+        widget.actOwned.status != 'late' &&
+        widget.actOwned.status != 'submitted' &&
+        widget.actOwned.status != 'completed' &&
+        widget.actOwned.status != 'rejected') {
       prov.editActivityStatus(widget.actOwned.id, 'late');
-
     }
   }
 
@@ -303,6 +306,11 @@ class _ActivityStatusCardState extends State<ActivityStatusCard> {
                             ? Colors.red
                             : Colors.black)),
               ]),
+              Space.space(),
+              Row(children: [
+                Text("Validated By: ", style: TextStyle(fontSize: 17)),
+                Text(widget.actOwned.mentor_email!,  style: TextStyle(fontSize: 17)),
+              ]),
             ],
           ),
         ));
@@ -310,8 +318,7 @@ class _ActivityStatusCardState extends State<ActivityStatusCard> {
 }
 
 class ActivityTitleCard extends StatelessWidget {
-  const ActivityTitleCard({Key? key, required this.actOwned})
-      : super(key: key);
+  const ActivityTitleCard({Key? key, required this.actOwned}) : super(key: key);
 
   final ActivityOwned actOwned;
 
@@ -337,8 +344,7 @@ class ActivityTitleCard extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     if (actOwned.status == 'assigned') {
-                      _editActStatus(
-                          actOwned.id, 'on_progress', prov, context);
+                      _editActStatus(actOwned.id, 'on_progress', prov, context);
                     }
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {

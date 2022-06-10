@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       providers: [
         // ChangeNotifierProvider(create: (context) => DashboardTabProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
+        // ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProxyProvider<AuthProvider, BrowseActivityPageProvider>(
             create: (context) => BrowseActivityPageProvider(),
             update: (context, authProv, dashPorv) {

@@ -9,8 +9,8 @@ import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart'
 import 'package:lms_onboarding/utils/constans.dart';
 
 import 'package:lms_onboarding/utils/custom_colors.dart';
-import 'package:lms_onboarding/views/activity/detail_pdf.dart';
-import 'package:lms_onboarding/views/activity/detail_video_player.dart';
+import 'package:lms_onboarding/views/activity/widgets/detail_pdf.dart';
+import 'package:lms_onboarding/views/activity/widgets/detail_video_player.dart';
 
 import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
 import 'package:lms_onboarding/widgets/loading_widget.dart';

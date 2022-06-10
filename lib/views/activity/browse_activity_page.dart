@@ -7,7 +7,7 @@ import 'package:lms_onboarding/models/status_menu.dart';
 import 'package:lms_onboarding/providers/activity/browse_activity_provider.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/activity/pre_activity_page.dart';
-import 'package:lms_onboarding/views/activity/top_nav_bar.dart';
+import 'package:lms_onboarding/views/activity/widgets/top_nav_bar.dart';
 import 'package:lms_onboarding/widgets/activity_item.dart';
 import 'package:lms_onboarding/widgets/space.dart';
 import 'package:provider/provider.dart';

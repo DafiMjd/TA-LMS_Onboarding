@@ -12,7 +12,6 @@ import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/views/home/home_page.dart';
 import 'package:lms_onboarding/views/leaderboard/leaderboard_page.dart';
 import 'package:lms_onboarding/views/profile/profile_page.dart';
-import 'package:lms_onboarding/views/download_test.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -137,9 +136,10 @@ class _DashboardPageState extends State<DashboardPage> {
               );
       } else if (dashboardTabProvider.tab == LEADERBOARD_PAGE) {
         return (dashProv.isFetchingData) ? LoadingScreen() : LeaderboardPage();
-      } else if (dashboardTabProvider.tab == VIDE_TEST) {
-        return (dashProv.isFetchingData) ? LoadingScreen() : DowloadTest();
-      }
+      } 
+      // else if (dashboardTabProvider.tab == VIDE_TEST) {
+      //   return (dashProv.isFetchingData) ? LoadingScreen() : DowloadTest();
+      // }
       return Scaffold(
         bottomNavigationBar: BottomNavBar(),
       );

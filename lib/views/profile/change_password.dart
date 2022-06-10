@@ -83,7 +83,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   padding: EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      // Fullname
+                      // Current Password
                       titleField("Current Password",
                           changePassProv.isCurPassFieldEmpty),
                       Space.space(),
