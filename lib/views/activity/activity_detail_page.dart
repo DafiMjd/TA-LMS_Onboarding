@@ -67,55 +67,62 @@ class _ActivityDetailPageState extends State<ActivityDetailPage> {
               child: Container(
               width: MediaQuery.of(context).size.width,
               margin: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Card(
-                    elevation: 3,
-                    child: Container(
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ActivityDetailWidget(
-                            type: 'header',
-                            text: 'Deskripsi',
-                          ),
-                          ActivityDetailWidget(
-                            type: 'text',
-                            text: actOwned.activity.activity_description,
-                            // text: 'dafi'
-                          ),
-                          (prov.isFetchingActDetails)
-                              ? CircularProgressIndicator()
-                              : (actDetails.isEmpty)
-                                  ? Container()
-                                  : ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: actDetails.length,
-                                      itemBuilder: (context, i) {
-                                        return ActivityDetailWidget(
-                                          detail: actDetails[i],
-                                        );
-                                      }),
-                        ],
+              child: Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Card(
+                      elevation: 3,
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ActivityDetailWidget(
+                              type: 'header',
+                              text: 'Deskripsi',
+                            ),
+                            ActivityDetailWidget(
+                              type: 'text',
+                              text: actOwned.activity.activity_description,
+                              // text: 'dafi'
+                            ),
+                            (prov.isFetchingActDetails)
+                                ? CircularProgressIndicator()
+                                : (actDetails.isEmpty)
+                                    ? Container()
+                                    : ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        itemCount: actDetails.length,
+                                        itemBuilder: (context, i) {
+                                          
+                                          return Align(
+                                            alignment: Alignment.center,
+                                            child: ActivityDetailWidget(
+                                              detail: actDetails[i],
+                                            ),
+                                          );
+                                        }),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Space.doubleSpace(),
-                  ElevatedButton(
-                    onPressed: (prov.isButtonDisabled)
-                        ? () {}
-                        : () {
-                            _editActivityStatus('submitted');
-                          },
-                    child: Text('Mark As Done'),
-                    style: ElevatedButton.styleFrom(
-                        primary: (prov.isButtonDisabled)
-                            ? Colors.blue[200]
-                            : Colors.blue),
-                  ),
-                ],
+                    Space.doubleSpace(),
+                    ElevatedButton(
+                      onPressed: (prov.isButtonDisabled)
+                          ? () {}
+                          : () {
+                              _editActivityStatus('submitted');
+                            },
+                      child: Text('Mark As Done'),
+                      style: ElevatedButton.styleFrom(
+                          primary: (prov.isButtonDisabled)
+                              ? Colors.blue[200]
+                              : Colors.blue),
+                    ),
+                  ],
+                ),
               ),
             )),
     );
@@ -277,10 +284,9 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
   }
 
   Widget getImage(String link) {
-
     return CachedNetworkImage(
         imageUrl: BASE_URL + '/' + link,
-        placeholder: (context, url) => SizedBox(height: 20, width: 20, child: CircularProgressIndicator()),
+        placeholder: (context, url) => CircularProgressIndicator(),
         errorWidget: (context, url, error) => Text('image not found'));
   }
 

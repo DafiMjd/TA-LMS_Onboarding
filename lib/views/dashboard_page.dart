@@ -128,18 +128,15 @@ class _DashboardPageState extends State<DashboardPage> {
                 user: user,
                 categories: categories,
               );
+      } else if (dashboardTabProvider.tab == LEADERBOARD_PAGE) {
+        return (dashProv.isFetchingData) ? LoadingScreen() : LeaderboardPage();
       } else if (dashboardTabProvider.tab == PROFILE_PAGE) {
         return (dashProv.isFetchingData)
             ? LoadingScreen()
             : ProfilePage(
                 user: user,
               );
-      } else if (dashboardTabProvider.tab == LEADERBOARD_PAGE) {
-        return (dashProv.isFetchingData) ? LoadingScreen() : LeaderboardPage();
-      } 
-      // else if (dashboardTabProvider.tab == VIDE_TEST) {
-      //   return (dashProv.isFetchingData) ? LoadingScreen() : DowloadTest();
-      // }
+      }
       return Scaffold(
         bottomNavigationBar: BottomNavBar(),
       );

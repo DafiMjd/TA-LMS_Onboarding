@@ -7,24 +7,26 @@ import 'package:lms_onboarding/models/user.dart';
 class ActivityOwned {
   int id;
   Activity activity;
-  ActivityCategory? category;
+  // ActivityCategory? category;
   DateTime start_date, end_date;
   String status, activity_note;
   bool late;
   String? mentor_email;
   User user;
+  int category_id;
 
   ActivityOwned(
       {required this.id,
       required this.activity,
-      required this.category,
+      // required this.category,
       required this.start_date,
       required this.end_date,
       required this.status,
       required this.late,
       this.mentor_email,
       required this.activity_note,
-      required this.user});
+      required this.user,
+      required this.category_id});
 
   factory ActivityOwned.fromJson(Map<String, dynamic> json) {
     var startDate = DateTime.parse(json['start_date']);
@@ -36,7 +38,7 @@ class ActivityOwned {
     return ActivityOwned(
         id: json['id'],
         activity: Activity.fromJson(json['activities_']),
-        category: cat,
+        // category: cat,
         start_date: startDate,
         end_date: endDate,
         status: json['status'],
@@ -44,6 +46,7 @@ class ActivityOwned {
         mentor_email: json['mentor_email'],
         activity_note: note,
         user: User.fromJson(json['user_']),
+        category_id: json['category_id']
         );
   }
 }

@@ -26,6 +26,7 @@ class PreActivityPage extends StatefulWidget {
 class _PreActivityPageState extends State<PreActivityPage> {
   late PreActivityProvider prov;
   late ActivityOwned actOwned;
+  late bool started;
 
   @override
   void initState() {
@@ -33,6 +34,13 @@ class _PreActivityPageState extends State<PreActivityPage> {
 
     prov = Provider.of<PreActivityProvider>(context, listen: false);
     _fetchActOwned(widget.actOwnedId);
+  }
+
+  bool hasActivityStarted() {
+    if (DateTime.now().isAfter(actOwned.start_date)) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -56,7 +64,10 @@ class _PreActivityPageState extends State<PreActivityPage> {
                     margin: EdgeInsets.all(10),
                     child: Column(
                       children: [
-                        ActivityTitleCard(actOwned: actOwned),
+                        ActivityTitleCard(
+                          actOwned: actOwned,
+                          started: started,
+                        ),
                         Space.doubleSpace(),
                         ActivityStatusCard(
                           actOwned: actOwned,
@@ -89,9 +100,10 @@ class _PreActivityPageState extends State<PreActivityPage> {
 
     try {
       actOwned = await prov.fetchActOwnedById(id);
-      print('dafi: ' + actOwned.mentor_email!);
+      started = hasActivityStarted();
       prov.isFetchingData = false;
     } catch (e) {
+      started = false;
       prov.isFetchingData = false;
       return _error(e);
     }
@@ -307,10 +319,14 @@ class _ActivityStatusCardState extends State<ActivityStatusCard> {
                             : Colors.black)),
               ]),
               Space.space(),
-              Row(children: [
-                Text("Validated By: ", style: TextStyle(fontSize: 17)),
-                Text(widget.actOwned.mentor_email!,  style: TextStyle(fontSize: 17)),
-              ]),
+              Visibility(
+                visible: widget.actOwned.status == 'completed' || widget.actOwned.status == 'rejected',
+                child: Row(children: [
+                  Text("Validated By: ", style: TextStyle(fontSize: 17)),
+                  Text(widget.actOwned.mentor_email!,
+                      style: TextStyle(fontSize: 17)),
+                ]),
+              ),
             ],
           ),
         ));
@@ -318,9 +334,12 @@ class _ActivityStatusCardState extends State<ActivityStatusCard> {
 }
 
 class ActivityTitleCard extends StatelessWidget {
-  const ActivityTitleCard({Key? key, required this.actOwned}) : super(key: key);
+  const ActivityTitleCard(
+      {Key? key, required this.actOwned, required this.started})
+      : super(key: key);
 
   final ActivityOwned actOwned;
+  final bool started;
 
   @override
   Widget build(BuildContext context) {
@@ -341,23 +360,34 @@ class ActivityTitleCard extends StatelessWidget {
                 color: CARD_BORDER,
                 height: 1,
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    if (actOwned.status == 'assigned') {
-                      _editActStatus(actOwned.id, 'on_progress', prov, context);
-                    }
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return ActivityDetailPage(
-                        actOwnedId: actOwned.id,
-                        actOwned: actOwned,
-                        act: actOwned.activity,
-                        title: actOwned.activity.activity_name,
-                      );
-                      // return Try();
-                    }));
-                  },
-                  child: Text("Enter Activity"))
+              (started)
+                  ? ElevatedButton(
+                      onPressed: () {
+                        if (actOwned.status == 'assigned') {
+                          _editActStatus(
+                              actOwned.id, 'on_progress', prov, context);
+                        }
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return ActivityDetailPage(
+                            actOwnedId: actOwned.id,
+                            actOwned: actOwned,
+                            act: actOwned.activity,
+                            title: actOwned.activity.activity_name,
+                          );
+                          // return Try();
+                        }));
+                      },
+                      child: Text(
+                        "Enter Activity",
+                      ))
+                  : ElevatedButton(
+                      onPressed: () {},
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.blue[100]),
+                      child: Text(
+                        "Not Started Yet",
+                      ))
             ],
           ),
         ));
