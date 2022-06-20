@@ -32,10 +32,16 @@ class _ChangePasswordState extends State<ChangePassword> {
     _confirmPassCtrl = TextEditingController();
 
     authProv = Provider.of<AuthProvider>(context, listen: false);
+    changePassProv = Provider.of<ChangePasswordProvider>(context,listen: false);
+    changePassProv.isConfPassFieldEmpty = true;
+    changePassProv.isNewPassFieldEmpty = true;
+    changePassProv.isCurPassFieldEmpty = true;
+
+    changePassProv.pwValidation = '';
+
   }
 
   void _changePassword(String curPass, String newPass) async {
-
     changePassProv.isSaveButtonDisabled = true;
 
     try {
@@ -113,8 +119,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                           inputFormatters: <TextInputFormatter>[
                             LengthLimitingTextInputFormatter(200),
                           ],
-                          onChanged: (value) => changePassProv
-                              .isNewPassFieldEmpty = _newPassCtrl.text.isEmpty,
+                          onChanged: (value) {
+                            validatePw(value);
+                            changePassProv.isNewPassFieldEmpty =
+                                _newPassCtrl.text.isEmpty;
+                          },
                           obscureText: changePassProv.isNewPassHidden,
                           controller: _newPassCtrl,
                           decoration: InputDecoration(
@@ -125,6 +134,17 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   child: Icon(changePassProv.isNewPassHidden
                                       ? Icons.visibility_off
                                       : Icons.visibility)))),
+                      Space.space(),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          changePassProv.pwValidation,
+                          style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red[400]),
+                        ),
+                      ),
                       Space.space(),
 
                       // Confirm Password
@@ -176,9 +196,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   changePassProv.isPassDifferent =
                                       _newPassCtrl.text !=
                                           _confirmPassCtrl.text;
-                                  if (!changePassProv.isPassDifferent) {
-                                    _changePassword(
-                                        _curPassCtrl.text, _newPassCtrl.text);
+                                  if (changePassProv.isPasswordValid &&
+                                      !changePassProv.isPassDifferent) {
+                                    // _changePassword(
+                                    //     _curPassCtrl.text, _newPassCtrl.text);
                                   }
                                 }
                               },
@@ -195,6 +216,38 @@ class _ChangePasswordState extends State<ChangePassword> {
                 )),
           ),
         ));
+  }
+
+  validatePw(String pw) {
+    changePassProv.pwValidation = '';
+    StringBuffer pwValidation = new StringBuffer();
+    // RegExp regex =
+    //     RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    RegExp regexpCapital = RegExp(r'^(?=.*?[A-Z])');
+    RegExp regexpLower = RegExp(r'^(?=.*?[a-z])');
+    RegExp regexpNumber = RegExp(r'(?=.*?[0-9])');
+    if (pw.length < 8) {
+      pwValidation.write('Min 8 chars* | ');
+      changePassProv.pwValidation = pwValidation.toString();
+    }
+    if (!regexpCapital.hasMatch(pw)) {
+      pwValidation.write('Min 1 uppercase char* | ');
+      changePassProv.pwValidation = pwValidation.toString();
+    }
+    if (!regexpLower.hasMatch(pw)) {
+      pwValidation.write('Min 1 lowercase char* | ');
+      changePassProv.pwValidation = pwValidation.toString();
+    }
+    if (!regexpNumber.hasMatch(pw)) {
+      pwValidation.write('Min 1 number* | ');
+      changePassProv.pwValidation = pwValidation.toString();
+    }
+
+    if (pwValidation.isEmpty) {
+      changePassProv.isPasswordValid = true;
+    } else {
+      changePassProv.isPasswordValid = false;
+    }
   }
 
   Container titleField(title, isEmpty) => Container(

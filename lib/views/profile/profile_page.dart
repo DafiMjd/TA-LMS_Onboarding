@@ -66,7 +66,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             size:
                                 MediaQuery.of(context).size.height * 0.14 - 20,
                           )
-                    : getProfPic(widget.user.profPicLink),
+                        : Icon(
+                            Icons.account_circle,
+                            size:
+                                MediaQuery.of(context).size.height * 0.14 - 20,
+                          ),
                     Container(
                         margin: EdgeInsets.only(top: 15, left: 13, bottom: 15),
                         child: Column(

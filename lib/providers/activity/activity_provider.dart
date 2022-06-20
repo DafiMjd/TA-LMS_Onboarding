@@ -1,66 +1,69 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:lms_onboarding/models/activity_category.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/models/user.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:lms_onboarding/providers/base_provider.dart';
 import 'dart:convert';
 
 import 'package:lms_onboarding/utils/constans.dart';
 
-class ActivityProvider extends ChangeNotifier {
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
-    notifyListeners();
-  }
-
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
-  }
+class ActivityProvider extends BaseProvider {
 
   // Request API
 
   Future<User> fetchUser() async {
+
+    var _token = super.token;
+    var _email = super.email;
     String url = "$BASE_URL/api/User/$_email";
 
-    try {
-      var result = await http.get(
-        Uri.parse(url),
-        headers: {
-          "Access-Control-Allow-Origin":
-              "*", // Required for CORS support to work
-          "Access-Control-Allow-Methods": "GET",
-          "Access-Control-Allow-Credentials": "true",
-          "Access-Control-Expose-Headers": "Authorization, authenticated",
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $_token',
-        },
-      );
-      if (result.statusCode == 404) {
-        throw "Not Found";
+    bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
+        var result = await http.get(
+          Uri.parse(url),
+          headers: {
+            "Access-Control-Allow-Origin":
+                "*", // Required for CORS support to work
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Expose-Headers": "Authorization, authenticated",
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $_token',
+          },
+        );
+        if (result.statusCode == 404) {
+          throw "Not Found";
+        }
+        if (result.statusCode == 400) {
+          Map<String, dynamic> responseData = jsonDecode(result.body);
+          throw responseData['errorMessage'];
+        }
+        if (result.statusCode == 502 || result.statusCode == 500) {
+          throw "Server Down";
+        }
+        return compute(parseUser, result.body);
+      } catch (e) {
+        rethrow;
       }
-      if (result.statusCode == 400) {
-        Map<String, dynamic> responseData = jsonDecode(result.body);
-        throw responseData['errorMessage'];
-      }
-      if (result.statusCode == 502 || result.statusCode == 500) {
-        throw "Server Down";
-      }
-      return compute(parseUser, result.body);
-    } catch (e) {
-      rethrow;
+    } else {
+      logout();
+      throw 'you have been logged out';
     }
   }
 
   Future<List<ActivityCategory>> fetchActivityCategories() async {
+
+    var _token = super.token;
     String url = "$BASE_URL/api/ActivityCategory";
 
-    try {
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
       var result = await http.get(
         Uri.parse(url),
         headers: {
@@ -83,18 +86,29 @@ class ActivityProvider extends ChangeNotifier {
       if (result.statusCode == 502 || result.statusCode == 500) {
         throw "Server Down";
       }
-
 
       return compute(parseActivityCategories, result.body);
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
-Future<List<ActivityOwned>> fetchActsOwned(String status) async {
+  Future<List<ActivityOwned>> fetchActsOwned(String status) async {
+
+    var _token = super.token;
+    var _email = super.email;
     String url = "$BASE_URL/api/ActivitiesOwned/$_email/$status";
 
-    try {
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
       var result = await http.get(
         Uri.parse(url),
         headers: {
@@ -118,11 +132,16 @@ Future<List<ActivityOwned>> fetchActsOwned(String status) async {
         throw "Server Down";
       }
 
-
       return compute(parseActivitiesOwned, result.body);
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
   // ===========

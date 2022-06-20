@@ -7,12 +7,12 @@ import 'package:lms_onboarding/providers/activity/activity_detail_provider.dart'
 import 'package:lms_onboarding/providers/activity/browse_activity_provider.dart';
 import 'package:lms_onboarding/providers/activity/activity_provider.dart';
 import 'package:lms_onboarding/providers/activity/pre_activity_provider.dart';
+import 'package:lms_onboarding/providers/base_provider.dart';
 import 'package:lms_onboarding/providers/home/home_activity_detail_provider.dart';
 import 'package:lms_onboarding/providers/home/home_provider.dart';
 import 'package:lms_onboarding/providers/leaderboard/leaderboard_provider.dart';
 import 'package:lms_onboarding/providers/profile/change_password_provider.dart';
 import 'package:lms_onboarding/providers/profile/edit_profile_provider.dart';
-import 'package:lms_onboarding/providers/profile/user_provider.dart';
 import 'package:lms_onboarding/views/dashboard_page.dart';
 import 'package:provider/provider.dart';
 import 'package:lms_onboarding/providers/dashboard_tab_provider.dart';
@@ -84,14 +84,6 @@ class MyApp extends StatelessWidget {
               }
               return PreActivityProvider();
             }),
-        ChangeNotifierProxyProvider<AuthProvider, LeaderboardProvider>(
-            create: (context) => LeaderboardProvider(),
-            update: (context, authProv, leaderboardProv) {
-              if (leaderboardProv != null) {
-                return leaderboardProv..recieveToken(authProv);
-              }
-              return LeaderboardProvider();
-            }),
         ChangeNotifierProxyProvider<AuthProvider, ActivityProvider>(
             create: (context) => ActivityProvider(),
             update: (context, authProv, actProv) {
@@ -115,6 +107,25 @@ class MyApp extends StatelessWidget {
                 return homeActDetailProv..recieveToken(authProv);
               }
               return HomeActivityDetailProvider();
+            }),
+        ChangeNotifierProxyProvider<AuthProvider, BaseProvider>(
+            create: (context) => BaseProvider(),
+            update: (context, authProv, baseProv) {
+              if (baseProv != null) {
+                return baseProv..recieveToken(authProv);
+              }
+              return BaseProvider();
+            }),
+
+        // ChangeNotifierProvider(create: (context) => LeaderboardProvider()),
+
+        ChangeNotifierProxyProvider<AuthProvider, LeaderboardProvider>(
+            create: (context) => LeaderboardProvider(),
+            update: (context, authProv, leadProv) {
+              if (leadProv != null) {
+                return leadProv..recieveToken(authProv);
+              }
+              return LeaderboardProvider();
             }),
       ],
       builder: (context, child) => Consumer<AuthProvider>(

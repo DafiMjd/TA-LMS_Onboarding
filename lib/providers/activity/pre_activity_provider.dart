@@ -4,24 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:lms_onboarding/providers/base_provider.dart';
 import 'dart:convert';
 
 import 'package:lms_onboarding/utils/constans.dart';
 
-class PreActivityProvider extends ChangeNotifier {
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
-    notifyListeners();
-  }
-
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
-    // notifyListeners();
-  }
+class PreActivityProvider extends BaseProvider {
 
   bool _isLate = false;
   get isLate => _isLate;
@@ -40,9 +28,13 @@ class PreActivityProvider extends ChangeNotifier {
   // API Request
 
   Future<List<ActivityOwned>> editActivityNote(int id, String note) async {
+    var _token = super.token;
+    var _email = super.email;
     String url = "$BASE_URL/api/ActivitiesOwned/activity-note";
 
-    try {
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {try {
       var result = await http.put(Uri.parse(url),
           headers: {
             "Access-Control-Allow-Origin":
@@ -76,12 +68,24 @@ class PreActivityProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
   Future<List<ActivityOwned>> editActivityStatus(int id, String status) async {
     String url = "$BASE_URL/api/ActivitiesOwned/status";
 
-    try {
+    var _token = super.token;
+    var _email = super.email;
+
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
       var result = await http.put(Uri.parse(url),
           headers: {
             "Access-Control-Allow-Origin":
@@ -113,12 +117,23 @@ class PreActivityProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
   Future<ActivityOwned> fetchActOwnedById(int id) async {
+
+    var _token = super.token;
     String url = "$BASE_URL/api/ActivitiesOwnedById/$id";
 
-    try {
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
       var result = await http.get(
         Uri.parse(url),
         headers: {
@@ -153,6 +168,12 @@ class PreActivityProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
   // ========

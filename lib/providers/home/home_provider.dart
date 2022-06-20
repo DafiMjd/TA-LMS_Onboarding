@@ -5,27 +5,21 @@ import 'package:lms_onboarding/models/activity.dart';
 import 'dart:convert';
 
 import 'package:lms_onboarding/models/activity_detail.dart';
+import 'package:lms_onboarding/providers/base_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
-class HomeProvider extends ChangeNotifier {
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
-    notifyListeners();
-  }
-
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
-  }
+class HomeProvider extends BaseProvider {
 
   // API Request
 
    Future<List<Activity>> fetchHomeActivity() async {
+    var _token = super.token;
 
     String url = "$BASE_URL/api/ActivitiesByType/home";
+
+    bool tokenValid = await checkToken();
+
+    if (tokenValid) {
 
     try {
       var result = await http.get(
@@ -65,6 +59,11 @@ class HomeProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
   }
 
 
@@ -72,7 +71,12 @@ class HomeProvider extends ChangeNotifier {
       Activity activity) async {
     var id = activity.id;
 
+    var _token = super.token;
+
     String url = "$BASE_URL/api/ActivityDetail/$id";
+    bool tokenValid = await checkToken();
+
+    if (tokenValid) {
 
     try {
       var result = await http.get(
@@ -116,6 +120,11 @@ class HomeProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
   }
 
   // ======

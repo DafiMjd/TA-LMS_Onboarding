@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/activity.dart';
 import 'package:lms_onboarding/models/activity_owned.dart';
 import 'package:lms_onboarding/models/status_menu.dart';
+import 'package:lms_onboarding/providers/base_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class BrowseActivityPageProvider extends ChangeNotifier {
+class BrowseActivityPageProvider extends BaseProvider {
   List<StatusMenu> _menus = [
     StatusMenu(
         id: "all_activity", statusName: "All Activity", selected: false),
@@ -35,24 +36,16 @@ class BrowseActivityPageProvider extends ChangeNotifier {
     // notifyListeners();
   }
 
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
-    notifyListeners();
-  }
-
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
-  }
-
   // API Request
   Future<Activity> fetchActivityById(int id) async {
+
+    var _token = super.token;
     String url = "$BASE_URL/api/Activities/$id";
 
-    try {
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
       var result = await http.get(
         Uri.parse(url),
         headers: {
@@ -83,12 +76,23 @@ class BrowseActivityPageProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
   Future<List<Activity>> fetchActivitiesByCategory(int id) async {
+
+    var _token = super.token;
     String url = "$BASE_URL/api/ActivitiesByCategory/$id";
 
-    try {
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
       var result = await http.get(
         Uri.parse(url),
         headers: {
@@ -118,12 +122,24 @@ class BrowseActivityPageProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
   Future<List<ActivityOwned>> fetchActOwnedByCat(int id) async {
+
+    var _token = super.token;
+    var _email = super.email;
     String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$_email/$id";
 
-    try {
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
       var result = await http.get(
         Uri.parse(url),
         headers: {
@@ -159,12 +175,23 @@ class BrowseActivityPageProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
   Future<List<ActivityOwned>> fetchActOwnedByCatByStatus(int id, String status) async {
+    var _token = super.token;
+    var _email = super.email;
     String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$_email/$id/$status";
 
-    try {
+     bool tokenValid = await checkToken();
+
+    if (tokenValid) {
+      try {
       var result = await http.get(
         Uri.parse(url),
         headers: {
@@ -200,6 +227,12 @@ class BrowseActivityPageProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
+    
   }
 
 

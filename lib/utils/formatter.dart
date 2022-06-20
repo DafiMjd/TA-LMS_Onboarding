@@ -26,7 +26,6 @@ class Formatter {
     String difString = '';
 
     if (difference.inHours < 24) {
-      print('dafi');
       difString = difHour.toString() + ' Hours ' + difMin.toString() + ' Mins';
     } else {
       difString =

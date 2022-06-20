@@ -3,13 +3,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_onboarding/models/user.dart';
+import 'package:lms_onboarding/providers/base_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class EditProfileProvider extends ChangeNotifier {
+class EditProfileProvider extends BaseProvider {
 
   bool _isEmailFieldEmpty = false;
   bool _isNameFieldEmpty = false;
@@ -43,23 +44,16 @@ class EditProfileProvider extends ChangeNotifier {
   }
   // ==========================
 
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
-    notifyListeners();
-  }
-
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
-  }
-
   // Users
   Future<User> getUserInfo() async {
-    // getAuthInfo();
+
+    var _token = super.token;
+    var _email = super.email;
     String apiURL = "$BASE_URL/api/User/$_email";
+
+    bool tokenValid = await checkToken();
+
+    if (tokenValid) {
 
     try {
       var result = await http.get(
@@ -87,12 +81,24 @@ class EditProfileProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
   }
 
   Future<User> editProfile(
       String name, String gender, String phoneNum, String date, double progress, int role_id, int jobtitle_id) async {
     // getAuthInfo();
     String apiURL = "$BASE_URL/api/User/";
+
+    var _token = super.token;
+    var _email = super.email;
+
+    bool tokenValid = await checkToken();
+
+    if (tokenValid) {
 
     try {
       var result = await http.put(Uri.parse(apiURL),
@@ -130,6 +136,11 @@ class EditProfileProvider extends ChangeNotifier {
 
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
   }
   // =======
   

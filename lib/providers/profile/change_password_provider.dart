@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:lms_onboarding/providers/base_provider.dart';
 import 'dart:convert';
 
 import 'package:lms_onboarding/utils/constans.dart';
-class ChangePasswordProvider extends ChangeNotifier {
+
+class ChangePasswordProvider extends BaseProvider {
   bool _isCurPassFieldEmpty = true;
   bool _isNewPassFieldEmpty = true;
   bool _isConfPassFieldEmpty = true;
@@ -71,23 +73,31 @@ class ChangePasswordProvider extends ChangeNotifier {
     _isPassDifferent = val;
   }
 
-  late String _token, _email;
-  void recieveToken(auth) {
-    _token = auth.token;
-    _email = auth.email;
+  String _pwValidation = '';
+  String get pwValidation => _pwValidation;
+  set pwValidation(String val) {
+    _pwValidation = val;
     notifyListeners();
   }
 
-  bool _isFetchingData = false;
-  get isFetchingData => _isFetchingData;
-  set isFetchingData(val) {
-    _isFetchingData = val;
+
+  bool _isPasswordValid = true;
+  bool get isPasswordValid => _isPasswordValid;
+  set isPasswordValid(bool val) {
+    _isPasswordValid = val;
+    notifyListeners();
   }
 
   // Change Password
   Future<void> changePassword(String curPass, String newPass) async {
-    // getAuthInfo();
     String apiURL = "$BASE_URL/api/User/edit-password";
+
+    bool tokenValid = await checkToken();
+
+    var _token = super.token;
+    var _email = super.email;
+
+    if (tokenValid) {
 
     try {
       var result = await http.put(Uri.parse(apiURL),
@@ -106,7 +116,7 @@ class ChangePasswordProvider extends ChangeNotifier {
             "new_password": newPass,
           }));
 
-          if (result.statusCode == 404) {
+      if (result.statusCode == 404) {
         throw "Not Found";
       }
 
@@ -121,6 +131,11 @@ class ChangePasswordProvider extends ChangeNotifier {
     } catch (e) {
       rethrow;
     }
+    } else {
+      logout();
+      throw 'you have been logged out';
+    }
+
   }
   // =======
 }

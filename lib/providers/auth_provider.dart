@@ -7,7 +7,7 @@ import 'package:lms_onboarding/utils/auth_secure_storage.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 import 'dart:convert';
 
-class AuthProvider with ChangeNotifier {
+class AuthProvider extends ChangeNotifier {
   late bool _isAuth = false;
   late String _token, _email;
   late DateTime _expiryDate;
@@ -90,7 +90,10 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> logout() async {
     await AuthSecureStorage.deleteAll();
-    notifyListeners();
+
+    String apiURL = "$BASE_URL/api/deleteToken";
+
+    
   }
 
   // button disable after login
