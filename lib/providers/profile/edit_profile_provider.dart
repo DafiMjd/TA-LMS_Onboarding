@@ -53,7 +53,10 @@ class EditProfileProvider extends BaseProvider {
 
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
 
     try {
       var result = await http.get(
@@ -81,10 +84,7 @@ class EditProfileProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
   }
 
@@ -98,7 +98,10 @@ class EditProfileProvider extends BaseProvider {
 
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
 
     try {
       var result = await http.put(Uri.parse(apiURL),
@@ -136,10 +139,7 @@ class EditProfileProvider extends BaseProvider {
 
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
   }
   // =======

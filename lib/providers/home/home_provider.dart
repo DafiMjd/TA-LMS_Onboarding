@@ -19,7 +19,10 @@ class HomeProvider extends BaseProvider {
 
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
 
     try {
       var result = await http.get(
@@ -59,10 +62,7 @@ class HomeProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
   }
 
@@ -76,7 +76,10 @@ class HomeProvider extends BaseProvider {
     String url = "$BASE_URL/api/ActivityDetail/$id";
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
 
     try {
       var result = await http.get(
@@ -120,10 +123,7 @@ class HomeProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
   }
 

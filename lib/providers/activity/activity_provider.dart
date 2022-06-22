@@ -21,7 +21,12 @@ class ActivityProvider extends BaseProvider {
 
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+
+    
       try {
         var result = await http.get(
           Uri.parse(url),
@@ -49,10 +54,7 @@ class ActivityProvider extends BaseProvider {
       } catch (e) {
         rethrow;
       }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
   }
 
   Future<List<ActivityCategory>> fetchActivityCategories() async {
@@ -62,7 +64,11 @@ class ActivityProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+
       try {
       var result = await http.get(
         Uri.parse(url),
@@ -91,10 +97,7 @@ class ActivityProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }
@@ -107,7 +110,11 @@ class ActivityProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+    
       try {
       var result = await http.get(
         Uri.parse(url),
@@ -136,10 +143,7 @@ class ActivityProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }

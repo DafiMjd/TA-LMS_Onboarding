@@ -80,7 +80,6 @@ class ChangePasswordProvider extends BaseProvider {
     notifyListeners();
   }
 
-
   bool _isPasswordValid = true;
   bool get isPasswordValid => _isPasswordValid;
   set isPasswordValid(bool val) {
@@ -96,8 +95,10 @@ class ChangePasswordProvider extends BaseProvider {
 
     var _token = super.token;
     var _email = super.email;
-
-    if (tokenValid) {
+// if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
 
     try {
       var result = await http.put(Uri.parse(apiURL),
@@ -131,11 +132,6 @@ class ChangePasswordProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
-
   }
   // =======
 }

@@ -34,7 +34,12 @@ class PreActivityProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {try {
+     // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+
+    try {
       var result = await http.put(Uri.parse(url),
           headers: {
             "Access-Control-Allow-Origin":
@@ -68,10 +73,7 @@ class PreActivityProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }
@@ -84,7 +86,11 @@ class PreActivityProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+// if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+    
       try {
       var result = await http.put(Uri.parse(url),
           headers: {
@@ -117,10 +123,7 @@ class PreActivityProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }
@@ -132,7 +135,11 @@ class PreActivityProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+// if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+    
       try {
       var result = await http.get(
         Uri.parse(url),
@@ -168,10 +175,7 @@ class PreActivityProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }

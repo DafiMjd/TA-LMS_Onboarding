@@ -12,8 +12,6 @@ import 'package:lms_onboarding/providers/base_provider.dart';
 import 'package:lms_onboarding/utils/constans.dart';
 
 class ActivityDetailProvider extends BaseProvider {
-  
-
   bool _isFetchingActOwned = false;
   get isFetchingActOwned => _isFetchingActOwned;
   set isFetchingActOwned(val) {
@@ -40,11 +38,14 @@ class ActivityDetailProvider extends BaseProvider {
 
     String url = "$BASE_URL/api/ActivityDetail/$id";
 
-
     var _token = super.token;
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+
     try {
       var result = await http.get(
         Uri.parse(url),
@@ -87,12 +88,6 @@ class ActivityDetailProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw "you have been logged out";
-    }
-    
-
   }
 
   Future<List<ActivityOwned>> editActivityStatus(int id, String status) async {
@@ -102,45 +97,44 @@ class ActivityDetailProvider extends BaseProvider {
     var _email = super.email;
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
-      try {
-        var result = await http.put(Uri.parse(url),
-            headers: {
-              "Access-Control-Allow-Origin":
-                  "*", // Required for CORS support to work
-              "Access-Control-Allow-Methods": "GET",
-              "Access-Control-Allow-Credentials": "true",
-              "Access-Control-Expose-Headers": "Authorization, authenticated",
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': 'Bearer $_token',
-            },
-            body:
-                jsonEncode({"id": id, "user_email": _email, "status": status}));
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
 
-        if (result.statusCode == 502 || result.statusCode == 500) {
-          throw "Server Down";
-        }
+    try {
+      var result = await http.put(Uri.parse(url),
+          headers: {
+            "Access-Control-Allow-Origin":
+                "*", // Required for CORS support to work
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Expose-Headers": "Authorization, authenticated",
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $_token',
+          },
+          body: jsonEncode({"id": id, "user_email": _email, "status": status}));
 
-        if (result.statusCode == 404) {
-          throw "Not Found";
-        }
-
-        if (result.statusCode == 400) {
-          Map<String, dynamic> responseData = jsonDecode(result.body);
-          throw responseData['errorMessage'];
-        }
-
-        if (result.body == '[]') {
-          return [];
-        }
-
-        return compute(parseActivitiesOwned, result.body);
-      } catch (e) {
-        rethrow;
+      if (result.statusCode == 502 || result.statusCode == 500) {
+        throw "Server Down";
       }
-    } else {
-      logout();
-      throw "you have been logged out";
+
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
+      if (result.statusCode == 400) {
+        Map<String, dynamic> responseData = jsonDecode(result.body);
+        throw responseData['errorMessage'];
+      }
+
+      if (result.body == '[]') {
+        return [];
+      }
+
+      return compute(parseActivitiesOwned, result.body);
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -150,45 +144,45 @@ class ActivityDetailProvider extends BaseProvider {
     var _token = super.token;
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
-      try {
-        var result = await http.get(
-          Uri.parse(url),
-          headers: {
-            "Access-Control-Allow-Origin":
-                "*", // Required for CORS support to work
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Expose-Headers": "Authorization, authenticated",
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $_token',
-          },
-        );
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
 
-        if (result.body == []) {
-          throw "No Data";
-        }
+    try {
+      var result = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Expose-Headers": "Authorization, authenticated",
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $_token',
+        },
+      );
 
-        if (result.statusCode == 404) {
-          throw "Not Found";
-        }
-
-        if (result.statusCode == 502 || result.statusCode == 500) {
-          throw "Server Down";
-        }
-
-        if (result.statusCode == 400) {
-          Map<String, dynamic> responseData = jsonDecode(result.body);
-          throw responseData['errorMessage'];
-        }
-
-        return compute(parseActivityOwned, result.body);
-      } catch (e) {
-        rethrow;
+      if (result.body == []) {
+        throw "No Data";
       }
-    } else {
-      logout();
-      throw "you have been logged out";
+
+      if (result.statusCode == 404) {
+        throw "Not Found";
+      }
+
+      if (result.statusCode == 502 || result.statusCode == 500) {
+        throw "Server Down";
+      }
+
+      if (result.statusCode == 400) {
+        Map<String, dynamic> responseData = jsonDecode(result.body);
+        throw responseData['errorMessage'];
+      }
+
+      return compute(parseActivityOwned, result.body);
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -198,41 +192,41 @@ class ActivityDetailProvider extends BaseProvider {
     var _token = super.token;
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
-      try {
-        var result = await http.get(
-          Uri.parse(url),
-          headers: {
-            "Access-Control-Allow-Origin":
-                "*", // Required for CORS support to work
-            "Access-Control-Allow-Methods": "GET",
-            "Access-Control-Allow-Credentials": "true",
-            "Access-Control-Expose-Headers": "Authorization, authenticated",
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $_token',
-          },
-        );
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
 
-        if (result.statusCode == 404) {
-          throw "Not Found";
-        }
+    try {
+      var result = await http.get(
+        Uri.parse(url),
+        headers: {
+          "Access-Control-Allow-Origin":
+              "*", // Required for CORS support to work
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Expose-Headers": "Authorization, authenticated",
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $_token',
+        },
+      );
 
-        if (result.statusCode == 502 || result.statusCode == 500) {
-          throw "Server Down";
-        }
-
-        if (result.statusCode == 400) {
-          Map<String, dynamic> responseData = jsonDecode(result.body);
-          throw responseData['errorMessage'];
-        }
-
-        // return compute(parseActivityOwned, result.body);
-      } catch (e) {
-        rethrow;
+      if (result.statusCode == 404) {
+        throw "Not Found";
       }
-    } else {
-      logout();
-      throw "you have been logged out";
+
+      if (result.statusCode == 502 || result.statusCode == 500) {
+        throw "Server Down";
+      }
+
+      if (result.statusCode == 400) {
+        Map<String, dynamic> responseData = jsonDecode(result.body);
+        throw responseData['errorMessage'];
+      }
+
+      // return compute(parseActivityOwned, result.body);
+    } catch (e) {
+      rethrow;
     }
   }
 

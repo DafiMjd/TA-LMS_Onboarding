@@ -49,6 +49,11 @@ class DashboardTabProvider extends BaseProvider {
     var _email = super.email;
     String apiURL = "$BASE_URL/api/User/$_email";
 
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+
     try {
       var result = await http.get(
         Uri.parse(apiURL),

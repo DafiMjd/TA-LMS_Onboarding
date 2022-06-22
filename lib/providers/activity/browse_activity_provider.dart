@@ -44,7 +44,11 @@ class BrowseActivityPageProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+// if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+    
       try {
       var result = await http.get(
         Uri.parse(url),
@@ -76,10 +80,7 @@ class BrowseActivityPageProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }
@@ -91,7 +92,11 @@ class BrowseActivityPageProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+
       try {
       var result = await http.get(
         Uri.parse(url),
@@ -122,10 +127,7 @@ class BrowseActivityPageProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }
@@ -138,7 +140,11 @@ class BrowseActivityPageProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
       try {
       var result = await http.get(
         Uri.parse(url),
@@ -175,10 +181,7 @@ class BrowseActivityPageProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }
@@ -190,7 +193,12 @@ class BrowseActivityPageProvider extends BaseProvider {
 
      bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+     
+// if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
+    
       try {
       var result = await http.get(
         Uri.parse(url),
@@ -227,10 +235,7 @@ class BrowseActivityPageProvider extends BaseProvider {
     } catch (e) {
       rethrow;
     }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
 
     
   }

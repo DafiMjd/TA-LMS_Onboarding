@@ -27,7 +27,10 @@ class LeaderboardProvider extends BaseProvider {
     var _token = super.token;
     bool tokenValid = await checkToken();
 
-    if (tokenValid) {
+    // if (!tokenValid) {
+    //   logout();
+    //   throw 'you have been logged out';
+    // }
       try {
         var result = await http.get(
           Uri.parse(url),
@@ -55,10 +58,7 @@ class LeaderboardProvider extends BaseProvider {
       } catch (e) {
         rethrow;
       }
-    } else {
-      logout();
-      throw 'you have been logged out';
-    }
+    
   }
 
   // ============
