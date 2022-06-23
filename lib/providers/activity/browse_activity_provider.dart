@@ -45,8 +45,8 @@ class BrowseActivityPageProvider extends BaseProvider {
      bool tokenValid = await checkToken();
 
 // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
     
       try {
@@ -93,8 +93,8 @@ class BrowseActivityPageProvider extends BaseProvider {
      bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
 
       try {
@@ -142,8 +142,8 @@ class BrowseActivityPageProvider extends BaseProvider {
 
     
     // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
       try {
       var result = await http.get(
@@ -195,8 +195,8 @@ class BrowseActivityPageProvider extends BaseProvider {
 
      
 // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
     
       try {

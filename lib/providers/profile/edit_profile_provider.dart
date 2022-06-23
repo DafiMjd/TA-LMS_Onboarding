@@ -54,8 +54,8 @@ class EditProfileProvider extends BaseProvider {
     bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
 
     try {
@@ -99,8 +99,8 @@ class EditProfileProvider extends BaseProvider {
     bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
 
     try {

@@ -54,7 +54,9 @@ class _PreActivityPageState extends State<PreActivityPage> {
       ),
       body: (prov.isFetchingData)
           ? LoadingWidget()
-          : RefreshIndicator(
+          : 
+          // (actOwned == null) ? 
+          RefreshIndicator(
               onRefresh: () async {
                 refresh();
               },
@@ -77,7 +79,8 @@ class _PreActivityPageState extends State<PreActivityPage> {
                       ],
                     ),
                   )),
-            ),
+            ) 
+            // : Text('No Data'),
     );
   }
 

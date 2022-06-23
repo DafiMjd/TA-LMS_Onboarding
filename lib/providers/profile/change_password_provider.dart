@@ -96,8 +96,8 @@ class ChangePasswordProvider extends BaseProvider {
     var _token = super.token;
     var _email = super.email;
 // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
 
     try {

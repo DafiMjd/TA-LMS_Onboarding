@@ -50,8 +50,8 @@ class DashboardTabProvider extends BaseProvider {
     String apiURL = "$BASE_URL/api/User/$_email";
 
     // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+    // logout();
+    // throw 'you have been logged out';
     // }
 
     try {

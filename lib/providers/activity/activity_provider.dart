@@ -22,8 +22,8 @@ class ActivityProvider extends BaseProvider {
     bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
 
     
@@ -65,8 +65,8 @@ class ActivityProvider extends BaseProvider {
      bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
 
       try {
@@ -111,8 +111,8 @@ class ActivityProvider extends BaseProvider {
      bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
-    //   logout();
-    //   throw 'you have been logged out';
+   // logout();
+    // throw 'you have been logged out';
     // }
     
       try {
