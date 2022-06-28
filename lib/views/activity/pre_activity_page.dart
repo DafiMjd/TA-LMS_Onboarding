@@ -33,6 +33,7 @@ class _PreActivityPageState extends State<PreActivityPage> {
     super.initState();
 
     prov = Provider.of<PreActivityProvider>(context, listen: false);
+    prov.isFetchingData = true;
     _fetchActOwned(widget.actOwnedId);
   }
 
@@ -80,7 +81,7 @@ class _PreActivityPageState extends State<PreActivityPage> {
                     ),
                   )),
             ) 
-            // : Text('No Data'),
+            // : Center(child: Text('Failed to load data')),
     );
   }
 

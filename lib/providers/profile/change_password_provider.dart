@@ -91,7 +91,7 @@ class ChangePasswordProvider extends BaseProvider {
   Future<void> changePassword(String curPass, String newPass) async {
     String apiURL = "$BASE_URL/api/User/edit-password";
 
-    bool tokenValid = await checkToken();
+    // bool tokenValid = await checkToken();
 
     var _token = super.token;
     var _email = super.email;

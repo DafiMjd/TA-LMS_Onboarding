@@ -51,7 +51,7 @@ class EditProfileProvider extends BaseProvider {
     var _email = super.email;
     String apiURL = "$BASE_URL/api/User/$_email";
 
-    bool tokenValid = await checkToken();
+    // bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
    // logout();
@@ -96,7 +96,7 @@ class EditProfileProvider extends BaseProvider {
     var _token = super.token;
     var _email = super.email;
 
-    bool tokenValid = await checkToken();
+    // bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
    // logout();

@@ -32,7 +32,7 @@ class PreActivityProvider extends BaseProvider {
     var _email = super.email;
     String url = "$BASE_URL/api/ActivitiesOwned/activity-note";
 
-     bool tokenValid = await checkToken();
+     // bool tokenValid = await checkToken();
 
      // if (!tokenValid) {
    // logout();
@@ -84,7 +84,7 @@ class PreActivityProvider extends BaseProvider {
     var _token = super.token;
     var _email = super.email;
 
-     bool tokenValid = await checkToken();
+     // bool tokenValid = await checkToken();
 
 // if (!tokenValid) {
    // logout();
@@ -133,7 +133,7 @@ class PreActivityProvider extends BaseProvider {
     var _token = super.token;
     String url = "$BASE_URL/api/ActivitiesOwnedById/$id";
 
-     bool tokenValid = await checkToken();
+     // bool tokenValid = await checkToken();
 
 // if (!tokenValid) {
    // logout();

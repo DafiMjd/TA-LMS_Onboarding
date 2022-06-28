@@ -9,6 +9,7 @@ import 'package:lms_onboarding/utils/constans.dart';
 import 'package:lms_onboarding/utils/custom_colors.dart';
 import 'package:lms_onboarding/views/activity/widgets/detail_pdf.dart';
 import 'package:lms_onboarding/views/activity/widgets/detail_video_player.dart';
+import 'package:lms_onboarding/views/test/youtube_player.dart';
 import 'package:lms_onboarding/widgets/error_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -174,6 +175,14 @@ class _HomeActivityDetailWidgetState extends State<HomeActivityDetailWidget> {
           margin: EdgeInsets.only(bottom: 10),
           child: DetailVideoPlayer(
             link: widget.detail!.detail_link!,
+          ));
+    } else if (widget.detail!.detail_type == 'video_link') {
+      return Container(
+          height: MediaQuery.of(context).size.height / 3,
+          width: MediaQuery.of(context).size.width,
+          margin: EdgeInsets.only(bottom: 10),
+          child: MyYoutubePlayer(
+            link: widget.detail!.detail_name,
           ));
     } else if (widget.detail!.detail_type == 'pdf') {
       return Container(

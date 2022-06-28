@@ -42,7 +42,7 @@ class BrowseActivityPageProvider extends BaseProvider {
     var _token = super.token;
     String url = "$BASE_URL/api/Activities/$id";
 
-     bool tokenValid = await checkToken();
+     // bool tokenValid = await checkToken();
 
 // if (!tokenValid) {
    // logout();
@@ -90,7 +90,7 @@ class BrowseActivityPageProvider extends BaseProvider {
     var _token = super.token;
     String url = "$BASE_URL/api/ActivitiesByCategory/$id";
 
-     bool tokenValid = await checkToken();
+     // bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
    // logout();
@@ -138,7 +138,7 @@ class BrowseActivityPageProvider extends BaseProvider {
     var _email = super.email;
     String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$_email/$id";
 
-     bool tokenValid = await checkToken();
+     // bool tokenValid = await checkToken();
 
     
     // if (!tokenValid) {
@@ -191,7 +191,7 @@ class BrowseActivityPageProvider extends BaseProvider {
     var _email = super.email;
     String url = "$BASE_URL/api/ActivitiesOwnedByCategory/$_email/$id/$status";
 
-     bool tokenValid = await checkToken();
+     // bool tokenValid = await checkToken();
 
      
 // if (!tokenValid) {

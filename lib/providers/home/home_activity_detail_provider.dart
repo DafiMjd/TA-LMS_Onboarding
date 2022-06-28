@@ -38,7 +38,7 @@ class HomeActivityDetailProvider extends BaseProvider {
 
     String url = "$BASE_URL/api/ActivityDetail/$id";
 
-    bool tokenValid = await checkToken();
+    // bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
    // logout();

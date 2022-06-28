@@ -25,7 +25,7 @@ class LeaderboardProvider extends BaseProvider {
     String url = "$BASE_URL/api/UsersByRole/$role_id";
 
     var _token = super.token;
-    bool tokenValid = await checkToken();
+    // bool tokenValid = await checkToken();
 
     // if (!tokenValid) {
    // logout();

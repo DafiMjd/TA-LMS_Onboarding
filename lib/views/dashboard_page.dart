@@ -12,6 +12,7 @@ import 'package:lms_onboarding/views/bottom_navbar.dart';
 import 'package:lms_onboarding/views/home/home_page.dart';
 import 'package:lms_onboarding/views/leaderboard/leaderboard_page.dart';
 import 'package:lms_onboarding/views/profile/profile_page.dart';
+import 'package:lms_onboarding/views/test/youtube_player.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -136,6 +137,10 @@ class _DashboardPageState extends State<DashboardPage> {
             : ProfilePage(
                 user: user,
               );
+      } else if (dashboardTabProvider.tab == TEST_PAGE) {
+        return (dashProv.isFetchingData)
+            ? LoadingScreen()
+            : MyYoutubePlayer(link: 'https://www.youtube.com/watch?v=TfOcbqjpRS8',);
       }
       return Scaffold(
         bottomNavigationBar: BottomNavBar(),
